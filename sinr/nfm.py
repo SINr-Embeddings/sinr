@@ -37,15 +37,20 @@ def get_nfm_embeddings(G, vector, size_partition, number_of_nodes, compute_np=Fa
 
 
 def compute_NR(adjacency, membership_matrix):
-    norm_adjacency = normalize(adjacency, "l1") # Make rows of matrix sum at 1
+    norm_adjacency = distributed_degree(adjacency) # Make rows of matrix sum at 1
     return norm_adjacency.dot(membership_matrix)
+
+def distributed_degree(adjacency):
+    return normalize(adjacency, "l1")
 
 def compute_NP(adjacency, membership_matrix):#, community_weights):
     #weighted_membership = membership_matrix.multiply(np.reciprocal(community_weights.astype('float'))) # 1/community_weight for each column of the membership matrix
-    community_weights = adjacency.dot(membership_matrix).sum(axis=1) # Weighted degree of each community
-    weighted_membership = membership_matrix.multiply(np.reciprocal(community_weights).astype('float'))) # 1/community_weight for each column of the membership matrix
+    community_weights = get_community_weights(adjacency, membership_matrix) # Weighted degree of each community
+    weighted_membership = membership_matrix.multiply(np.reciprocal(community_weights).astype('float')) # 1/community_weight for each column of the membership matrix
     return adjacency.dot(weighted_membership)
 
+def get_community_weights(adjacency, membership_matrix):
+    return adjacency.dot(membership_matrix).sum(axis=0)
 
 def get_membership(vector):
     nb_nodes = len(vector)
