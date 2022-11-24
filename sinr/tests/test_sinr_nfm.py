@@ -5,7 +5,7 @@
 
 import unittest
 
-from sinr_embeddings import sinr_embeddings
+from .. import nfm
 
 
 class TestSinr_embeddings(unittest.TestCase):
