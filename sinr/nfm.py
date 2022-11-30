@@ -5,15 +5,7 @@ import pickle as pk
 from sklearn.preprocessing import normalize
 import networkit as nk
 
-logger = logging.getLogger(__name__)
-ch = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s - %(funcName)s - %(levelname)s - %(message)s')
-ch.setFormatter(formatter)
-
-if not len(logger.handlers):
-        logger.addHandler(ch)
-
-logger.setLevel(logging.INFO)
+from .logger import logger
 
 def get_nfm_embeddings(G, vector, size_partition, number_of_nodes, compute_np=False, merge=False):
     logger.info("Starting NFM")
@@ -27,8 +19,7 @@ def get_nfm_embeddings(G, vector, size_partition, number_of_nodes, compute_np=Fa
 
     if compute_np or merge:
         edges_weights = G.iterEdgesWeights()
-        # community_weights = get_community_weights(edges_weights, vector)
-        node_pred = compute_NP(adjacency, membership_matrix, community_weights)
+        node_pred = compute_NP(adjacency, membership_matrix)
         if merge:
             nfm = hstack([node_pred, node_recall])
 
