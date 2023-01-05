@@ -1,144 +1,116 @@
 import os
-import logging
-from scipy.sparse import csr_matrix
+
 from networkit import Graph, components, community, setNumberOfThreads, graphio 
-from pathlib import PurePath
 import pickle as pk
-import numpy as np
-import parallel_sort
-#from gensim.models import KeyedVectors
-#from .sparse_nfm import get_nfm_embeddings
+
 from .nfm import get_nfm_embeddings
-import copy
 
-logger = logging.getLogger(__name__)
-ch = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s - %(funcName)s - %(levelname)s - %(message)s')
-ch.setFormatter(formatter)
+from .logger import logger
 
-if not len(logger.handlers):
-        logger.addHandler(ch)
+from . import strategy_norm
+from . import strategy_loader
 
-logger.setLevel(logging.INFO)
-
-class EmbeddingExtraction(object):
-
-    def nfm_extraction(G, vector, nb_com, nb_nodes,  n_jobs):
-        #print("Vector size : ", len(communities.getVector()))
-        return get_nfm_embeddings(G, vector, nb_com,nb_nodes)[2] #Concatenation of Node F-measure and Node Predominance
-
-
-class WeightNorm(object):
-
-    def apply_norm(G, norm):
-        """
-        Apply a normalisation to the graph (IPMI, PMI...) before detecting communities
-
-        :param norm: Type of normalisation.
-        :param norm_args: Arguments to pass to the normalisation alfgorithm.
-        :return: The graph and the weighted degrees before and after normalisation.
-        """
-        #try:
-        G = norm(G)#, wd_before, wd_after = norm(G)
-        #except:
-         #   raise TypeError('Unknown norm type')
-        return G#, wd_before, wd_after
-
-    def iterative_pmi(G):
-        """
-        Iteratively applies PMI to the graph to allow for community detection.
-
-        @return:  The graph and the weighted degrees before and after normalisation.
-        """
-        logger.info("Starting IPMI normalisation.")
-        # Using Decorate-Sort-Undecorate as apparently it's more efficient for large lists
-        dtype = [('edge', tuple), ('weighted_degree', int)]
-        edges_wd = np.array([(e, G.weightedDegree(e[0]) + G.weightedDegree(e[1])) for e in G.iterEdges() ], dtype=dtype)
-        #edges_wd[::-1].sort(order='weighted_degree') # Sort by weighted degree of edge
-        #edges = sorted(list(G.iterEdges()),
-                       #key=lambda x: G.weightedDegree(x[0]) + G.weightedDegree(x[1]), reverse=True)
-        edges = edges_wd['edge']
-        edges = edges[parallel_sort.parallel_argsort(edges_wd['weighted_degree'])[::-1]]
-        #wd_before = {e: G.weightedDegree(e) for e in G.iterNodes()}
-        ipmi = lambda u,v: (G.weight(u, v) / (G.weightedDegree(u) * G.weightedDegree(v)))
-        nb_edges = edges.shape[0]
-        cnt = 0
-        for u, v in edges:
-            G.setWeight(u, v,
-                        w= ipmi(u,v))
-            if cnt%1000000 == 0:
-                logger.info("Edge %i/%i normalized."%(cnt, nb_edges))
-            cnt+=1
-        #wd_after = {e: G.weightedDegree(e) for e in G.iterNodes()}
-        logger.info("Finished IPMI normalisation.")
-        return G#, wd_before, wd_after
+from sklearn.neighbors import NearestNeighbors
 
 
 class SINr(object):
 
-    def __init__(self, cooc_matrix_path, n_jobs=1):
+    def __init__(self, graph, lgcc, wrd_to_idx, n_jobs=1):
         """
         :param matrix_path: Path to coocurrence matrix.
         :type matrix_path: `str`
         """
         self.n_jobs = n_jobs
         setNumberOfThreads(n_jobs)
-        self.wrd_to_idx, self.matrix = self.load(cooc_matrix_path)
-        self.idx_to_wrd = SINr._flip_keys_values(self.wrd_to_idx)
+        self.wrd_to_idx = wrd_to_idx
+        self.idx_to_wrd = self._flip_keys_values(self.wrd_to_idx)
+        self.cooc_graph = graph
+        self.out_of_LgCC = lgcc
+        
         self.wd_before, self.wd_after = None, None
-        self.cooc_graph = None
-        self.out_of_LgCC = None
-
-    def build_graph(self, norm=WeightNorm.iterative_pmi, n_jobs=1):
+       
+    @staticmethod
+    def getGraphFromMatrix(matrix):
+        graph = Graph(weighted=True) 
+        rows, cols = matrix.row, matrix.col
+        weights = matrix.data
+        for row, col, weight in zip(rows, cols, weights):
+                graph.addEdge(u=row, v=col, w=weight, addMissing=True)
+        return graph
+        
+    @staticmethod
+    def getLgcc(graph):
+        out_of_LgCC = set(graph.iterNodes()) - set(components.ConnectedComponents.extractLargestConnectedComponent(graph).iterNodes()) # Extract out of largest connected component vocabulary
+        return out_of_LgCC
+        
+    @classmethod
+    def load_from_cooc_pkl(cls, cooc_matrix_path, norm=None, n_jobs=1):
         """
-        Build a graph and filter its nodes.
+        Build a sinr object from a co-occurrence matrix : useful to deal with textual data.
+        
+        :param cooc_matrix_path: path to the pickle obtaiuned using text.cooccurrence
+        
+        :type cooc_matrix_path: `pickle`
 
-        :param norm: Normalization to apply to edges.
-        :param rm_hg_deg: Number of highest degree nodes to remove.
-        :param k_core: Minimum size of k-core in graph.
+        :param norm: Normalization to apply to edges, used in IDA paper, but deprecated, default at None works fine
 
-        :type norm: `WeightNorm`
-        :type rm_hg_deg: `int`
-        :type k-core: `int`
+        :type norm: `strategy_norm`
 
         :return: A weighted graph.
         :rtype: `networkit.Graph`
         """
         logger.info("Building Graph.")
-        graph = Graph(weighted=True)
-        rows, cols = self.matrix.row, self.matrix.col
-        weights = self.matrix.data
-
-        for row, col, weight in zip(rows, cols, weights):
-                graph.addEdge(u=row, v=col, w=weight, addMissing=True)
-        self.cooc_graph = Graph(graph, weighted=True)
-        if norm != None:
-            graph = WeightNorm.apply_norm(graph, norm)
-            #, self.wd_before, self.wd_after = WeightNorm.apply_norm(graph, norm)
-        #print(list(graph.iterEdgesWeights())[:50])
-        self.out_of_LgCC = set(graph.iterNodes()) - set(components.ConnectedComponents.extractLargestConnectedComponent(graph).iterNodes()) # Extract out of largest connected component vocabulary
+        
+        word_to_idx, matrix = strategy_loader.load_pkl_text(cooc_matrix_path)
+        graph = SINr.getGraphFromMatrix(matrix)
+        graph = strategy_norm.apply_norm(graph, norm)
+        out_of_LgCC = SINr.getLgcc(graph)
         logger.info("Finished building graph.")
-        return graph
-
-    def load(self, mat_path):
+        return cls(graph, out_of_LgCC, word_to_idx)
+    
+    @classmethod
+    def load_from_adjacency_matrix(cls, matrix_object, norm=None, n_jobs=1):
         """
-        Load a cooccurrence matrix.
+        Build a sinr object from a matrix object
 
-        :param cooc_mat_path: Path to coocurrence matrix.
+        :param norm: Normalization to apply to edges, used in IDA paper, but deprecated, default at None works fine
 
-        :type cooc_mat_path : str
+        :type norm: `strategy_norm`
 
-        :return: The loaded cooccurrence matrix and the word index.
-
-        :rtype: `tuple(dict(), scipy.sparse.coo_matrix)`
+        :return: A weighted graph.
+        :rtype: `networkit.Graph`
         """
-        logger.info("Loading cooccurrence matrix and dictionary.")
-        with open(mat_path, "rb") as file:
-            word_to_idx, mat = pk.load(file)
-        logger.info("Finished loading data.")
-        return (word_to_idx, mat)
+        logger.info("Building Graph.")
+        word_to_idx, matrix = strategy_loader.load_adj_mat(matrix_object)
+        graph = SINr.getGraphFromMatrix(matrix)
+        graph = strategy_norm.apply_norm(graph, norm)
+        out_of_LgCC = SINr.getLgcc(graph)
+        logger.info("Finished building graph.")
+        return cls(graph, out_of_LgCC, word_to_idx)
+    
+    @classmethod
+    def load_from_graph(cls, graph,  norm=None, n_jobs=1):
+        """
+        Build a sinr object from a graph
 
-    def detect_communities(self, G, algo=community.PLP):
+        :param norm: Normalization to apply to edges, used in IDA paper, but deprecated, default at None works fine
+
+        :type norm: `strategy_norm`
+
+        :return: A weighted graph.
+        :rtype: `networkit.Graph`
+        """
+        word_to_idx = dict()
+        idx = 0
+        for u in graph.iterNodes():
+            word_to_idx[u] = idx
+            idx+=1
+        graph = strategy_norm.apply_norm(graph, norm)
+        out_of_LgCC = SINr.getLgcc(graph)
+        logger.info("Finished building graph.")
+        return cls(graph, out_of_LgCC, word_to_idx)
+
+    def detect_communities(self, gamma=1, algo=None, inspect=True ):
         """
         Detect the communities in a graph.
 
@@ -153,68 +125,85 @@ class SINr(object):
         :rtype: Networkit.community.Partition
         """
         logger.info("Detecting communities.")
-        communities = community.detectCommunities(G, algo=algo(G))
+        if algo == None:
+            algo = community.PLM(self.cooc_graph, refine=False, gamma=gamma, turbo=True, recurse=False)
+        communities = community.detectCommunities(self.cooc_graph, algo=algo, inspect=inspect)
         communities.compact(useTurbo=True) #Consecutive communities from 0 to number of communities - 1
+        self.communities = communities
         logger.info("Finished detecting communities.")
         return communities
 
     def get_out_of_LgCC_coms(self, communities):
         set_out_of_LgCC = set(self.out_of_LgCC)
         out_of_LgCC_coms = []
-        for community in communities.getSubsetIds():
+        for com in communities.getSubsetIds():
             if set(communities.getMembers()) & set_out_of_LgCC != {}:
-                out_of_LgCC_coms.append(community)
+                out_of_LgCC_coms.append(com)
         return out_of_LgCC_coms
 
 
-    def extract_embeddings(self, G, communities, extraction=EmbeddingExtraction.nfm_extraction, n_jobs=1):
+    def extract_embeddings(self, communities):
         """
         Extract the word embeddings from the graph and its community structure. The word embeddings are computed by
         counting the number of neighbors in each community.
 
         :param G: A graph.
         :param communities: A community structure.
-        :param extraction: The extraction method for the word embeddings.
 
         :type G: Networkit.graph
         :type communities: Networkit.community.Partitions
-        :type extraction: EmbeddingExtraction
 
         :return: The word embeddings.
         :rtype: `graph_embeddings.Model()`
         """
         logger.info("Extracting embeddings.")
-#        nodes  = set(G.iterNodes())
+
         logger.info("Applying NFM.")
-        embeddings = extraction(G=self.cooc_graph, vector=communities.getVector(), nb_com=communities.numberOfSubsets(), nb_nodes=self.cooc_graph.numberOfNodes(), n_jobs=n_jobs)
-        #print(embeddings)
+        np, nr, nfm = get_nfm_embeddings(self.cooc_graph, communities.getVector(), self.n_jobs)
+        self.np = np
+        self.nr = nr
+        self.nfm = nfm
         logger.info("NFM successfully applied.")
-
-#        if self.out_of_LgCC: #Even though we extracted the embeddings in communities outside of the largest connected component, we do not wish to extract them in our model
-#            out_of_LgCC_coms = np.array([com_ids_map[i] for i in self.get_out_of_LgCC_coms(communities)])
-#
-#            if embeddings.shape[1] == 2 * nb_com: # Concatenation of node predominance and node recall
-#                out_of_LgCC_coms = np.append(out_of_LgCC_coms, out_of_LgCC_coms+nb_com, 0) # Delete component for node recall and node predominance
-#            embeddings = np.delete(embeddings, self.out_of_LgCC, axis=0) # Delete words out of LgCC from embeddings
-#            embeddings = np.delete(embeddings, out_of_LgCC_coms, axis=1) # Delete components corresponding to communities out of LgCC
-
-#            nodes      =sorted( list(nodes - self.out_of_LgCC))
-
-#        words = [self.idx_to_wrd[i] for i in nodes] 
-        words = list(self.idx_to_wrd.values())
-        #model = KeyedVectors(embeddings.shape[1])
-        #model.add(words, embeddings)
-        #del model.vectors_norm
         logger.info("Finished extracting embeddings.")
-        return Model(words, embeddings)
 
-    def sinr(cooc_mat_path, output_path=None, mat=None, dictionary=None, n_jobs=1, norm=WeightNorm.iterative_pmi, algo=community.PLP, extraction=EmbeddingExtraction.nfm_extraction):
-        sinr = SINr(cooc_mat_path, n_jobs=n_jobs)
-        G = sinr.build_graph(norm=norm, n_jobs=n_jobs)
-        communities = sinr.detect_communities(G, algo=algo)
-        model = sinr.extract_embeddings(G=sinr.cooc_graph, communities=communities, extraction=extraction, n_jobs=n_jobs)
-        if output_path:
-            sinr.save(output_path, G=G, communities=communities, model=model)
+    def get_cooc_graph(self):
+        return self.cooc_graph
+    def get_nr(self):
+        if hasattr(self, 'nr'):
+            return self.nr
+        else:
+            raise NoEmbeddingExtractedException
+            
+    def get_np(self):
+        if hasattr(self, 'np'):
+            return self.np
+        else:
+            raise NoEmbeddingExtractedException
+
+    def get_nfm(self):
+        if hasattr(self, 'nfm'):
+            return self.nfm
+        else:
+            raise NoEmbeddingExtractedException    
+    
+    def get_vocabulary(self):
+        return list(self.idx_to_wrd.values())
+    
+    def get_communities(self):
+        if hasattr(self, 'communities'):
+            return self.communities
+        else:
+            raise NoCommunityDetectedException
+            
+    def run(self, output_path=None, mat=None, dictionary=None, norm=None, algo=None):
+        #G = self.build_graph(norm=norm)
+        if algo == None:
+            algo = community.PLM(self.cooc_graph, refine=False, gamma=1, turbo=True, recurse=False)
+        self.communities = self.detect_communities(self.cooc_graph, algo=algo)
+        model = self.extract_embeddings(G=self.cooc_graph, communities=self.communities)
+        
+        #if output_path:
+        #    self.save(output_path, G=self.cooc_graph, communities=self.communities, model=model)
         return model
 
     def save(self, output_path, G=None, communities=None, model=None):
@@ -234,21 +223,93 @@ class SINr(object):
             pk.dump(self.idx_to_wrd, i2w)
 
 
-    def _flip_keys_values(dictionary):
+    def _flip_keys_values(self, dictionary):
         return dict((v, k) for k,v in dictionary.items())
 
+class NoCommunityDetectedException(Exception):
+    "Raised when the communities were not detected"
+    pass
 
-class Model(object):
+class NoEmbeddingExtractedException(Exception):
+    "Raised when the embeddings were not extracted"
+    pass
 
-    def __init__(self, voc, embeddings):
-        self.vocab=voc
-        self.vectors=embeddings
+
+class ModelBuilder:
+    def __init__(self, sinr, name, n_jobs=1, n_neighbors=31):
+        self.sinr = sinr
+        self.model = SINrVectors(name, n_jobs, n_neighbors)
+        
+    def with_embeddings_nr(self):
+        self.model.set_vectors(self.sinr.get_nr())
+        return self
+        
+    def with_embeddings_nfm(self):
+        self.model.set_vectors(self.sinr.get_nfm())
+        return self
+        
+    def with_np(self):
+        self.model.set_np(self.sinr.get_np())
+        return self
+        
+    def with_vocabulary(self):
+        self.model.set_vocabulary(self.sinr.get_vocabulary())
+        return self
+        
+    def with_communities(self):
+        self.model.set_communities(self.sinr.get_)
+        
+    def build(self):
+        return self.model
+        
+        
     
-    def save(self, output_path):
-        with open(output_path, 'wb+') as file:
-            pk.dump((self.vocab, self.vectors), file)
+class SINrVectors(object):
 
-    def load(model_path):
-        with open(model_path, 'rb') as file:
-            vocab, vectors = pk.load(file)
-        return Model(vocab, vectors)
+    def __init__(self, name, n_jobs, n_neighbors):
+        self.name = name
+        self.n_jobs=n_jobs
+        self.n_neighbors=n_neighbors
+        
+    def set_n_jobs(self, n_jobs):
+        self.n_jobs = n_jobs
+        
+    def set_vocabulary(self, voc):
+        self.vocab=voc
+        
+    def set_vectors(self, embeddings):
+        self.vectors=embeddings
+        self.neighbors = NearestNeighbors(n_neighbors=self.n_neighbors, metric='cosine', n_jobs=self.n_jobs).fit(self.vectors)
+        
+    def set_np(self, np):
+        self.np = np
+        
+    def set_communities(self, com):
+        self.communities = com
+        
+    def most_similar(self, word):
+        similarities, neighbor_idx = self.neighbors.kneighbors(self.vectors[self.vocab.index(word),:], return_distance=True)
+        #print(similarities, neighbor_idx)
+        return {"word":word,
+               "neighbors": [(self.vocab[nbr], 1-sim) for sim, nbr in list(zip(similarities.flatten(), neighbor_idx.flatten()))[1::]]}
+        
+    def load(self):
+        f = open(self.name, 'rb')
+        tmp_dict = pk.load(f)
+        f.close()          
+        self.__dict__.update(tmp_dict) 
+
+
+    def save(self):
+        f = open(self.name, 'wb')
+        pk.dump(self.__dict__, f, 2)
+        f.close()
+    
+#    def save(self, output_path):
+#        with open(output_path, 'wb+') as file:
+#            pk.dump((self.vocab, self.vectors), file)
+
+#    def load(model_path):
+#        with open(model_path, 'rb') as file:
+#            vocab, vectors = pk.load(file)
+#        return Model(vocab, vectors)

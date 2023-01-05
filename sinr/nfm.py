@@ -1,13 +1,11 @@
-import logging
 import numpy as np
-from scipy.sparse import csr_matrix, coo_matrix, hstack
-import pickle as pk
+from scipy.sparse import coo_matrix, hstack
 from sklearn.preprocessing import normalize
 import networkit as nk
 
 from .logger import logger
 
-def get_nfm_embeddings(G, vector, size_partition, number_of_nodes, compute_np=False, merge=False):
+def get_nfm_embeddings(G, vector, compute_np=False, merge=False):
     logger.info("Starting NFM")
     adjacency = nk.algebraic.adjacencyMatrix(G, matrixType='sparse') # Extract the adjacency matrix of the graph
     membership_matrix = get_membership(vector) # Word-Community membership matrix
@@ -18,7 +16,6 @@ def get_nfm_embeddings(G, vector, size_partition, number_of_nodes, compute_np=Fa
     nfm = None
 
     if compute_np or merge:
-        edges_weights = G.iterEdgesWeights()
         node_pred = compute_NP(adjacency, membership_matrix)
         if merge:
             nfm = hstack([node_pred, node_recall])
@@ -51,12 +48,3 @@ def get_membership(vector):
     data = np.ones(nb_nodes)
     return coo_matrix((data, (rows, columns)), shape=(nb_nodes, nb_communities)).tocsr()
 
-# def get_community_weights(edges_weights, vector):
-#     sum_community_weights = np.zeros(len(set(vector)))
-#     for u, v, weight in edges_weights:
-#         if vector[int(u)] == vector[int(v)]: # For selfloops
-#             sum_community_weights[vector[int(u)]] += weight
-#         else:
-#             sum_community_weights[vector[u]] += weight
-#             sum_community_weights[vector[v]] += weight
-#     return sum_community_weights

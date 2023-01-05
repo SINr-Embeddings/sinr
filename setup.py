@@ -64,24 +64,24 @@ def define_extensions(cythonize=False):
         compile_args.append('-march=native')
 
     if cythonize:
-        sinr_cooc = "sinr/cooccurrence_cython.pyx"
-        nfm = "sinr/nfm.pyx"
+        sinr_cooc = "sinr/text/cooccurrence_cython.pyx"
+        #nfm = "sinr/nfm.pyx"
     else:
-        sinr_cooc = "sinr/cooccurrence_cython.cpp"
-        nfm = "sinr/nfm.cpp"
+        sinr_cooc = "sinr/text/cooccurrence_cython.cpp"
+        #nfm = "sinr/nfm.cpp"
 
-    return [Extension("sinr.cooccurrence_cython", [sinr_cooc],
+    return [Extension("sinr.text.cooccurrence_cython", [sinr_cooc],
                       language='C++',
                       libraries=["stdc++"],
                       extra_link_args=compile_args,
 		      include_dirs=[numpy.get_include()],
                       extra_compile_args=compile_args),
-            Extension("sinr.nfm", [nfm],
-                      language='C++',
-                      libraries=["stdc++"],
-		      include_dirs=[numpy.get_include()],
-                      extra_link_args=compile_args,
-                      extra_compile_args=compile_args)
+            #Extension("sinr.nfm", [nfm],
+            #          language='C++',
+            #          libraries=["stdc++"],
+		    #  include_dirs=[numpy.get_include()],
+            #          extra_link_args=compile_args,
+            #          extra_compile_args=compile_args)
             ]
 
 
@@ -195,7 +195,7 @@ setup(
     install_requires=requirements,
 	tests_require=test_requirements,
     cmdclass={'test': PyTest, 'cythonize': Cythonize, 'clean': Clean},
-    url='https://git-lium.univ-lemans.fr/tprouteau/sinr_embeddings',
+    url='https://github.com/SINr-Embeddings/sinr',
     #download_url='',
     license='Apache 2.0',
     classifiers=['Development Status :: 3 - Alpha',
