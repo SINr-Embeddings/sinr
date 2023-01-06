@@ -1,16 +1,15 @@
-
-from networkit import Graph, components, community, setNumberOfThreads
 import pickle as pk
+from networkit import Graph, components, community, setNumberOfThreads
+from numpy import argpartition, argsort, asarray
+from sklearn.neighbors import NearestNeighbors
 
+from . import strategy_loader
+from . import strategy_norm
+from .logger import logger
 from .nfm import get_nfm_embeddings
 
-from .logger import logger
 
-from . import strategy_norm
-from . import strategy_loader
 
-from sklearn.neighbors import NearestNeighbors
-from numpy import argpartition, argsort, asarray
 
 
 class SINr(object):
@@ -24,8 +23,7 @@ class SINr(object):
     ----------
     Attributes should not be read
     """
-    
-        
+
     @classmethod
     def load_from_cooc_pkl(cls, cooc_matrix_path, norm=None, n_jobs=1):
         """
@@ -48,14 +46,14 @@ class SINr(object):
 
         """
         logger.info("Building Graph.")
-        
+
         word_to_idx, matrix = strategy_loader.load_pkl_text(cooc_matrix_path)
-        graph = SINr.getGraphFromMatrix(matrix)
+        graph = get_graph_from_matrix(matrix)
         graph = strategy_norm.apply_norm(graph, norm)
-        out_of_LgCC = SINr.getLgcc(graph)
+        out_of_LgCC = get_lgcc(graph)
         logger.info("Finished building graph.")
         return cls(graph, out_of_LgCC, word_to_idx)
-    
+
     @classmethod
     def load_from_adjacency_matrix(cls, matrix_object, norm=None, n_jobs=1):
         """
@@ -78,14 +76,14 @@ class SINr(object):
         """
         logger.info("Building Graph.")
         word_to_idx, matrix = strategy_loader.load_adj_mat(matrix_object)
-        graph = SINr.getGraphFromMatrix(matrix)
+        graph = get_graph_from_matrix(matrix)
         graph = strategy_norm.apply_norm(graph, norm)
-        out_of_LgCC = SINr.getLgcc(graph)
+        out_of_LgCC = get_lgcc(graph)
         logger.info("Finished building graph.")
         return cls(graph, out_of_LgCC, word_to_idx)
-    
+
     @classmethod
-    def load_from_graph(cls, graph,  norm=None, n_jobs=1):
+    def load_from_graph(cls, graph, norm=None, n_jobs=1):
         """
         Build a sinr object from a networkit graph object
 
@@ -108,9 +106,9 @@ class SINr(object):
         idx = 0
         for u in graph.iterNodes():
             word_to_idx[u] = idx
-            idx+=1
+            idx += 1
         graph = strategy_norm.apply_norm(graph, norm)
-        out_of_LgCC = SINr.getLgcc(graph)
+        out_of_LgCC = get_lgcc(graph)
         logger.info("Finished building graph.")
         return cls(graph, out_of_LgCC, word_to_idx)
 
@@ -128,14 +126,12 @@ class SINr(object):
         None.
 
         """
-        #G = self.build_graph(norm=norm)
-        if algo == None:
+        if algo is None:
             algo = community.PLM(self.cooc_graph, refine=False, gamma=100, turbo=True, recurse=False)
         self.communities = self.detect_communities(self.cooc_graph, algo=algo)
         self.extract_embeddings(G=self.cooc_graph, communities=self.communities)
 
-    
-    def detect_communities(self, gamma=100, algo=None, inspect=True ):
+    def detect_communities(self, gamma=100, algo=None, inspect=True):
         """
         Runs community detection on the graph
 
@@ -155,14 +151,13 @@ class SINr(object):
 
         """
         logger.info("Detecting communities.")
-        if algo == None:
+        if algo is None:
             algo = community.PLM(self.cooc_graph, refine=False, gamma=gamma, turbo=True, recurse=False)
         communities = community.detectCommunities(self.cooc_graph, algo=algo, inspect=inspect)
-        communities.compact(useTurbo=True) #Consecutive communities from 0 to number of communities - 1
+        communities.compact(useTurbo=True)  # Consecutive communities from 0 to number of communities - 1
         self.communities = communities
         logger.info("Finished detecting communities.")
         return communities
-
 
     def extract_embeddings(self, communities):
         """
@@ -188,7 +183,6 @@ class SINr(object):
         logger.info("NFM successfully applied.")
         logger.info("Finished extracting embeddings.")
 
-    
     def __init__(self, graph, lgcc, wrd_to_idx, n_jobs=1):
         """
         Should not be used ! Some factory methods below starting with "load_" should be used instead.
@@ -208,54 +202,18 @@ class SINr(object):
         None.
 
         """
+        self.nfm = None
+        self.nr = None
+        self.np = None
+        self.communities = None
         self.n_jobs = n_jobs
         setNumberOfThreads(n_jobs)
         self.wrd_to_idx = wrd_to_idx
-        self.idx_to_wrd = self._flip_keys_values(self.wrd_to_idx)
+        self.idx_to_wrd = _flip_keys_values(self.wrd_to_idx)
         self.cooc_graph = graph
         self.out_of_LgCC = lgcc
-        
+
         self.wd_before, self.wd_after = None, None
-       
-    @staticmethod
-    def getGraphFromMatrix(matrix):
-        """
-
-        Parameters
-        ----------
-        matrix : coo_matrix
-            A sparse matrix describing a graph
-
-        Returns
-        -------
-        graph : networkit graph
-            the graph corresponding to the coo matrix
-
-        """
-        graph = Graph(weighted=True) 
-        rows, cols = matrix.row, matrix.col
-        weights = matrix.data
-        for row, col, weight in zip(rows, cols, weights):
-                graph.addEdge(u=row, v=col, w=weight, addMissing=True)
-        return graph
-        
-    @staticmethod
-    def getLgcc(graph):
-        """
-
-        Parameters
-        ----------
-        graph : networkit graph
-            
-
-        Returns
-        -------
-        out_of_LgCC : networkit graph
-            the largest connected component of the graph provided as a parameter
-
-        """
-        out_of_LgCC = set(graph.iterNodes()) - set(components.ConnectedComponents.extractLargestConnectedComponent(graph).iterNodes()) # Extract out of largest connected component vocabulary
-        return out_of_LgCC
 
     def get_out_of_LgCC_coms(self, communities):
         set_out_of_LgCC = set(self.out_of_LgCC)
@@ -264,46 +222,88 @@ class SINr(object):
             if set(communities.getMembers()) & set_out_of_LgCC != {}:
                 out_of_LgCC_coms.append(com)
         return out_of_LgCC_coms
-    
+
     def get_cooc_graph(self):
         return self.cooc_graph
-    
+
     def get_nr(self):
-        if hasattr(self, 'nr'):
+        if self.nr is None:
+            raise NoEmbeddingExtractedException
+        else:
             return self.nr
-        else:
-            raise NoEmbeddingExtractedException
-            
+
     def get_np(self):
-        if hasattr(self, 'np'):
-            return self.np
-        else:
+        if self.np is None:
             raise NoEmbeddingExtractedException
+        else:
+            return self.np
 
     def get_nfm(self):
-        if hasattr(self, 'nfm'):
-            return self.nfm
+        if self.nfm is None:
+            raise NoEmbeddingExtractedException
         else:
-            raise NoEmbeddingExtractedException    
-    
+            return self.nfm
+
     def get_vocabulary(self):
         return list(self.idx_to_wrd.values())
-    
+
     def get_wrd_to_id(self):
         return self.wrd_to_idx
-    
-    def get_communities(self):
-        if hasattr(self, 'communities'):
-            return self.communities
-        else:
-            raise NoCommunityDetectedException
 
-    def _flip_keys_values(self, dictionary):
-        return dict((v, k) for k,v in dictionary.items())
+    def get_communities(self):
+        if self.communities is None:
+            raise NoCommunityDetectedException
+        else:
+            return self.communities
+
+
+def _flip_keys_values(dictionary):
+    return dict((v, k) for k, v in dictionary.items())
+def get_lgcc(graph):
+    """
+
+    Parameters
+    ----------
+    graph : networkit graph
+
+
+    Returns
+    -------
+    out_of_LgCC : networkit graph
+        the largest connected component of the graph provided as a parameter
+
+    """
+    out_of_LgCC = set(graph.iterNodes()) - set(components.ConnectedComponents.extractLargestConnectedComponent(
+        graph).iterNodes())  # Extract out of largest connected component vocabulary
+    return out_of_LgCC
+
+
+def get_graph_from_matrix(matrix):
+    """
+
+    Parameters
+    ----------
+    matrix : coo_matrix
+        A sparse matrix describing a graph
+
+    Returns
+    -------
+    graph : networkit graph
+        the graph corresponding to the coo matrix
+
+    """
+    graph = Graph(weighted=True)
+    rows, cols = matrix.row, matrix.col
+    weights = matrix.data
+    for row, col, weight in zip(rows, cols, weights):
+        graph.addEdge(u=row, v=col, w=weight, addMissing=True)
+    return graph
+
 
 class NoCommunityDetectedException(Exception):
     "Raised when the communities were not detected"
     pass
+
 
 class NoEmbeddingExtractedException(Exception):
     "Raised when the embeddings were not extracted"
@@ -320,6 +320,7 @@ class ModelBuilder:
     ----------
     Attributes should not be read
     """
+
     def __init__(self, sinr, name, n_jobs=1, n_neighbors=31):
         """
         Creating a ModelBuilder object to build a SINrVectors one
@@ -342,7 +343,7 @@ class ModelBuilder:
         """
         self.sinr = sinr
         self.model = SINrVectors(name, n_jobs, n_neighbors)
-        
+
     def with_embeddings_nr(self):
         """
         Adding Node Recall vectors to the SINrVectors object
@@ -350,7 +351,7 @@ class ModelBuilder:
         """
         self.model.set_vectors(self.sinr.get_nr())
         return self
-        
+
     def with_embeddings_nfm(self):
         """
         Adding NFM (Node Recall + Node Predominance) vectors to the SINrVectors object
@@ -363,7 +364,7 @@ class ModelBuilder:
         """
         self.model.set_vectors(self.sinr.get_nfm())
         return self
-        
+
     def with_np(self):
         """
         Storing Node predominance values in order to label dimensions for instance
@@ -376,7 +377,7 @@ class ModelBuilder:
         """
         self.model.set_np(self.sinr.get_np())
         return self
-        
+
     def with_vocabulary(self):
         """
         To deal with word vectors or graph when nodes have labels
@@ -389,7 +390,7 @@ class ModelBuilder:
         """
         self.model.set_vocabulary(self.sinr.get_vocabulary())
         return self
-        
+
     def with_communities(self):
         """
         To keep the interpretability of the model using the communities
@@ -402,7 +403,7 @@ class ModelBuilder:
         """
         self.model.set_communities(self.sinr.get_communities())
         return self
-        
+
     def build(self):
         """
         To get the SINrVectors object
@@ -414,118 +415,224 @@ class ModelBuilder:
 
         """
         return self.model
-        
+
+
 class NoInterpretabilityException(Exception):
     "Raised when the communities were not included in the model that was built. It is thus not interpretable anymore."
     pass
 
+
 class NoVocabularyException(Exception):
     "Raised when no vocabulary was included in the model that was built. One cant play with words."
     pass
-    
+
+
 class SINrVectors(object):
+    """
+    After having trained word or graph embeddings using SINr object, use the ModelBuilder object to build SINrVectors.
+    SINrVectors is the object to manipulate the model, explore the embedding space and its interpretability
+    """
 
     def __init__(self, name, n_jobs, n_neighbors):
+        """
+        Initializing SINr vectors objets
+        @param name: name of the model, useful to save it
+        @param n_jobs: number of jobs to use (k-nearest neighbors to obtain most similar words or nodes)
+        @param n_neighbors: number of neighbors to consider when querying the most similar words or nodes
+        """
+        self.np = None
+        self.neighbors = None
+        self.communities = None
+        self.vocab = None
+        self.vectors = None
         self.name = name
         self.n_jobs = n_jobs
         self.n_neighbors = n_neighbors
         self.labels = False
-        
+
     def set_n_jobs(self, n_jobs):
+        """
+
+        @param n_jobs: number of jobs
+        """
         self.n_jobs = n_jobs
-        
+
     def set_vocabulary(self, voc):
+        """
+
+        @param voc: set the vocabulary when dealing with words or nodes with labels. label parameter is set to True.
+        By default, labels from the vocab will be used.
+        """
         self.vocab = voc
-        #self.wrd_to_id = wrd_to_id
+        # self.wrd_to_id = wrd_to_id
         self.labels = True
-        
+
     def set_vectors(self, embeddings):
+        """
+
+        @param embeddings:  initialize the vectors and build the nearest neighbors data structure using sklearn
+        """
         self.vectors = embeddings
-        self.neighbors = NearestNeighbors(n_neighbors=self.n_neighbors, metric='cosine', n_jobs=self.n_jobs).fit(self.vectors)
-        
+        self.neighbors = NearestNeighbors(n_neighbors=self.n_neighbors, metric='cosine', n_jobs=self.n_jobs).fit(
+            self.vectors)
+
     def set_np(self, np):
         self.np = np
-        
+
     def set_communities(self, com):
         self.communities = com
-        
+
     def _get_index(self, obj):
+        """
+        Returns the index of the object if there is a list of labels. If not, return the obj.
+        @param obj:
+        @return:
+        """
         index = self.vocab.index(obj) if self.labels else obj
         return index
-    
+
     def most_similar(self, obj):
+        """
+        Get the most similar objects of the one passed as a parameter using the cosine of their vectors
+
+        Parameters
+        ----------
+        obj : integer or string
+            DESCRIPTION.
+
+        Returns
+        -------
+        dict
+            DESCRIPTION.
+
+        """
         index = self._get_index(obj)
-            
-        distances, neighbor_idx = self.neighbors.kneighbors(self.vectors[index,:], return_distance=True)
-        #print(similarities, neighbor_idx)
+
+        distances, neighbor_idx = self.neighbors.kneighbors(self.vectors[index, :], return_distance=True)
+        # print(similarities, neighbor_idx)
         return {"object ": obj,
-                   "neighbors ": [(self.vocab[nbr] if self.labels else nbr , 1-dist) for dist, nbr in list(zip(distances.flatten(), neighbor_idx.flatten()))[1::]]}
-    
-    
-    
-    
-    
+                "neighbors ": [(self.vocab[nbr] if self.labels else nbr, 1 - dist) for dist, nbr in
+                               list(zip(distances.flatten(), neighbor_idx.flatten()))[1::]]}
+
     def _get_vector(self, idx, row=True):
-        vector = asarray(self.vectors.getrow(idx).todense()).flatten() if row else  asarray(self.vectors.getcol(idx).todense()).flatten()
-        return vector 
-    
+        """
+        Returns a list from the csr matrix
+        @param idx: id of the vector requested
+        @param row: if the vector should be a row or a column of the csr matrix of embeddings
+        @return: the vector
+        """
+        vector = asarray(self.vectors.getrow(idx).todense()).flatten() if row else asarray(
+            self.vectors.getcol(idx).todense()).flatten()
+        return vector
+
     def _get_topk(self, idx, topk=5, row=True):
+        """
+        return indices of the topk values in the vector of id idx
+        @param idx: idx of the vector in which the topk values are searched
+        @param topk: number of values to get
+        @param row: if the vector is a row or a column
+        @return: the indices of the topk values in the vector
+        """
         vector = self._get_vector(idx, row)
         topk = -topk
         ind = argpartition(vector, topk)[topk:]
         ind = ind[argsort(vector[ind])[::-1]]
         return ind
-        
-    #Using communities to describe dimensions
+
+    # Using communities to describe dimensions
     def get_dimension_descriptors(self, obj):
-        "returns the other objects that constitute the dimension (i.e. the community) of obj"
+        """
+        returns the objects that constitute the dimension of obj, i.e. the members of the community of obj
+        @param obj: id, word
+        @return: a set of object, the community of obj
+        """
+
         index = self._get_index(obj)
         return self.get_dimension_descriptors_idx(self.communities.subsetOf(index))
-    
+
     def get_dimension_descriptors_idx(self, idx):
-        return [self.vocab[member]  if self.labels else member for member in self.communities.getMembers(idx)]
+        """
+        returns the objects that constitute the dimension of idx, i.e. the members of the community of idx
+        @param idx: int of a node
+        @return: the nodes of the community of idx
+        """
+        return [self.vocab[member] if self.labels else member for member in self.communities.getMembers(idx)]
 
     def get_obj_descriptors(self, obj, topk=5):
-        "returns the dimensions (and the objects that constitute these dimensions) that matter to describe obj"
+        """
+        @param obj: an id or a word/label
+        @param topk: int, topk dimensions to consider to describe obj
+        @return: the dimensions (and the objects that constitute these dimensions) that matter to describe obj
+        """
+
         index = self._get_index(obj)
         highest_dims = self._get_topk(index, topk, row=True)
         vector = self._get_vector(index, row=True)
-        highest_dims = [{"dimension" : idx, "value" : vector[idx], "descriptors" : self.get_dimension_descriptors_idx(idx)} for idx in highest_dims]
+        highest_dims = [{"dimension": idx, "value": vector[idx], "descriptors": self.get_dimension_descriptors_idx(idx)}
+                        for idx in highest_dims]
         return highest_dims
-    
-    
-    
-    #Using words to describe dimensions
+
+    # Using top words to describe dimensions
     def get_dimension_stereotypes(self, obj, topk=5):
+        """
+
+        @param obj: id of a dimension, or label of a word (then turned into the id of its community)
+        @param topk: topk value to consider on the dimension
+        @return: the topk words that describe this dimension (highest values)
+        """
         index = self._get_index(obj)
         return self.get_dimension_stereotypes_idx(self.communities.subsetOf(index), topk)
-    
+
     def get_dimension_stereotypes_idx(self, idx, topk=5):
+        """
+
+        @param idx: id of a dimension
+        @param topk: topk value to consider on the dimension
+        @return: the topk words that describe this dimension (highest values)
+        """
         highest_idxes = self._get_topk(idx, topk, row=False)
         highest_idxes = [self.vocab[idx] if self.labels else idx for idx in highest_idxes]
         return highest_idxes
-    
-    #Using wor
-    def get_obj_stereotypes(self, obj, topk=5):
-        #get index of the word considered
+
+    def get_obj_stereotypes(self, obj, topk_dim=5, topk_val=3):
+        """
+
+        @param obj: the word to consider
+        @param topk_dim: topk dimension to consider
+        @param topk_val: topk values to describe each dimension
+        @return: the most useful dimensions to describe a word and for each dimension,
+        the topk words that describe this dimension (highest values)
+        """
+        # get index of the word considered
         index = self._get_index(obj)
-        #get the topk dimensions for this word
-        highest_dims = self._get_topk(index, topk, row=True)
+        # get the topk dimensions for this word
+        highest_dims = self._get_topk(index, topk_dim, row=True)
         vector = self._get_vector(index, row=True)
-        highest_dims = [{"dimension" : idx, "value" : vector[idx], "stereotypes" : self.get_dimension_stereotypes_idx(idx)} for idx in highest_dims]
+        highest_dims = [{"dimension": idx, "value": vector[idx], "stereotypes": self.get_dimension_stereotypes_idx(idx, topk_val)}
+                        for idx in highest_dims]
         return highest_dims
-             
+
+    def get_obj_stereotypes_and_descriptors(self, obj, topk_dim=5, topk_val=3):
+        """
+        @return: both stereotypes and descriptors
+        """
+        sters = self.get_obj_stereotypes(obj, topk_dim, topk_val)
+        descs = self.get_obj_descriptors(obj, topk=topk_dim)
+        for ster, desc in zip(sters, descs):
+            ster["descriptors"] = desc["descriptors"]
+        return sters
+
     def load(self):
         f = open(self.name, 'rb')
         tmp_dict = pk.load(f)
-        f.close()          
-        self.__dict__.update(tmp_dict) 
+        f.close()
+        self.__dict__.update(tmp_dict)
 
     def save(self):
         f = open(self.name, 'wb')
         pk.dump(self.__dict__, f, 2)
         f.close()
-    
+
 #    def save(self, output_path):
 #        with open(output_path, 'wb+') as file:
 #            pk.dump((self.vocab, self.vectors), file)

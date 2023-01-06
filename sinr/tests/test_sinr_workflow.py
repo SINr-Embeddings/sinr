@@ -80,17 +80,18 @@ class TestSinr_embeddings(unittest.TestCase):
         
         
     def test_detect_communities(self):
-        communities = self.sinr_from_graph.detect_communities(inspect=False)
+        communities = self.sinr_from_graph.detect_communities(gamma=1, inspect=False)
         communities = communities.getVector()
+        print(communities)
         self.assertAlmostEqual(rand_score([0,0,0,1,1], communities), 1)
         self.assertAlmostEqual(rand_score([0,0,0,1,1], self.sinr_from_graph.get_communities().getVector()), 1)
         
-        communities = self.sinr_from_mat.detect_communities(inspect=False)
+        communities = self.sinr_from_mat.detect_communities(gamma=1, inspect=False)
         communities = communities.getVector()
         self.assertAlmostEqual(rand_score([0,0,0,1,1], communities), 1)
         self.assertAlmostEqual(rand_score([0,0,0,1,1], self.sinr_from_mat.get_communities().getVector()), 1)
         
-        communities = self.sinr_from_cooc.detect_communities(inspect=False)
+        communities = self.sinr_from_cooc.detect_communities(gamma=1, inspect=False)
         communities = communities.getVector()
         # ['a', 'fun', 'is', 'package', 'python', 'sinr']
         # [0    ,1     ,2    ,0         ,0      ,1]
@@ -98,7 +99,7 @@ class TestSinr_embeddings(unittest.TestCase):
         self.assertAlmostEqual(rand_score([0,1,2,0,0,1], self.sinr_from_cooc.get_communities().getVector()), 1)
         
     def test_extract_embeddings(self):
-        communities = self.sinr_from_graph.detect_communities(inspect=False)
+        communities = self.sinr_from_graph.detect_communities(gamma=1, inspect=False)
         self.sinr_from_graph.extract_embeddings(communities)
         nr = self.sinr_from_graph.get_nr()
         ref = csr_matrix([[1,0],[1,0],[0.66666666, 0.33333333], [0.5, 0.5], [0,1]])
@@ -107,7 +108,7 @@ class TestSinr_embeddings(unittest.TestCase):
         except AssertionError:
             self.fail("Nr not equals to what is expected")
         
-        communities = self.sinr_from_mat.detect_communities(inspect=False)
+        communities = self.sinr_from_mat.detect_communities(gamma=1, inspect=False)
         self.sinr_from_mat.extract_embeddings(communities)
         nr = self.sinr_from_mat.get_nr()
         try:
@@ -118,7 +119,7 @@ class TestSinr_embeddings(unittest.TestCase):
         # Graphe : a-package-python, fun-sinr, is
         # "is" of community 2 is not connected
         ref = csr_matrix([[1, 0, 0],[0,1,0],[0, 0, 0], [1, 0, 0], [1, 0, 0], [0,1, 0]])
-        communities = self.sinr_from_cooc.detect_communities(inspect=False)
+        communities = self.sinr_from_cooc.detect_communities(gamma=1, inspect=False)
         self.sinr_from_cooc.extract_embeddings(communities)
         nr = self.sinr_from_cooc.get_nr()
         try:

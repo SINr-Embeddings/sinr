@@ -112,7 +112,8 @@ Tips
 To run a subset of tests::
 
 
-    $ python -m unittest tests.test_sinr_embeddings
+    $ python -m sinr.tests.test_sinr_workflow
+    $ python -m sinr.tests.test_sinr_nfm
 
 Deploying
 ---------

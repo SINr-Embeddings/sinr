@@ -10,4 +10,4 @@ Development Lead
 Contributors
 ------------
 
-None yet. Why not be the first?
+* Nicolas Dugué <nicolas.dugue@univ-lemans.fr>
