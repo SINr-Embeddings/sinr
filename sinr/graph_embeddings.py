@@ -404,6 +404,17 @@ class ModelBuilder:
         self.model.set_communities(self.sinr.get_communities())
         return self
 
+    def with_graph(self):
+        """
+        To keep the underlying graph ; useful to get co-occ statistics, degree of nodes or to label communities with central nodes
+        @return:
+        """
+        self.model.set_graph(self.sinr.get_cooc_graph())
+        return self
+
+    def with_all(self):
+        return self.with_embeddings_nr().with_vocabulary().with_communities().with_graph().with_np()
+
     def build(self):
         """
         To get the SINrVectors object
@@ -414,6 +425,18 @@ class ModelBuilder:
             DESCRIPTION.
 
         """
+        return self.model
+
+
+class InterpretableWordsModelBuilder(ModelBuilder):
+    """
+    bject that should be used after the training of word or graph embeddings using the SINr object to get interpretable word vectors.
+    The InterpretableWordsModelBuilder will make use of the SINr object to build a SINrVectors object that will allow to use the resulting vectors efficiently.
+    No need to use parent methods starting by "with", those are included in the "build" function.
+    Juste provide the name of the model and build it.
+    """
+    def build(self):
+        self.with_embeddings_nr().with_vocabulary().with_communities()
         return self.model
 
 
@@ -441,6 +464,7 @@ class SINrVectors(object):
         @param n_jobs: number of jobs to use (k-nearest neighbors to obtain most similar words or nodes)
         @param n_neighbors: number of neighbors to consider when querying the most similar words or nodes
         """
+        self.G = None
         self.communities_sets = None
         self.community_membership = None
         self.np = None
@@ -458,6 +482,9 @@ class SINrVectors(object):
         @param n_jobs: number of jobs
         """
         self.n_jobs = n_jobs
+
+    def set_graph(self, G):
+        self.G = G
 
     def set_vocabulary(self, voc):
         """
