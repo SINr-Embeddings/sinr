@@ -1,4 +1,5 @@
 import pickle as pk
+
 from networkit import Graph, components, community, setNumberOfThreads
 from numpy import argpartition, argsort, asarray
 from sklearn.neighbors import NearestNeighbors
@@ -7,9 +8,6 @@ from . import strategy_loader
 from . import strategy_norm
 from .logger import logger
 from .nfm import get_nfm_embeddings
-
-
-
 
 
 class SINr(object):
@@ -259,6 +257,8 @@ class SINr(object):
 
 def _flip_keys_values(dictionary):
     return dict((v, k) for k, v in dictionary.items())
+
+
 def get_lgcc(graph):
     """
 
@@ -432,17 +432,19 @@ class SINrVectors(object):
     After having trained word or graph embeddings using SINr object, use the ModelBuilder object to build SINrVectors.
     SINrVectors is the object to manipulate the model, explore the embedding space and its interpretability
     """
+    labels: bool
 
-    def __init__(self, name, n_jobs, n_neighbors):
+    def __init__(self, name, n_jobs=1, n_neighbors=20):
         """
         Initializing SINr vectors objets
         @param name: name of the model, useful to save it
         @param n_jobs: number of jobs to use (k-nearest neighbors to obtain most similar words or nodes)
         @param n_neighbors: number of neighbors to consider when querying the most similar words or nodes
         """
+        self.communities_sets = None
+        self.community_membership = None
         self.np = None
         self.neighbors = None
-        self.communities = None
         self.vocab = None
         self.vectors = None
         self.name = name
@@ -480,14 +482,40 @@ class SINrVectors(object):
         self.np = np
 
     def set_communities(self, com):
-        self.communities = com
+        self.community_membership = com.getVector()
+        nb_coms = max(self.community_membership)
+        self.communities_sets = []
+        for i in range(nb_coms + 1):
+            self.communities_sets.append(set())
+        for idx, com in enumerate(self.community_membership):
+            self.communities_sets[com].add(idx)
+
+    def get_community_membership(self, obj):
+        """
+
+        @param obj: an integer of the node or of its label
+        @return: the community of a specific object
+        """
+        index = self._get_index(obj)
+        return self.community_membership[index]
+
+    def get_community_sets(self, idx):
+        """
+
+        @param obj: an integer index of a community
+        @return: the set of ids of nodes belonging to this community
+        """
+        return self.communities_sets[idx]
 
     def _get_index(self, obj):
         """
-        Returns the index of the object if there is a list of labels. If not, return the obj.
+        If obj is already an int, then it is the id to use, returns is
+        Else, returns the index of the object if there is a list of labels. If not, return the obj.
         @param obj:
         @return:
         """
+        if type(obj) is int:
+            return obj
         index = self.vocab.index(obj) if self.labels else obj
         return index
 
@@ -548,7 +576,7 @@ class SINrVectors(object):
         """
 
         index = self._get_index(obj)
-        return self.get_dimension_descriptors_idx(self.communities.subsetOf(index))
+        return self.get_dimension_descriptors_idx(self.community_membership[index])
 
     def get_dimension_descriptors_idx(self, idx):
         """
@@ -556,7 +584,7 @@ class SINrVectors(object):
         @param idx: int of a node
         @return: the nodes of the community of idx
         """
-        return [self.vocab[member] if self.labels else member for member in self.communities.getMembers(idx)]
+        return [self.vocab[member] if self.labels else member for member in self.get_community_sets(idx)]
 
     def get_obj_descriptors(self, obj, topk=5):
         """
@@ -581,7 +609,7 @@ class SINrVectors(object):
         @return: the topk words that describe this dimension (highest values)
         """
         index = self._get_index(obj)
-        return self.get_dimension_stereotypes_idx(self.communities.subsetOf(index), topk)
+        return self.get_dimension_stereotypes_idx(self.get_community_membership(index), topk)
 
     def get_dimension_stereotypes_idx(self, idx, topk=5):
         """
@@ -608,8 +636,9 @@ class SINrVectors(object):
         # get the topk dimensions for this word
         highest_dims = self._get_topk(index, topk_dim, row=True)
         vector = self._get_vector(index, row=True)
-        highest_dims = [{"dimension": idx, "value": vector[idx], "stereotypes": self.get_dimension_stereotypes_idx(idx, topk_val)}
-                        for idx in highest_dims]
+        highest_dims = [
+            {"dimension": idx, "value": vector[idx], "stereotypes": self.get_dimension_stereotypes_idx(idx, topk_val)}
+            for idx in highest_dims]
         return highest_dims
 
     def get_obj_stereotypes_and_descriptors(self, obj, topk_dim=5, topk_val=3):
@@ -623,13 +652,13 @@ class SINrVectors(object):
         return sters
 
     def load(self):
-        f = open(self.name, 'rb')
+        f = open(self.name + ".pk", 'rb')
         tmp_dict = pk.load(f)
         f.close()
         self.__dict__.update(tmp_dict)
 
     def save(self):
-        f = open(self.name, 'wb')
+        f = open(self.name + ".pk", 'wb')
         pk.dump(self.__dict__, f, 2)
         f.close()
 
