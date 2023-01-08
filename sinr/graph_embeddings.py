@@ -614,13 +614,12 @@ class SINrVectors(object):
         @param idx: id of dimension
         @return: a set of object, the community of obj
         """
-
+        vector = self._get_vector(index, row=False)
+        community_nr = [(round(vector[member], 2), self.vocab[member]) for member in self.get_community_sets(index)]
+        community_nr.sort(key=lambda x: x[0], reverse=True)
         if topk < 1:
-            return [self.vocab[member] if self.labels else member for member in self.get_community_sets(index)]
+            return community_nr
         else:
-            vector = self._get_vector(index, row=False)
-            community_nr = [(vector[member], self.vocab[member]) for member in self.get_community_sets(index)]
-            community_nr.sort(key=lambda x: x[0], reverse=True)
             topk = min(topk, len(community_nr))
             return community_nr[:topk]
 
@@ -658,7 +657,8 @@ class SINrVectors(object):
         @return: the topk words that describe this dimension (highest values)
         """
         highest_idxes = self._get_topk(idx, topk, row=False)
-        highest_idxes = [self.vocab[idx] if self.labels else idx for idx in highest_idxes]
+        vector = self._get_vector(idx, row=False)
+        highest_idxes = [(round(vector[idx],2),self.vocab[idx]) if self.labels else idx for idx in highest_idxes]
         return highest_idxes
 
     def get_obj_stereotypes(self, obj, topk_dim=5, topk_val=3):
