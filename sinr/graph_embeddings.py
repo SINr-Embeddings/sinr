@@ -567,7 +567,7 @@ class SINrVectors(object):
         distances, neighbor_idx = self.neighbors.kneighbors(self.vectors[index, :], return_distance=True)
         # print(similarities, neighbor_idx)
         return {"object ": obj,
-                "neighbors ": [(self.vocab[nbr] if self.labels else nbr, 1 - dist) for dist, nbr in
+                "neighbors ": [(self.vocab[nbr] if self.labels else nbr, round(1 - dist,2)) for dist, nbr in
                                list(zip(distances.flatten(), neighbor_idx.flatten()))[1::]]}
 
     def _get_vector(self, idx, row=True):
