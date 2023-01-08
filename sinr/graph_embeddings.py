@@ -435,6 +435,7 @@ class InterpretableWordsModelBuilder(ModelBuilder):
     No need to use parent methods starting by "with", those are included in the "build" function.
     Juste provide the name of the model and build it.
     """
+
     def build(self):
         self.with_embeddings_nr().with_vocabulary().with_communities()
         return self.model
@@ -595,7 +596,7 @@ class SINrVectors(object):
         return ind
 
     # Using communities to describe dimensions
-    def get_dimension_descriptors(self, obj):
+    def get_dimension_descriptors(self, obj, topk=-1):
         """
         returns the objects that constitute the dimension of obj, i.e. the members of the community of obj
         @param obj: id, word
@@ -603,34 +604,45 @@ class SINrVectors(object):
         """
 
         index = self._get_index(obj)
-        return self.get_dimension_descriptors_idx(self.community_membership[index])
+        return self.get_dimension_descriptors_idx(self.community_membership[index], topk)
 
-    def get_dimension_descriptors_idx(self, idx):
+    def get_dimension_descriptors_idx(self, index, topk=-1):
         """
-        returns the objects that constitute the dimension of idx, i.e. the members of the community of idx
-        @param idx: int of a node
-        @return: the nodes of the community of idx
+        returns the objects that constitute the dimension of obj, i.e. the members of the community of obj
+        @param topk: -1 returns all the members of the community, a positive int returns juste the topk members with
+        highest nr values on the community
+        @param idx: id of dimension
+        @return: a set of object, the community of obj
         """
-        return [self.vocab[member] if self.labels else member for member in self.get_community_sets(idx)]
 
-    def get_obj_descriptors(self, obj, topk=5):
+        if topk < 1:
+            return [self.vocab[member] if self.labels else member for member in self.get_community_sets(index)]
+        else:
+            vector = self._get_vector(index, row=False)
+            community_nr = [(vector[member], self.vocab[member]) for member in self.get_community_sets(index)]
+            community_nr.sort(key=lambda x: x[0], reverse=True)
+            topk = min(topk, len(community_nr))
+            return community_nr[:topk]
+
+    def get_obj_descriptors(self, obj, topk_dim=5, topk_val=-1):
         """
+        @param topk_dim: int, topk dimensions to consider to describe obj
         @param obj: an id or a word/label
-        @param topk: int, topk dimensions to consider to describe obj
+        @param topk_val: -1 returns all the members of the community, a positive int returns juste the topk members with
+        highest nr values on the community
         @return: the dimensions (and the objects that constitute these dimensions) that matter to describe obj
         """
 
         index = self._get_index(obj)
-        highest_dims = self._get_topk(index, topk, row=True)
+        highest_dims = self._get_topk(index, topk_dim, row=True)
         vector = self._get_vector(index, row=True)
-        highest_dims = [{"dimension": idx, "value": vector[idx], "descriptors": self.get_dimension_descriptors_idx(idx)}
+        highest_dims = [{"dimension": idx, "value": vector[idx], "descriptors": self.get_dimension_descriptors_idx(idx, topk_val)}
                         for idx in highest_dims]
         return highest_dims
 
     # Using top words to describe dimensions
     def get_dimension_stereotypes(self, obj, topk=5):
         """
-
         @param obj: id of a dimension, or label of a word (then turned into the id of its community)
         @param topk: topk value to consider on the dimension
         @return: the topk words that describe this dimension (highest values)
@@ -641,7 +653,7 @@ class SINrVectors(object):
     def get_dimension_stereotypes_idx(self, idx, topk=5):
         """
 
-        @param idx: id of a dimension
+        @param obj: id of a dimension, or label of a word (then turned into the id of its community)
         @param topk: topk value to consider on the dimension
         @return: the topk words that describe this dimension (highest values)
         """
@@ -673,7 +685,7 @@ class SINrVectors(object):
         @return: both stereotypes and descriptors
         """
         sters = self.get_obj_stereotypes(obj, topk_dim, topk_val)
-        descs = self.get_obj_descriptors(obj, topk=topk_dim)
+        descs = self.get_obj_descriptors(obj, topk_dim, topk_val)
         for ster, desc in zip(sters, descs):
             ster["descriptors"] = desc["descriptors"]
         return sters
