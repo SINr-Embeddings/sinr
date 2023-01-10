@@ -452,14 +452,26 @@ class NoVocabularyException(Exception):
 
 
 class InterpretableDimension:
-    def __init__(self, idx, interpreter):
+    def __init__(self, idx, type):
         self.idx = idx
-        self.interpreter = interpreter
+        self.type = type
         self.value = None
         self.interpreters = []
 
     def add_interpreter(self, obj, value):
         self.interpreters.append((round(value, 2), obj))
+
+    def get_idx(self):
+        return self.get_idx()
+
+    def get_value(self):
+        return self.value
+
+    def get_interpreters(self):
+        return self.interpreters
+
+    def get_interpreter(self, id):
+        return self.interpreters[id]
 
     def sort(self, on_value=True):
         if on_value:
@@ -477,8 +489,8 @@ class InterpretableDimension:
 
     def get_dict(self):
         result = {"dimension": self.idx, "value": self.value,
-                  self.interpreter: self.interpreters} if self.value is not None else {"dimension": self.idx,
-                                                                                       self.interpreter: self.interpreters}
+                  self.type: self.interpreters} if self.value is not None else {"dimension": self.idx,
+                                                                                self.type: self.interpreters}
         return result
 
     def __repr__(self):
@@ -633,6 +645,15 @@ class SINrVectors(object):
         ind = ind[argsort(vector[ind])[::-1]]
         return ind
 
+    def get_topk_dims(self, obj, topk=5):
+        index = self._get_index(obj)
+        return self._get_topk(index, topk, True)
+
+    def get_value_obj_dim(self, obj, dim):
+        index = self._get_index(obj)
+        vector = self._get_vector(index)
+        return vector[dim]
+
     # Using communities to describe dimensions
     def get_dimension_descriptors(self, obj, topk=-1):
         """
@@ -658,7 +679,8 @@ class SINrVectors(object):
         vector = self._get_vector(index, row=False)
         in_dim = InterpretableDimension(index, "descriptors")
         for member in self.get_community_sets(index):
-            in_dim.add_interpreter(self.vocab[member], vector[member]) if self.labels else in_dim.add_interpreter(member, vector[member])
+            in_dim.add_interpreter(self.vocab[member], vector[member]) if self.labels else in_dim.add_interpreter(
+                member, vector[member])
         in_dim.sort(on_value=True)
         if topk >= 1:
             in_dim.topk(topk)
@@ -709,7 +731,8 @@ class SINrVectors(object):
         vector = self._get_vector(idx, row=False)
         in_dim = InterpretableDimension(idx, "stereotypes")
         for idx in highest_idxes:
-            in_dim.add_interpreter(self.vocab[idx], vector[idx]) if self.labels else in_dim.add_interpreter(idx, vector[idx])
+            in_dim.add_interpreter(self.vocab[idx], vector[idx]) if self.labels else in_dim.add_interpreter(idx,
+                                                                                                            vector[idx])
         return in_dim
 
     def get_obj_stereotypes(self, obj, topk_dim=5, topk_val=3):
