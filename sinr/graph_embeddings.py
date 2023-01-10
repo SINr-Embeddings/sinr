@@ -451,6 +451,40 @@ class NoVocabularyException(Exception):
     pass
 
 
+class InterpretableDimension:
+    def __init__(self, idx, interpreter):
+        self.idx = idx
+        self.interpreter = interpreter
+        self.value = None
+        self.interpreters = []
+
+    def add_interpreter(self, obj, value):
+        self.interpreters.append((round(value, 2), obj))
+
+    def sort(self, on_value=True):
+        if on_value:
+            self.interpreters.sort(key=lambda x: x[0], reverse=True)
+        else:
+            self.interpreters.sort(key=lambda x: x[1], reverse=True)
+
+    def topk(self, topk):
+        topk = min(topk, len(self.interpreters))
+        self.interpreters = self.interpreters[:topk]
+
+    def with_value(self, value):
+        self.value = value
+        return self
+
+    def get_dict(self):
+        result = {"dimension": self.idx, "value": self.value,
+                  self.interpreter: self.interpreters} if self.value is not None else {"dimension": self.idx,
+                                                                                       self.interpreter: self.interpreters}
+        return result
+
+    def __repr__(self):
+        return str(self.get_dict())
+
+
 class SINrVectors(object):
     """
     After having trained word or graph embeddings using SINr object, use the ModelBuilder object to build SINrVectors.
@@ -567,7 +601,7 @@ class SINrVectors(object):
         distances, neighbor_idx = self.neighbors.kneighbors(self.vectors[index, :], return_distance=True)
         # print(similarities, neighbor_idx)
         return {"object ": obj,
-                "neighbors ": [(self.vocab[nbr] if self.labels else nbr, round(1 - dist,2)) for dist, nbr in
+                "neighbors ": [(self.vocab[nbr] if self.labels else nbr, round(1 - dist, 2)) for dist, nbr in
                                list(zip(distances.flatten(), neighbor_idx.flatten()))[1::]]}
 
     def _get_vector(self, idx, row=True):
@@ -615,13 +649,20 @@ class SINrVectors(object):
         @return: a set of object, the community of obj
         """
         vector = self._get_vector(index, row=False)
-        community_nr = [(round(vector[member], 2), self.vocab[member]) for member in self.get_community_sets(index)]
-        community_nr.sort(key=lambda x: x[0], reverse=True)
-        if topk < 1:
-            return community_nr
-        else:
-            topk = min(topk, len(community_nr))
-            return community_nr[:topk]
+        in_dim = InterpretableDimension(index, "descriptors")
+        for member in self.get_community_sets(index):
+            in_dim.add_interpreter(self.vocab[member], vector[member]) if self.labels else in_dim.add_interpreter(member, vector[member])
+        in_dim.sort(on_value=True)
+        if topk >= 1:
+            in_dim.topk(topk)
+        return in_dim
+        # community_nr = [(round(vector[member], 2), self.vocab[member]) for member in self.get_community_sets(index)]
+        # community_nr.sort(key=lambda x: x[0], reverse=True)
+        # if topk < 1:
+        #     return community_nr
+        # else:
+        #     topk = min(topk, len(community_nr))
+        #     return community_nr[:topk]
 
     def get_obj_descriptors(self, obj, topk_dim=5, topk_val=-1):
         """
@@ -635,8 +676,8 @@ class SINrVectors(object):
         index = self._get_index(obj)
         highest_dims = self._get_topk(index, topk_dim, row=True)
         vector = self._get_vector(index, row=True)
-        highest_dims = [{"dimension": idx, "value": vector[idx], "descriptors": self.get_dimension_descriptors_idx(idx, topk_val)}
-                        for idx in highest_dims]
+        highest_dims = [self.get_dimension_descriptors_idx(idx, topk_val).with_value(vector[idx]).get_dict() for idx in
+                        highest_dims]
         return highest_dims
 
     # Using top words to describe dimensions
@@ -658,8 +699,10 @@ class SINrVectors(object):
         """
         highest_idxes = self._get_topk(idx, topk, row=False)
         vector = self._get_vector(idx, row=False)
-        highest_idxes = [(round(vector[idx],2),self.vocab[idx]) if self.labels else idx for idx in highest_idxes]
-        return highest_idxes
+        in_dim = InterpretableDimension(idx, "stereotypes")
+        for idx in highest_idxes:
+            in_dim.add_interpreter(self.vocab[idx], vector[idx]) if self.labels else in_dim.add_interpreter(idx, vector[idx])
+        return in_dim
 
     def get_obj_stereotypes(self, obj, topk_dim=5, topk_val=3):
         """
@@ -675,9 +718,8 @@ class SINrVectors(object):
         # get the topk dimensions for this word
         highest_dims = self._get_topk(index, topk_dim, row=True)
         vector = self._get_vector(index, row=True)
-        highest_dims = [
-            {"dimension": idx, "value": vector[idx], "stereotypes": self.get_dimension_stereotypes_idx(idx, topk_val)}
-            for idx in highest_dims]
+        highest_dims = [self.get_dimension_stereotypes_idx(idx, topk_val).with_value(vector[idx]).get_dict() for idx in
+                        highest_dims]
         return highest_dims
 
     def get_obj_stereotypes_and_descriptors(self, obj, topk_dim=5, topk_val=3):
