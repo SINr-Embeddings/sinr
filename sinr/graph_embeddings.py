@@ -558,6 +558,8 @@ class SINrVectors(object):
         @param obj: an integer of the node or of its label
         @return: the community of a specific object
         """
+        if self.communities_sets is None:
+            raise NoInterpretabilityException
         index = self._get_index(obj)
         return self.community_membership[index]
 
@@ -567,6 +569,8 @@ class SINrVectors(object):
         @param obj: an integer index of a community
         @return: the set of ids of nodes belonging to this community
         """
+        if self.communities_sets is None:
+            raise NoInterpretabilityException
         return self.communities_sets[idx]
 
     def _get_index(self, obj):
@@ -636,7 +640,8 @@ class SINrVectors(object):
         @param obj: id, word
         @return: a set of object, the community of obj
         """
-
+        if self.communities_sets is None:
+            raise NoInterpretabilityException
         index = self._get_index(obj)
         return self.get_dimension_descriptors_idx(self.community_membership[index], topk)
 
@@ -648,6 +653,8 @@ class SINrVectors(object):
         @param idx: id of dimension
         @return: a set of object, the community of obj
         """
+        if self.communities_sets is None:
+            raise NoInterpretabilityException
         vector = self._get_vector(index, row=False)
         in_dim = InterpretableDimension(index, "descriptors")
         for member in self.get_community_sets(index):
@@ -672,7 +679,8 @@ class SINrVectors(object):
         highest nr values on the community
         @return: the dimensions (and the objects that constitute these dimensions) that matter to describe obj
         """
-
+        if self.communities_sets is None:
+            raise NoInterpretabilityException
         index = self._get_index(obj)
         highest_dims = self._get_topk(index, topk_dim, row=True)
         vector = self._get_vector(index, row=True)
