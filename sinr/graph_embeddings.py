@@ -1,7 +1,7 @@
 import pickle as pk
 
 from networkit import Graph, components, community, setNumberOfThreads
-from numpy import argpartition, argsort, asarray
+from numpy import argpartition, argsort, asarray, where
 from sklearn.neighbors import NearestNeighbors
 
 from . import strategy_loader
@@ -344,12 +344,21 @@ class ModelBuilder:
         self.sinr = sinr
         self.model = SINrVectors(name, n_jobs, n_neighbors)
 
-    def with_embeddings_nr(self):
+    def with_embeddings_nr(self, threshold=0):
         """
         Adding Node Recall vectors to the SINrVectors object
+        @param threshold:
 
         """
-        self.model.set_vectors(self.sinr.get_nr())
+        if threshold == 0:
+            self.model.set_vectors(self.sinr.get_nr())
+        else:
+            coo = self.sinr.get_nr().tocoo()
+            for idx, val in enumerate(coo.data):
+                if val < threshold:
+                    coo.data[idx] = 0
+            coo.eliminate_zeros()
+            self.model.set_vectors(coo.tocsr())
         return self
 
     def with_embeddings_nfm(self):
@@ -438,6 +447,20 @@ class InterpretableWordsModelBuilder(ModelBuilder):
 
     def build(self):
         self.with_embeddings_nr().with_vocabulary().with_communities()
+        return self.model
+
+
+class ThresholdedModelBuilder(ModelBuilder):
+    """
+    Object that should be used after the training of word or graph embeddings using the SINr object to get interpretable word vectors.
+    The ThresholdedModelBuilder will make use of the SINr object to build a SINrVectors object that will allow to use the resulting vectors efficiently.
+    Values in the vectors that are lower than the threshold will be discarded. Vectors are then sparser and more interpretable.
+    No need to use parent methods starting by "with", those are included in the "build" function.
+    Juste provide the name of the model and build it.
+    """
+
+    def build(self, threshold=0.01):
+        self.with_embeddings_nr(threshold=threshold).with_vocabulary().with_communities()
         return self.model
 
 
@@ -532,6 +555,28 @@ class SINrVectors(object):
 
     def set_graph(self, G):
         self.G = G
+
+    def get_nnz(self):
+        """
+        @return: number of non zero values
+        """
+        return self.vectors.getnnz()
+
+    def get_nnv(self):
+        """
+        @return: number of null vectors
+        """
+        sum = self.vectors.sum(axis=1)
+        nulls = where(sum == 0)[0]
+        return len(nulls)
+
+    def pct_nnz(self):
+        """
+        percentage of non zero values in the matrix
+        @return:
+        """
+        nnz = self.get_nnz()
+        return (nnz * 100) / (self.vectors.shape[0] * self.vectors.shape[1])
 
     def set_vocabulary(self, voc):
         """
