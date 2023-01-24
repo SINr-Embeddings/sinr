@@ -127,7 +127,7 @@ class SINr(object):
         if algo is None:
             algo = community.PLM(self.cooc_graph, refine=False, gamma=100, turbo=True, recurse=False)
         self.communities = self.detect_communities(self.cooc_graph, algo=algo)
-        self.extract_embeddings(G=self.cooc_graph, communities=self.communities)
+        self.extract_embeddings(communities=self.communities)
 
     def detect_communities(self, gamma=100, algo=None, inspect=True):
         """
