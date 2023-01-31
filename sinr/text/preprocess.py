@@ -48,7 +48,6 @@ class VRTMaker:
         fichier = self.corpus_output.open("w")
         return fichier
 
-
     def _with_ner_merging(self):
         self.model.add_pipe("merge_entities", after="ner")  # Merge Named-Entities
 
@@ -93,7 +92,8 @@ class VRTMaker:
         logger.info(f"VRT-style file written in {self.corpus_output.absolute()}")
 
 
-def extract_text(corpus_path, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False, exclude_pos=[],
+def extract_text(corpus_path, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False,
+                 exclude_pos=[],
                  en=True, min_freq=50, alpha=True, exclude_en=[], min_length_word=3):
     '''corpus_path
     Extracts the text from a VRT corpus file.

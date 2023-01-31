@@ -10,6 +10,12 @@ __pycache__/
 # Pickles
 *.pk
 
+# vrt
+*.vrt
+
+# idea
+*.idea
+
 # Distribution / packaging
 .Python
 build/
@@ -131,3 +137,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/notebooks/reuters
