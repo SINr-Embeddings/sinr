@@ -827,3 +827,20 @@ class SINrVectors(object):
 #        with open(model_path, 'rb') as file:
 #            vocab, vectors = pk.load(file)
 #        return Model(vocab, vectors)
+    def get_my_vector(self, obj, row=True):
+        index = self._get_index(obj)
+        vector = asarray(self.vectors.getrow(index).todense()).flatten() if row else asarray(
+            self.vectors.getcol(index).todense()).flatten()
+        return vector
+    
+    def light_model_save(self):
+        """
+        save a minimal version of the model that is readable as a dict for evaluation on word-embeddings-benchmark 
+        https://github.com/kudkudak/word-embeddings-benchmarks
+        """
+        data={}
+        for item in self.vocab :
+            data[item]=self.get_my_vector(item)
+        f = open(self.name + "_light.pk", 'wb')
+        pk.dump(data,f)
+        f.close()
