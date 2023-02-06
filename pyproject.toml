@@ -14,7 +14,12 @@ scikit-learn = "^1.2.1"
 ipykernel = "^6.21.1"
 jupyter = "^1.0.0"
 tqdm = "^4.64.1"
+pandas = "^1.5.3"
+parallel-sort = "^0.1.0"
+tabulate = "^0.9.0"
 
 [tool.poetry.group.dev.dependencies]
 nltk = "^3.8.1"
+networkx = "^3.0"
+cython = "^0.29.33"
 
