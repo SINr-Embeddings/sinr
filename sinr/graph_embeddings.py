@@ -160,19 +160,33 @@ class SINr(object):
     def size_of_voc(self):
         return len(self.idx_to_wrd)
 
-    def transfert_communities_labels(self, community_labels):
+    def transfert_communities_labels(self, community_labels, refine=False):
+        '''
+
+        @param community_labels: a list of communities described by sets of labels describing the nodes
+        @return: Initializes a partition where nodes are all singletons. Then, when communities in parameters contain labels
+        that are in the graph at hand, these communities are transferred.
+        '''
         self.communities = Partition(self.size_of_voc())
         self.communities.allToSingletons()
         for com in community_labels:
             new_com = []
+            # Check if labels in communities passed as parameters are in the graph at hand, if so -> transfer the community
             for word in com:
                 if word in self.wrd_to_idx:
                     new_com.append(self.wrd_to_idx[word])
+            # Transferring the community to the graph at hand
             if len(new_com) > 1:
                 subset_id = self.communities.subsetOf(new_com[0])
                 for idx in range(1, len(new_com)):
                     self.communities.moveToSubset(subset_id, new_com[idx])
+        # Compating the community ids
         self.communities.compact()
+        if refine:
+            self._refine_transfered_communities()
+
+    def _refine_transfered_communities(self):
+
 
     def extract_embeddings(self, communities=None):
         """
