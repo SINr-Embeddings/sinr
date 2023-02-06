@@ -1,6 +1,6 @@
 #!python
 # distutils: language = c++
-# cython: boundscheck=False, wraparound=False, nonecheck=False, cdivision=True
+# cython: language_level=3, boundscheck=False, wraparound=False, nonecheck=False, cdivision=True
 
 import numpy as np
 import scipy.sparse as sp

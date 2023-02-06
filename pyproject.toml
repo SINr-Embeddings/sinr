@@ -1,8 +1,40 @@
+[build-system]
+requires = [
+  "poetry-core>=1.0.0a9",
+  "Cython~=0.29.21",
+  "setuptools~=67.1.0",
+  "numpy~=1.24.2",
+  "wheel"
+]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "sinr"
-version = "1"
-description = ""
+version = "1.0.9"
+description = "Build word and graph embeddings based on community detection in graphs."
 authors = ["Thibault Prouteau <thibault.prouteau@univ-lemans.fr>", "Nicolas Dugue <nicolas.dugue@univ-lemans.fr>"]
+license = "CeCILL 2.1"
+homepage = "https://github.com/SINr-Embeddings/sinr"
+repository = "https://github.com/SINr-Embeddings/sinr"
+keywords = ["node embedding", "word embedding", "embedding", "graph embedding", "louvain", "community"]
+classifiers = [
+"Development Status :: 4 - Beta",
+"Intended Audience :: Science/Research",
+"License :: Other/Proprietary License",
+"Operating System :: OS Independent",
+"Programming Language :: Cython",
+"Programming Language :: Python",
+"Programming Language :: Python :: 3",
+"Topic :: Software Development :: Libraries :: Python Modules",
+"Topic :: Scientific/Engineering"
+]
+readme = "README.md"
+include = [
+	"LICENCE",
+	"./**/*.so"
+]
+
+
 
 [tool.poetry.dependencies]
 python = ">=3.8"
@@ -12,14 +44,18 @@ numpy = ">=1.21.0"
 scipy = ">=1.6.1"
 scikit-learn = "^1.2.1"
 ipykernel = "^6.21.1"
-jupyter = "^1.0.0"
 tqdm = "^4.64.1"
 pandas = "^1.5.3"
 parallel-sort = "^0.1.0"
 tabulate = "^0.9.0"
 
+
 [tool.poetry.group.dev.dependencies]
 nltk = "^3.8.1"
 networkx = "^3.0"
-cython = "^0.29.33"
+cython = "^0.29.21"
+
+[tool.poetry.build]
+script = "build.py"
+generate-setup-file = false
 
