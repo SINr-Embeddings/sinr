@@ -1,6 +1,6 @@
 import pickle as pk
 
-from networkit import Graph, components, community, setNumberOfThreads
+from networkit import Graph, components, community, setNumberOfThreads, Partition
 from numpy import argpartition, argsort, asarray, where
 from sklearn.neighbors import NearestNeighbors
 
@@ -157,7 +157,24 @@ class SINr(object):
         logger.info("Finished detecting communities.")
         return communities
 
-    def extract_embeddings(self, communities):
+    def size_of_voc(self):
+        return len(self.idx_to_wrd)
+
+    def transfert_communities_labels(self, community_labels):
+        self.communities = Partition(self.size_of_voc())
+        self.communities.allToSingletons()
+        for com in community_labels:
+            new_com = []
+            for word in com:
+                if word in self.wrd_to_idx:
+                    new_com.append(self.wrd_to_idx[word])
+            if len(new_com) > 1:
+                subset_id = self.communities.subsetOf(new_com[0])
+                for idx in range(1, len(new_com)):
+                    self.communities.moveToSubset(subset_id, new_com[idx])
+        self.communities.compact()
+
+    def extract_embeddings(self, communities=None):
         """
         
 
@@ -173,8 +190,11 @@ class SINr(object):
         """
         logger.info("Extracting embeddings.")
 
+        if communities is not None:
+            self.communities = communities
+
         logger.info("Applying NFM.")
-        np, nr, nfm = get_nfm_embeddings(self.cooc_graph, communities.getVector(), self.n_jobs)
+        np, nr, nfm = get_nfm_embeddings(self.cooc_graph, self.communities.getVector(), self.n_jobs)
         self.np = np
         self.nr = nr
         self.nfm = nfm
@@ -546,6 +566,17 @@ class SINrVectors(object):
         self.n_neighbors = n_neighbors
         self.labels = False
 
+    def get_communities_as_labels_sets(self):
+        if self.communities_sets is None:
+            raise NoInterpretabilityException
+        labels_sets = []
+        for com in self.communities_sets:
+            labels = set()
+            for u in com:
+                labels.add(self.vocab[u])
+            labels_sets.append(labels)
+        return labels_sets
+
     def set_n_jobs(self, n_jobs):
         """
 
@@ -807,6 +838,9 @@ class SINrVectors(object):
         for ster, desc in zip(sters, descs):
             ster["descriptors"] = desc["descriptors"]
         return sters
+
+    def get_number_of_dimensions(self):
+        return len(self.communities_sets)
 
     def load(self):
         f = open(self.name + ".pk", 'rb')
