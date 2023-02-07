@@ -19,7 +19,8 @@
 
    ```python
    # With conda install
-   conda create --name sinr-v2 python==3.9 poetry # create conda environment
+   conda create --name sinr-v2 python==3.9 pip # create conda environment
+   pip install poetry # installpoetry through pip
    conda activate sinr-v2 # activate the environment
    poetry install # install dependencies and package
    pip install -e . # make package installed in development/editable mode
