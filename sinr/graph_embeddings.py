@@ -469,14 +469,24 @@ class ModelBuilder:
 
         """
         return self.model
+    
+class OnlyGraphModelBuilder(ModelBuilder):
+    """Object that should be used after the training of word or graph embeddings using the SINr object to get interpretable vectors.
+    The OnlyGraphModelBuilder will make use of the SINr object to build a SINrVectors object that will allow to use the resulting vectors efficiently.
+    No need to use parent methods starting by "with", those are included in the "build" function.
+    Just provide the name of the model and build it.
+    """
+    def build(self):
+        self.with_np()
+        return self.model
 
 
 class InterpretableWordsModelBuilder(ModelBuilder):
     """
-    bject that should be used after the training of word or graph embeddings using the SINr object to get interpretable word vectors.
+    Object that should be used after the training of word or graph embeddings using the SINr object to get interpretable word vectors.
     The InterpretableWordsModelBuilder will make use of the SINr object to build a SINrVectors object that will allow to use the resulting vectors efficiently.
     No need to use parent methods starting by "with", those are included in the "build" function.
-    Juste provide the name of the model and build it.
+    Just provide the name of the model and build it.
     """
 
     def build(self):
@@ -490,7 +500,7 @@ class ThresholdedModelBuilder(ModelBuilder):
     The ThresholdedModelBuilder will make use of the SINr object to build a SINrVectors object that will allow to use the resulting vectors efficiently.
     Values in the vectors that are lower than the threshold will be discarded. Vectors are then sparser and more interpretable.
     No need to use parent methods starting by "with", those are included in the "build" function.
-    Juste provide the name of the model and build it.
+    Just provide the name of the model and build it.
     """
 
     def build(self, threshold=0.01):
