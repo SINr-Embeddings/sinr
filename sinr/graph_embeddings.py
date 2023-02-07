@@ -186,12 +186,12 @@ class SINr(object):
             self._refine_transfered_communities()
 
     def _refine_transfered_communities(self):
-
+        algo = community.PLP(self.cooc_graph, baseClustering=self.communities)
+        self.communities = community.detectCommunities(self.cooc_graph, algo=algo)
+        self.communities.compact()
 
     def extract_embeddings(self, communities=None):
         """
-        
-
         Parameters
         ----------
         communities : networkit partition
@@ -867,28 +867,28 @@ class SINrVectors(object):
         pk.dump(self.__dict__, f, 2)
         f.close()
 
-#    def save(self, output_path):
-#        with open(output_path, 'wb+') as file:
-#            pk.dump((self.vocab, self.vectors), file)
+    #    def save(self, output_path):
+    #        with open(output_path, 'wb+') as file:
+    #            pk.dump((self.vocab, self.vectors), file)
 
-#    def load(model_path):
-#        with open(model_path, 'rb') as file:
-#            vocab, vectors = pk.load(file)
-#        return Model(vocab, vectors)
+    #    def load(model_path):
+    #        with open(model_path, 'rb') as file:
+    #            vocab, vectors = pk.load(file)
+    #        return Model(vocab, vectors)
     def get_my_vector(self, obj, row=True):
         index = self._get_index(obj)
         vector = asarray(self.vectors.getrow(index).todense()).flatten() if row else asarray(
             self.vectors.getcol(index).todense()).flatten()
         return vector
-    
+
     def light_model_save(self):
         """
         save a minimal version of the model that is readable as a dict for evaluation on word-embeddings-benchmark 
         https://github.com/kudkudak/word-embeddings-benchmarks
         """
-        data={}
-        for item in self.vocab :
-            data[item]=self.get_my_vector(item)
+        data = {}
+        for item in self.vocab:
+            data[item] = self.get_my_vector(item)
         f = open(self.name + "_light.pk", 'wb')
-        pk.dump(data,f)
+        pk.dump(data, f)
         f.close()
