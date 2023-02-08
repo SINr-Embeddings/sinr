@@ -1,6 +1,8 @@
 from sinr.graph_embeddings import SINr, SINrVectors, ModelBuilder, OnlyGraphModelBuilder
 import leidenalg as la
 import igraph as ig
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
 
 def to_igraph(G):
@@ -25,7 +27,7 @@ class DiachronicModels:
 
     @classmethod
     def mutilayer_factory(cls, sinrmodels:list[SINr], name: str, gamma: int =1):
-        """_summary_
+        """ Second strategy : modularity gain is computing on each layer and averaged to decide whether or not to move
 
         Args:
             sinrmodels (list[SINr]): SINrVectors initialized with a graph for each time slice
@@ -46,7 +48,7 @@ class DiachronicModels:
 
     @classmethod
     def mutislices_factory(cls, sinrmodels:list[SINr], name: str, gamma: int =1):
-        """_summary_
+        """ Fourth strategy : multi slices, optimization is made on each slice, taking into account the other ones
 
         Args:
             sinrmodels (list[SINr]): SINrVectors initialized with a graph for each time slice
@@ -70,7 +72,7 @@ class DiachronicModels:
 
     @classmethod
     def static_factory(cls, sinrmodels : list[SINr], name : str, gamma: int =1 ):
-        """_summary_
+        """ One Sinr model per slice, independent from each other
 
         Args:
             sinrmodels (list[SINr]): _description_
@@ -81,6 +83,7 @@ class DiachronicModels:
             DiachronicModels: _description_
         """
         
+
         static_models = []
         for idx, model in enumerate(sinrmodels):
             model.detect_communities(gamma=gamma) # One partition per slice
@@ -104,9 +107,68 @@ class DiachronicModels:
 
         return cls()
 
-    def get_model(self, slice:int)->SINrVectors:
+    def get_model(self, slice:int) -> SINrVectors:
+        """Getting Sinr model for a specific slice
+
+        Args:
+            slice (int): slice number
+
+        Returns:
+            SINrVectors: A SinrVectors object for a specific slice
+        """
         return self.models[slice]
 
     def get_vector(self, slice:int, node:int):
+        """Getting vector of a node for a specific slice
+
+        Args:
+            slice (int): slice number
+            node (int): node id
+
+        Returns:
+            _type_: a csr matrix
+        """
         model = self.models[slice]
         return model.get_my_vector(node)
+    
+    def get_similarity_matrix(self, slice:int):
+        """ Getting similarity matrix of vectors of a specific slice
+
+        Args:
+            slice (int): slice number
+
+        Returns:
+            _type_: matrix of float
+        """
+        model = self.models[slice]
+        return cosine_similarity(model.vectors)
+    
+    def get_k_highest(self, slice:int, k:int):
+        """Getting the k (row, column) pairs with the highest similarities
+
+        Args:
+            slice (int): slice number
+            k (int): k
+
+        Returns:
+            _type_: dict[(row, column)] = similarity
+        """
+        similarity = self.get_similarity_matrix(slice=slice)
+        voc = 10
+        limit = - (voc + 2 * k)
+        rows = np.argpartition(similarity.flatten(), limit)[limit:] // voc
+        columns = np.argpartition(similarity.flatten(), limit)[limit:] % voc
+        k_highest = dict()
+        for r,c in zip(rows, columns):
+            if r != c:
+                if (c,r) not in k_highest:
+                    k_highest[(r,c)] = similarity[r,c]
+        return k_highest
+
+    def reconstruct_graph(self, slice:int, k:int):
+        """Ordered edges : the most probable according to our embeddings
+        """
+        dico = self.get_k_highest(slice, k)
+        ordered_k_edges = [k for k, v in sorted(x.items(), key=lambda item: item[1])]
+        return ordered_k_edges
+
