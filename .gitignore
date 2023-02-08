@@ -16,6 +16,9 @@ __pycache__/
 # idea
 *.idea
 
+#poetry
+*.lock
+
 # Distribution / packaging
 .Python
 build/
