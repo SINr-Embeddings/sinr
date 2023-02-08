@@ -28,19 +28,20 @@ class DiachronicModels:
         self.models = models
 
     @classmethod
-    def mutilayer_factory(cls, sinrmodels:list[SINr], name: str, gamma: int =1):
-        """ Second strategy : modularity gain is computing on each layer and averaged to decide whether or not to move
+    def multilayer_factory(cls, sinrmodels:list[SINr], name: str, gamma: int =1):
+        """_summary_
 
         Args:
             sinrmodels (list[SINr]): SINrVectors initialized with a graph for each time slice
             name (str): name of the dataset
-            gamma (int, optional): resolution parameter. Defaults to 1.
 
         Returns:
             _type_: an instance of Diachronic models, acts as a factory
         """
         graphs_igraph = to_igraphs(sinrmodels)
-        membership, improvement = la.find_partition_multiplex(graphs_igraph, la.ModularityVertexPartition, gamma=gamma)
+        for graph in graphs_igraph:
+            ig.summary(graph)
+        membership, improvement = la.find_partition_multiplex(graphs_igraph, la.ModularityVertexPartition)
         models = list()
         for idx, model in enumerate(sinrmodels):
             model.extract_embeddings(membership)
@@ -49,24 +50,25 @@ class DiachronicModels:
         return cls(models)
 
     @classmethod
-    def mutislices_factory(cls, sinrmodels:list[SINr], name: str, gamma: int =1):
-        """ Fourth strategy : multi slices, optimization is made on each slice, taking into account the other ones
+    def multislices_factory(cls, sinrmodels:list[SINr], name: str, gamma: int =1):
+        """_summary_
 
         Args:
             sinrmodels (list[SINr]): SINrVectors initialized with a graph for each time slice
             name (str): name of the dataset
-            gamma (int, optional): resolution parameter. Defaults to 1.
 
         Returns:
             _type_: an instance of Diachronic models, acts as a factory
         """
         graphs_igraph = to_igraphs(sinrmodels)
         for g in graphs_igraph:
-            g["id"] = g.index
+            g.vs["id"] = [node.index for node in g.vs]
 
-        memberships, improvement = la.find_partition(graphs_igraph, la.ModularityVertexPartition, gamma=gamma)
+        memberships, improvement = la.find_partition_temporal(graphs_igraph, la.ModularityVertexPartition)
         models = list()
-        for idx, model, membership in enumerate(zip(sinrmodels, memberships)):
+        for idx, zip_info in enumerate(zip(sinrmodels, memberships)):
+            model = zip_info[0]
+            membership = zip_info[1]
             model.extract_embeddings(membership)
             sinrvectors = OnlyGraphModelBuilder(model, name+"_"+str(idx))
             models.append(sinrvectors)
