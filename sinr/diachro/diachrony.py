@@ -18,7 +18,7 @@ def to_igraphs(sinrmodels:list[SINr]):
 
 
 class DiachronicModels:
-    models: list[SINr] = list()
+    models: list[SINrVectors] = list()
 
     def __init__(self, models):
         self.models = models
@@ -104,7 +104,7 @@ class DiachronicModels:
 
         return cls()
 
-    def get_model(self, slice:int)->SINr:
+    def get_model(self, slice:int)->SINrVectors:
         return self.models[slice]
 
     def get_vector(self, slice:int, node:int):
