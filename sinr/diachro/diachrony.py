@@ -18,7 +18,7 @@ def to_igraphs(sinrmodels:list[SINr]):
 
 
 class DiachronicModels:
-    models: list[SINrVectors] = list()
+    models: list[SINr] = list()
 
     def __init__(self, models):
         self.models = models
@@ -103,3 +103,10 @@ class DiachronicModels:
         common_edges = set([i for model in sinrmodels for i in model.get_cooc_graph.iterNodes()]) # Get the set of common edges accross all time slices.
 
         return cls()
+
+    def get_model(self, slice:int)->SINr:
+        return self.models[slice]
+
+    def get_vector(self, slice:int, node:int):
+        model = self.models[slice]
+        return model.get_my_vector(node)
