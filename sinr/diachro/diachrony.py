@@ -45,7 +45,7 @@ class DiachronicModels:
         models = list()
         for idx, model in enumerate(sinrmodels):
             model.extract_embeddings(membership)
-            sinrvectors = OnlyGraphModelBuilder(model, name+"_"+str(idx))
+            sinrvectors = OnlyGraphModelBuilder(model, name+"_"+str(idx)).build()
             models.append(sinrvectors)
         return cls(models)
 
@@ -70,7 +70,7 @@ class DiachronicModels:
             model = zip_info[0]
             membership = zip_info[1]
             model.extract_embeddings(membership)
-            sinrvectors = OnlyGraphModelBuilder(model, name+"_"+str(idx))
+            sinrvectors = OnlyGraphModelBuilder(model, name+"_"+str(idx)).build()
             models.append(sinrvectors)
         return cls(models)
 
@@ -92,7 +92,7 @@ class DiachronicModels:
         for idx, model in enumerate(sinrmodels):
             model.detect_communities(gamma=gamma) # One partition per slice
             model.extract_embeddings() # One extraction according to the partition of the slice
-            static_models.append(OnlyGraphModelBuilder(model, f"{name}_{idx}"))
+            static_models.append(OnlyGraphModelBuilder(model, f"{name}_{idx}").build())
         return cls(static_models)
 
     @classmethod
@@ -128,7 +128,7 @@ class DiachronicModels:
             node_subset = list(set(model.iterNodes()) & common_nodes) # Get the intersection of nodes between graph of slice and coalesced graph
             model_common = SINr.load_from_graph(nk.graphtools.GraphTools.subgraphFromNodes(model_graph, node_subset))
             model_common.extract_embeddings(communities=partition_common)
-            coalesced_models.append(OnlyGraphModelBuilder(model, f"{name}_{idx}"))
+            coalesced_models.append(OnlyGraphModelBuilder(model, f"{name}_{idx}").build())
         return cls(coalesced_models)
 
     # To amend for text
@@ -194,7 +194,9 @@ class DiachronicModels:
             _type_: matrix of float
         """
         model = self.models[slice]
-        return cosine_similarity(model.vectors)
+        matrix = np.triu(cosine_similarity(model.vectors))
+        np.fill_diagonal(matrix, 0)
+        return matrix
     
     def get_k_highest(self, slice:int, k:int):
         """Getting the k (row, column) pairs with the highest similarities
@@ -207,21 +209,23 @@ class DiachronicModels:
             _type_: dict[(row, column)] = similarity
         """
         similarity = self.get_similarity_matrix(slice=slice)
-        voc = 10
-        limit = - (voc + 2 * k)
+        voc = self.models[slice].vectors.shape[0]
+        print(voc)
+        limit = - k
+        print(limit)
         rows = np.argpartition(similarity.flatten(), limit)[limit:] // voc
         columns = np.argpartition(similarity.flatten(), limit)[limit:] % voc
+        print(rows.shape)
+        print(columns.shape)
         k_highest = dict()
         for r,c in zip(rows, columns):
-            if r != c:
-                if (c,r) not in k_highest:
-                    k_highest[(r,c)] = similarity[r,c]
+            k_highest[(r,c)] = similarity[r,c]
         return k_highest
 
     def reconstruct_graph(self, slice:int, k:int):
         """Ordered edges : the most probable according to our embeddings
         """
         dico = self.get_k_highest(slice, k)
-        ordered_k_edges = [k for k, v in sorted(x.items(), key=lambda item: item[1])]
+        ordered_k_edges = [k for k, v in sorted(dico.items(), key=lambda item: item[1])]
         return ordered_k_edges
 

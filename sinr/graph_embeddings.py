@@ -480,7 +480,7 @@ class OnlyGraphModelBuilder(ModelBuilder):
     Just provide the name of the model and build it.
     """
     def build(self):
-        self.with_np()
+        self.with_embeddings_nr()
         return self.model
 
 
