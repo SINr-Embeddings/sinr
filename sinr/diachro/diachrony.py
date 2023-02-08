@@ -1,19 +1,77 @@
 from sinr.graph_embeddings import SINr, SINrVectors, ModelBuilder, OnlyGraphModelBuilder
 import networkit as nk
 from networkit import Partition
+import leidenalg as la
+import igraph as ig
+
+
+def to_igraph(G):
+    graph_igraph = ig.Graph()
+    graph_igraph.add_vertices(len(list(G.iterNodes())))
+    graph_igraph.add_edges(G.iterEdges(), attributes={"weight":[weight for _, _, weight in G.iterEdgesWeights()]})
+    return graph_igraph
+
+def to_igraphs(sinrmodels:list[SINr]):
+    graphs_igraph = list()        
+    for model in sinrmodels:
+        graph_igraph = to_igraph(model.get_cooc_graph())
+        graphs_igraph.append(graph_igraph)
+    return graphs_igraph
+
 
 class DiachronicModels:
-    models = list()
+    models: list[SINrVectors] = list()
 
     def __init__(self, models):
         self.models = models
 
     @classmethod
-    def mutilayer_factory(cls, graphs):
-        return cls()
+    def mutilayer_factory(cls, sinrmodels:list[SINr], name: str, gamma: int =1):
+        """_summary_
+
+        Args:
+            sinrmodels (list[SINr]): SINrVectors initialized with a graph for each time slice
+            name (str): name of the dataset
+            gamma (int, optional): resolution parameter. Defaults to 1.
+
+        Returns:
+            _type_: an instance of Diachronic models, acts as a factory
+        """
+        graphs_igraph = to_igraphs(sinrmodels)
+        membership, improvement = la.find_partition_multiplex(graphs_igraph, la.ModularityVertexPartition, gamma=gamma)
+        models = list()
+        for idx, model in enumerate(sinrmodels):
+            model.extract_embeddings(membership)
+            sinrvectors = OnlyGraphModelBuilder(model, name+"_"+str(idx))
+            models.append(sinrvectors)
+        return cls(models)
 
     @classmethod
-    def static_factory(cls, sinrmodels : list[SINr],  name : str, gamma : int= 1):
+    def mutislices_factory(cls, sinrmodels:list[SINr], name: str, gamma: int =1):
+        """_summary_
+
+        Args:
+            sinrmodels (list[SINr]): SINrVectors initialized with a graph for each time slice
+            name (str): name of the dataset
+            gamma (int, optional): resolution parameter. Defaults to 1.
+
+        Returns:
+            _type_: an instance of Diachronic models, acts as a factory
+        """
+        graphs_igraph = to_igraphs(sinrmodels)
+        for g in graphs_igraph:
+            g["id"] = g.index
+
+        memberships, improvement = la.find_partition(graphs_igraph, la.ModularityVertexPartition, gamma=gamma)
+        models = list()
+        for idx, model, membership in enumerate(zip(sinrmodels, memberships)):
+            model.extract_embeddings(membership)
+            sinrvectors = OnlyGraphModelBuilder(model, name+"_"+str(idx))
+            models.append(sinrvectors)
+        return cls(models)
+
+    @classmethod
+    def static_factory(cls, sinrmodels : list[SINr], name : str, gamma: int =1 ):
         """_summary_
 
         Args:
@@ -33,7 +91,7 @@ class DiachronicModels:
         return cls(static_models)
 
     @classmethod
-    def coalesced_common_factory(cls, sinrmodels : list[SINr], name : str, gamma : int = 1):
+    def coalesced_factory(cls, sinrmodels : list[SINr], name : str, gamma : int = 1):
         """_summary_
 
         Args:
@@ -97,8 +155,9 @@ class DiachronicModels:
             
     
 
+    def get_model(self, slice:int)->SINrVectors:
+        return self.models[slice]
 
-
-        
-            
-
+    def get_vector(self, slice:int, node:int):
+        model = self.models[slice]
+        return model.get_my_vector(node)

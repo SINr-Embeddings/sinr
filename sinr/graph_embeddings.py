@@ -208,7 +208,10 @@ class SINr(object):
             self.communities = communities
 
         logger.info("Applying NFM.")
-        np, nr, nfm = get_nfm_embeddings(self.cooc_graph, self.communities.getVector(), self.n_jobs)
+        if isinstance(self.communities, list):
+            np, nr, nfm = get_nfm_embeddings(self.cooc_graph, self.communities, self.n_jobs)
+        else:    
+            np, nr, nfm = get_nfm_embeddings(self.cooc_graph, self.communities.getVector(), self.n_jobs)
         self.np = np
         self.nr = nr
         self.nfm = nfm
