@@ -48,7 +48,7 @@ class BaselineVectors:
             _type_: matrix of float
         """
         model = self.models[slice]
-        matrix = np.triu(cosine_similarity(model.vectors))
+        matrix = np.triu(cosine_similarity(model))
         np.fill_diagonal(matrix, 0)
         return matrix
     
@@ -63,7 +63,7 @@ class BaselineVectors:
             _type_: dict[(row, column)] = similarity
         """
         similarity = self.get_similarity_matrix(slice=slice)
-        voc = self.models[slice].vectors.shape[0]
+        voc = self.models[slice].shape[0]
         print(voc)
         limit = - k
         print(limit)
