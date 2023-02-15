@@ -11,7 +11,6 @@ Welcome to SINr's documentation!
    :caption: Contents:
 
    sinr
-   modules
 
 
 Introduction
