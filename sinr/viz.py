@@ -4,6 +4,7 @@ import numpy as np
 
 
 class SINrViz:
+    """ """
     def __init__(self, sinr_vectors: SINrVectors):
         self.sinr_vectors = sinr_vectors
 
@@ -14,6 +15,7 @@ class SINrViz:
         :type args: list[int]
         :param topk_dim: Number of top dimensions to fetch, defaults to 5
         :type topk_dim: int, optional
+
         """
         if len(args) == 0:
             print("No objects passed as parameters")

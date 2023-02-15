@@ -14,14 +14,14 @@ from .cooccurrence_cython import construct_cooccurrence_matrix
 
 
 class Cooccurrence(object):
-    """
-    Class for constructing a cooccurrence matrix
+    """Class for constructing a cooccurrence matrix
     from a corpus.
-
+    
     A dictionnary mapping the vocabulary of the corpus in lexicographic order
     will be constructed as well as the cooccurrence matrix.
 
-     """
+
+    """
 
     def __init__(self):
 
@@ -29,14 +29,14 @@ class Cooccurrence(object):
         self.matrix = None
 
     def fit(self, corpus, window=2):
-        """
-        Perform a pass through the corpus to construct
+        """Perform a pass through the corpus to construct
         the cooccurrence matrix.
 
         :param corpus: List of lists of strings (words) from the corpus.
         :type corpus: list[list[str]]
         :param window: The length of the (symmetric) context window used for cooccurrence, defaults to 2
         :type window: int
+
         """
         words_sorted = sorted(set(itertools.chain(*corpus)))
         self.dictionary   = dict(zip(words_sorted, range(len(words_sorted))))
@@ -46,11 +46,11 @@ class Cooccurrence(object):
                                                     int(window))
 
     def save(self, filename):
-        """
-        Save cooccurrence object to a pickle file.
+        """Save cooccurrence object to a pickle file.
 
         :param filename: Output path to the filename of the pickle file.
         :type filename: str
+
         """
         with open(filename, 'wb') as savefile:
             pickle.dump((self.dictionary, self.matrix),
@@ -59,13 +59,13 @@ class Cooccurrence(object):
 
     @classmethod
     def load(cls, filename):
-        """
-        Load Cooccurrence object from pickle.
-        
+        """Load Cooccurrence object from pickle.
+
         :param filename: Path to the pickle file.
         :type filename: str
-        :return: An instance of the :class: Cooccurrence.
+        :returns: An instance of the :class: Cooccurrence.
         :rtype: SINr.cooccurrence.Cooccurrence
+
         """
         instance = cls()
 

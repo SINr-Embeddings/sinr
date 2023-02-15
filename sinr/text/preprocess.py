@@ -12,6 +12,7 @@ from collections import Counter
 
 
 class Corpus:
+    """ """
     REGISTER_WEB = "web"
     REGISTER_NEWS = "news"
     LANGUAGE_FR = "fr"
@@ -33,11 +34,15 @@ class Corpus:
 
 
 class VRTMaker:
+    """ """
     def _get_model(self):
         """Load a SpaCy model.
 
-        :return: A spacy.Language object with the loaded pipeline.
+
+        :returns: A spacy.Language object with the loaded pipeline.
+
         :rtype: spacy.Language
+
         """
         if self.corpus.language == "fr":
             return spacy.load("fr_core_news_lg")
@@ -49,8 +54,9 @@ class VRTMaker:
 
         :param output_path: Path in which to output the data.
         :type output_path: str
-        :return: The filepath in output.
+        :returns: The filepath in output.
         :rtype: str
+
         """
         op = Path(output_path)
         op.mkdir(exist_ok=True)
@@ -77,20 +83,21 @@ class VRTMaker:
     def _open(self):
         """Open the output file.
 
-        :return: The output buffer.
+
+        :returns: The output buffer.
+
         :rtype: file
+
         """
         fichier = self.corpus_output.open("w")
         return fichier
 
     def _with_ner_merging(self):
-        """Merge named entities.
-        """
+        """Merge named entities."""
         self.model.add_pipe("merge_entities", after="ner")  # Merge Named-Entities
 
     def do_txt_to_vrt(self):
-        """Build VRT format file and write to output filepath.
-        """
+        """Build VRT format file and write to output filepath."""
         corpus_opened = self._open()
         id_corpus = str(uuid.uuid4())  # Generate a random corpus id
         corpus_opened.write(
@@ -134,26 +141,24 @@ class VRTMaker:
 def extract_text(corpus_path, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False,
                  exclude_pos=[],
                  en=True, min_freq=50, alpha=True, exclude_en=[], min_length_word=3):
-    '''Extracts the text from a VRT corpus file.
+    """Extracts the text from a VRT corpus file.
 
+    :param corpus_path: str
+    :param lemmatize: bool (Default value = True)
+    :param stop_words: bool (Default value = False)
+    :param lower: bool
+    :param number: bool (Default value = False)
+    :param punct: bool (Default value = False)
+    :param exclude_pos: list (Default value = [])
+    :param en: bool (Default value = True)
+    :param min_freq: int (Default value = 50)
+    :param alpha: bool (Default value = True)
+    :param exclude_en: list (Default value = [])
+    :param lower_words:  (Default value = True)
+    :param min_length_word:  (Default value = 3)
+    :returns: text (list(list(str))): A list of sentences containing words
 
-    Parameters:
-    corpus_path (str|pathlib.Path): Path to the corpus file.
-    lemmatize (bool): Return lemmatized text (default: True).
-    stop_words (bool): Keep stop-words (default: False).
-    lower (bool): Put the text in lowercase (default: True).
-    number (bool): Keep the numbers (default: False).
-    punct (bool): Keep the punctuation (default: False).
-    exclude_pos (list): List of part-of speech (from spacy) to exclude) (default: []).
-    en (bool): Keep named entities (default:True)
-    min_freq (int): Minimum number of occurrences to keep a token (default: 10).
-    alpha (bool): Keep alphanumeric characters (default: False).
-    exclude_en (list): List of named-entities types to exclude (default: []).
-
-
-    Return:
-    text (list(list(str))): A list of sentences containing words
-    '''
+    """
     corpus_file = open_corpus(corpus_path)
     text = corpus_file.read().splitlines()
     out = []
@@ -222,6 +227,11 @@ def extract_text(corpus_path, lemmatize=True, stop_words=False, lower_words=True
 
 
 def open_corpus(corpus_path):
+    """
+
+    :param corpus_path: 
+
+    """
     if isinstance(corpus_path, str):
         corpus_file = Path(corpus_path).open("r")
     elif isinstance(corpus_path, Path):
