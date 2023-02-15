@@ -4,16 +4,14 @@ import pickle as pk
 import networkit as nk
 
 def load_pkl_text(mat_path):
-    """
-    Load a cooccurrence matrix.
+    """Load a cooccurrence matrix.
 
     :param cooc_mat_path: Path to coocurrence matrix.
+    :type cooc_mat_path: str
+    :param mat_path: 
+    :returns: The loaded cooccurrence matrix and the word index.
+    :rtype: tuple(dict(), scipy.sparse.coo_matrix)`
 
-    :type cooc_mat_path : str
-
-    :return: The loaded cooccurrence matrix and the word index.
-
-    :rtype: `tuple(dict(), scipy.sparse.coo_matrix)`
     """
     logger.info("Loading cooccurrence matrix and dictionary.")
     with open(mat_path, "rb") as file:
@@ -23,18 +21,15 @@ def load_pkl_text(mat_path):
 
 from scipy.sparse import coo_matrix
 def load_adj_mat(matrix, labels=None):
-    """
-    Load a cooccurrence matrix.
+    """Load a cooccurrence matrix.
 
     :param matrix: an adjacency matrix
     :param matrix: a dict matching labels with nodes
+    :type matrix: csr_matrix
+    :param labels:  (Default value = None)
+    :returns: The loaded cooccurrence matrix and the word index.
+    :rtype: tuple(dict(), scipy.sparse.coo_matrix)`
 
-    :type matrix : csr_matrix
-    :type labels : dict: string -> int
-
-    :return: The loaded cooccurrence matrix and the word index.
-
-    :rtype: `tuple(dict(), scipy.sparse.coo_matrix)`
     """
     if labels == None:
         labels = dict()

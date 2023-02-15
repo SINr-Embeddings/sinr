@@ -4,12 +4,13 @@ import parallel_sort
 
 
 def apply_norm(G, norm):
-    """
-    Apply a normalisation to the graph (IPMI, PMI...) before detecting communities
+    """Apply a normalisation to the graph (IPMI, PMI...) before detecting communities
 
     :param norm: Type of normalisation.
     :param norm_args: Arguments to pass to the normalisation alfgorithm.
-    :return: The graph and the weighted degrees before and after normalisation.
+    :param G: 
+    :returns: The graph and the weighted degrees before and after normalisation.
+
     """
     # try:
     if norm != None:
@@ -20,10 +21,11 @@ def apply_norm(G, norm):
 
 
 def iterative_pmi(G):
-    """
-    Iteratively applies PMI to the graph to allow for community detection.
+    """Iteratively applies PMI to the graph to allow for community detection.
 
-    @return:  The graph and the weighted degrees before and after normalisation.
+    :param G: 
+    :returns: The graph and the weighted degrees before and after normalisation.
+
     """
     logger.info("Starting IPMI normalisation.")
     # Using Decorate-Sort-Undecorate as apparently it's more efficient for large lists

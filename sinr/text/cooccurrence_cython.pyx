@@ -67,7 +67,7 @@ cdef void free_matrix(SparseRowMatrix* mat) nogil:
     Deallocate the data of a matrix
 
     :param mat: A matrix.
-    :type mat: `SparseRowMatrix*`
+    :type mat: SparseRowMatrix*
 
     """
 
@@ -89,9 +89,9 @@ cdef void increment_matrix(SparseRowMatrix* mat, int row, int col, float increme
     Increment the (row, col) entry of mat by increment.
 
     :param mat: A matrix.
-    :type mat: `SparseRowMatrix*`
+    :type mat: SparseRowMatrix*
     :param row: A row.
-    :type row: `int`
+    :type row: int
     """
 
     cdef vector[int]* row_indices
@@ -137,7 +137,7 @@ cdef int matrix_nnz(SparseRowMatrix* mat) nogil:
     Get the number of nonzero entries in mat
 
     :param mat: A matrix.
-    :type mat: `SparseRowMatrix*`
+    :type mat: SparseRowMatrix*
     """
 
     cdef int i
@@ -154,12 +154,12 @@ cdef matrix_to_coo(SparseRowMatrix* mat, int shape):
     Convert to a shape by shape COO matrix.
 
     :param mat: A matrix.
-    :type mat: `SparseRowMatrix*`
+    :type mat: SparseRowMatrix*
     :param shape: The shape (size of the vocabulary) of the matrix.
-    :type shape: `int`
+    :type shape: int
 
-    :return: A matrix in `scipy.sparse.coo_matrix` format
-    :rtype: `scipy.sparse.coo_matrix`
+    :return: A matrix in scipy.sparse.coo_matrix format
+    :rtype: scipy.sparse.coo_matrix
     """
 
     cdef int i, j
@@ -211,14 +211,14 @@ cdef int words_to_ids(list words, vector[int]& word_ids,
     filtered vocabulary).
 
     :param words: List of words (sentence).
-    :type words: `list(str)`
+    :type words: list[str]
     :param word_ids: An empty vector whose function is to store the ids of the words in the sentence
-    :type word_ids: `vector[int]`
+    :type word_ids: vector[int]
     :param dictionary: A dictionary mapping of word to their ids in the vocabulary (in lexicographic order).
-    :type dictionary: `dict`
+    :type dictionary: dict
 
     :return: Value 0 if success else value -1
-    :rtype: `int`
+    :rtype: int
     """
 
     cdef int word_id
@@ -240,8 +240,7 @@ cdef int words_to_ids(list words, vector[int]& word_ids,
 
 
 def construct_cooccurrence_matrix(corpus, dictionary, int window_size):
-    """
-    Construct the word-id dictionary and cooccurrence matrix for
+    """Construct the word-id dictionary and cooccurrence matrix for
     a given corpus, using a given window size.
     
     The dictionary is constructed by lexicographix order.
@@ -249,15 +248,16 @@ def construct_cooccurrence_matrix(corpus, dictionary, int window_size):
     order in which they appear in the corpus. Consequently, the cooccurrence
     matrix is upper triangular (undirected graph in SINr) .
 
-   :param corpus: The sentences from the corpus.
-   :type corpus: `list(str)`
-   :param dictionary: A dictionary mapping of words to their ids in the vocabulary (in lexicographic order)
-   :type dictionary: `dict`
-   :param window_size: The size of the symmetric moving window.
-   :type window_size: `int`
+    :param corpus: The sentences from the corpus.
+    :type corpus: list[str]
+    :param dictionary: A dictionary mapping of words to their ids in the vocabulary (in lexicographic order)
+    :type dictionary: dictionary: dict[str:int]
+    :param window_size: The size of the symmetric moving window.
+    :type window_size: int
+    :param int window_size: 
+    :returns: The cooccurrence matrix built from the corpus.
+    :rtype: scipy.sparse.coo
 
-   :return: The cooccurrence matrix built from the corpus.
-   :rtype: `scipy.sparse.coo`
     """
 
     # Declare the cooccurrence map
@@ -314,17 +314,6 @@ def construct_cooccurrence_matrix(corpus, dictionary, int window_size):
                                          outer_word,
                                          inner_word,
                                          2)
-
-                #increment_matrix(matrix,
-                #                 inner_word,
-                #                 outer_word,
-                #                 1)
-                #increment_matrix(matrix,
-                #                 outer_word,
-                #                 inner_word,
-                #                 1)
-
-    # Create the matrix.
     mat = matrix_to_coo(matrix, len(dictionary))
     free_matrix(matrix)
 
