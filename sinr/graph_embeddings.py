@@ -1,7 +1,7 @@
 import pickle as pk
 
 from networkit import Graph, components, community, setNumberOfThreads, Partition
-from numpy import argpartition, argsort, asarray, where
+from numpy import argpartition, argsort, asarray, where, nonzero
 from sklearn.neighbors import NearestNeighbors
 
 from . import strategy_loader
@@ -186,7 +186,7 @@ class SINr(object):
         if refine:
             self._refine_transfered_communities()
 
-    def _refine_transfered_communities(self):
+    """def _refine_transfered_communities(self):"""
 
 
     def extract_embeddings(self, communities=None):
@@ -637,7 +637,25 @@ class SINrVectors(object):
         @return: number of non zero values
         """
         return self.vectors.getnnz()
-
+    
+    def get_nz_dims(self, obj) :
+        """
+        @return: set of indexes of non zero dimensions
+        """
+        index = self._get_index(obj)
+        vector = self._get_vector(index, row=True)
+        return set(list(nonzero(vector)[0]))
+    
+    def get_value_dim_per_word(self, obj, dim_index):
+        """
+        @return: the NR value for a given vector on a given dimension
+        """
+        index = self._get_index(obj)
+        vector = self._get_vector(index, row=True)
+        dict_in_dim = InterpretableDimension(dim_index,"descriptors").with_value(vector[dim_index]).get_dict()
+        value = dict_in_dim["value"]
+        return value
+     
     def get_nnv(self):
         """Get the number of null-vetors in the embedding matrix.
 
