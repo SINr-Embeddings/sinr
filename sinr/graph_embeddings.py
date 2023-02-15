@@ -3,6 +3,7 @@ import pickle as pk
 from networkit import Graph, components, community, setNumberOfThreads, Partition
 from numpy import argpartition, argsort, asarray, where, nonzero
 from sklearn.neighbors import NearestNeighbors
+from scipy import spatial
 
 from . import strategy_loader
 from . import strategy_norm
@@ -738,7 +739,18 @@ class SINrVectors(object):
         vector = asarray(self.vectors.getrow(idx).todense()).flatten() if row else asarray(
             self.vectors.getcol(idx).todense()).flatten()
         return vector
-
+    
+    def cosine_sim(self, obj1, obj2):
+        """
+        return cosine similarity between specified item of the model
+        """
+        id1 = self._get_index(obj1)
+        id2 = self._get_index(obj2)
+        vec1 = self._get_vector(id1)
+        vec2 = self._get_vector(id2)
+        cos_dist = spatial.distance.cosine(vec1, vec2)
+        return 1-cos_dist
+        
     def _get_topk(self, idx, topk=5, row=True):
         """
         return indices of the topk values in the vector of id idx
@@ -752,7 +764,7 @@ class SINrVectors(object):
         ind = argpartition(vector, topk)[topk:]
         ind = ind[argsort(vector[ind])[::-1]]
         return ind
-
+    
     def get_topk_dims(self, obj, topk=5):
         index = self._get_index(obj)
         return self._get_topk(index, topk, True)
