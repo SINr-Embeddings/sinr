@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'docs/docs-env.yaml'
+      - '.github/workflows/sphinx_docs_to_gh_pages.yaml'
 
 # workflow_dispatch:        # Un comment line if you also want to trigger action manually
 
