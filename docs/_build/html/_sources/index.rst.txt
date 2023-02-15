@@ -10,8 +10,7 @@ Welcome to SINr's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   sinr
-
+   modules
 
 Introduction
 ============
