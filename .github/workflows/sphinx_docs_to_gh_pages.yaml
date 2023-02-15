@@ -22,8 +22,8 @@ jobs:
         uses: conda-incubator/setup-miniconda@v2
         with:
           python-version: 3.9    # Python version to build the html sphinx documentation
-          environment-file: docs/docs_env.yml    # Path to the documentation conda environment
-          condarc-file: docs/docs_env.yml
+          environment-file: docs_env.yml    # Path to the documentation conda environment
+          condarc-file: docs_env.yml
           auto-update-conda: false
           auto-activate-base: false
           show-channel-urls: true
