@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sinr package &mdash; SINr  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sinr.tests package" href="sinr.tests.html" />
+    <link rel="prev" title="Welcome to SINr’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SINr
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">sinr package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sinr.tests.html">sinr.tests package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.graph_embeddings">sinr.graph_embeddings module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.add_interpreter"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.add_interpreter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.get_dict"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.get_idx"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_idx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.get_interpreter"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_interpreter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.get_interpreters"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_interpreters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.get_value"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.sort"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.sort()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.topk"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.topk()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.with_value"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.with_value()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableWordsModelBuilder"><code class="docutils literal notranslate"><span class="pre">InterpretableWordsModelBuilder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableWordsModelBuilder.build"><code class="docutils literal notranslate"><span class="pre">InterpretableWordsModelBuilder.build()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder"><code class="docutils literal notranslate"><span class="pre">ModelBuilder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.build"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.build()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_all"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_all()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_communities"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_communities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_embeddings_nfm"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_embeddings_nfm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_embeddings_nr"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_embeddings_nr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_graph"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_np"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_np()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_vocabulary"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_vocabulary()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.NoCommunityDetectedException"><code class="docutils literal notranslate"><span class="pre">NoCommunityDetectedException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.NoEmbeddingExtractedException"><code class="docutils literal notranslate"><span class="pre">NoEmbeddingExtractedException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.NoInterpretabilityException"><code class="docutils literal notranslate"><span class="pre">NoInterpretabilityException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.NoVocabularyException"><code class="docutils literal notranslate"><span class="pre">NoVocabularyException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.OnlyGraphModelBuilder"><code class="docutils literal notranslate"><span class="pre">OnlyGraphModelBuilder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.OnlyGraphModelBuilder.build"><code class="docutils literal notranslate"><span class="pre">OnlyGraphModelBuilder.build()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.SINr"><code class="docutils literal notranslate"><span class="pre">SINr</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.detect_communities"><code class="docutils literal notranslate"><span class="pre">SINr.detect_communities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.extract_embeddings"><code class="docutils literal notranslate"><span class="pre">SINr.extract_embeddings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_communities"><code class="docutils literal notranslate"><span class="pre">SINr.get_communities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_cooc_graph"><code class="docutils literal notranslate"><span class="pre">SINr.get_cooc_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_nfm"><code class="docutils literal notranslate"><span class="pre">SINr.get_nfm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_np"><code class="docutils literal notranslate"><span class="pre">SINr.get_np()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_nr"><code class="docutils literal notranslate"><span class="pre">SINr.get_nr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_out_of_LgCC_coms"><code class="docutils literal notranslate"><span class="pre">SINr.get_out_of_LgCC_coms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_vocabulary"><code class="docutils literal notranslate"><span class="pre">SINr.get_vocabulary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_wrd_to_id"><code class="docutils literal notranslate"><span class="pre">SINr.get_wrd_to_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.load_from_adjacency_matrix"><code class="docutils literal notranslate"><span class="pre">SINr.load_from_adjacency_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.load_from_cooc_pkl"><code class="docutils literal notranslate"><span class="pre">SINr.load_from_cooc_pkl()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.load_from_graph"><code class="docutils literal notranslate"><span class="pre">SINr.load_from_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.run"><code class="docutils literal notranslate"><span class="pre">SINr.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.size_of_voc"><code class="docutils literal notranslate"><span class="pre">SINr.size_of_voc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.transfert_communities_labels"><code class="docutils literal notranslate"><span class="pre">SINr.transfert_communities_labels()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors"><code class="docutils literal notranslate"><span class="pre">SINrVectors</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.cosine_sim"><code class="docutils literal notranslate"><span class="pre">SINrVectors.cosine_sim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_communities_as_labels_sets"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_communities_as_labels_sets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_community_membership"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_community_membership()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_community_sets"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_community_sets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_dimension_descriptors"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_dimension_descriptors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_dimension_descriptors_idx"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_dimension_descriptors_idx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_dimension_stereotypes"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_dimension_stereotypes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_dimension_stereotypes_idx"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_dimension_stereotypes_idx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_my_vector"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_my_vector()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_nnv"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_nnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_nnz"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_nnz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_number_of_dimensions"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_number_of_dimensions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_nz_dims"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_nz_dims()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_obj_descriptors"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_obj_descriptors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_obj_stereotypes"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_obj_stereotypes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_obj_stereotypes_and_descriptors"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_obj_stereotypes_and_descriptors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_topk_dims"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_topk_dims()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_value_dim_per_word"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_value_dim_per_word()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_value_obj_dim"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_value_obj_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.labels"><code class="docutils literal notranslate"><span class="pre">SINrVectors.labels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.light_model_save"><code class="docutils literal notranslate"><span class="pre">SINrVectors.light_model_save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.load"><code class="docutils literal notranslate"><span class="pre">SINrVectors.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.most_similar"><code class="docutils literal notranslate"><span class="pre">SINrVectors.most_similar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.pct_nnz"><code class="docutils literal notranslate"><span class="pre">SINrVectors.pct_nnz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.save"><code class="docutils literal notranslate"><span class="pre">SINrVectors.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_communities"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_communities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_graph"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_n_jobs"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_n_jobs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_np"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_np()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_vectors"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_vectors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_vocabulary"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_vocabulary()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.ThresholdedModelBuilder"><code class="docutils literal notranslate"><span class="pre">ThresholdedModelBuilder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ThresholdedModelBuilder.build"><code class="docutils literal notranslate"><span class="pre">ThresholdedModelBuilder.build()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.get_graph_from_matrix"><code class="docutils literal notranslate"><span class="pre">get_graph_from_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.get_lgcc"><code class="docutils literal notranslate"><span class="pre">get_lgcc()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.logger">sinr.logger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.nfm">sinr.nfm module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.nfm.compute_NP"><code class="docutils literal notranslate"><span class="pre">compute_NP()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.nfm.compute_NR"><code class="docutils literal notranslate"><span class="pre">compute_NR()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.nfm.distributed_degree"><code class="docutils literal notranslate"><span class="pre">distributed_degree()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.nfm.get_community_weights"><code class="docutils literal notranslate"><span class="pre">get_community_weights()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.nfm.get_membership"><code class="docutils literal notranslate"><span class="pre">get_membership()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.nfm.get_nfm_embeddings"><code class="docutils literal notranslate"><span class="pre">get_nfm_embeddings()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.strategy_loader">sinr.strategy_loader module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.strategy_loader.load_adj_mat"><code class="docutils literal notranslate"><span class="pre">load_adj_mat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.strategy_loader.load_pkl_text"><code class="docutils literal notranslate"><span class="pre">load_pkl_text()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.strategy_norm">sinr.strategy_norm module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.strategy_norm.apply_norm"><code class="docutils literal notranslate"><span class="pre">apply_norm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.strategy_norm.iterative_pmi"><code class="docutils literal notranslate"><span class="pre">iterative_pmi()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.viz">sinr.viz module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.viz.SINrViz"><code class="docutils literal notranslate"><span class="pre">SINrViz</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.viz.SINrViz.compare_stereotypes"><code class="docutils literal notranslate"><span class="pre">SINrViz.compare_stereotypes()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">sinr</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">sinr package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html">sinr.tests package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sinr.graph_embeddings">sinr.graph_embeddings module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableWordsModelBuilder"><code class="docutils literal notranslate"><span class="pre">InterpretableWordsModelBuilder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder"><code class="docutils literal notranslate"><span class="pre">ModelBuilder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.NoCommunityDetectedException"><code class="docutils literal notranslate"><span class="pre">NoCommunityDetectedException</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.NoEmbeddingExtractedException"><code class="docutils literal notranslate"><span class="pre">NoEmbeddingExtractedException</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.NoInterpretabilityException"><code class="docutils literal notranslate"><span class="pre">NoInterpretabilityException</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.NoVocabularyException"><code class="docutils literal notranslate"><span class="pre">NoVocabularyException</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.OnlyGraphModelBuilder"><code class="docutils literal notranslate"><span class="pre">OnlyGraphModelBuilder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr"><code class="docutils literal notranslate"><span class="pre">SINr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors"><code class="docutils literal notranslate"><span class="pre">SINrVectors</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ThresholdedModelBuilder"><code class="docutils literal notranslate"><span class="pre">ThresholdedModelBuilder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.get_graph_from_matrix"><code class="docutils literal notranslate"><span class="pre">get_graph_from_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.get_lgcc"><code class="docutils literal notranslate"><span class="pre">get_lgcc()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sinr.logger">sinr.logger module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sinr.nfm">sinr.nfm module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.nfm.compute_NP"><code class="docutils literal notranslate"><span class="pre">compute_NP()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.nfm.compute_NR"><code class="docutils literal notranslate"><span class="pre">compute_NR()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.nfm.distributed_degree"><code class="docutils literal notranslate"><span class="pre">distributed_degree()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.nfm.get_community_weights"><code class="docutils literal notranslate"><span class="pre">get_community_weights()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.nfm.get_membership"><code class="docutils literal notranslate"><span class="pre">get_membership()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.nfm.get_nfm_embeddings"><code class="docutils literal notranslate"><span class="pre">get_nfm_embeddings()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sinr.strategy_loader">sinr.strategy_loader module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.strategy_loader.load_adj_mat"><code class="docutils literal notranslate"><span class="pre">load_adj_mat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.strategy_loader.load_pkl_text"><code class="docutils literal notranslate"><span class="pre">load_pkl_text()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sinr.strategy_norm">sinr.strategy_norm module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.strategy_norm.apply_norm"><code class="docutils literal notranslate"><span class="pre">apply_norm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.strategy_norm.iterative_pmi"><code class="docutils literal notranslate"><span class="pre">iterative_pmi()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sinr.viz">sinr.viz module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.viz.SINrViz"><code class="docutils literal notranslate"><span class="pre">SINrViz</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sinr">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SINr</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">sinr package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/sinr.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sinr-package">
+<h1>sinr package<a class="headerlink" href="#sinr-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sinr.tests.html">sinr.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sinr.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.tests.html#module-sinr.tests.test_sinr_nfm">sinr.tests.test_sinr_nfm module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.setUp"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.setUp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.tearDown"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.tearDown()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_adjacency"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_adjacency()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_community_weights"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_community_weights()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_membership"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_membership()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_nnz"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_nnz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_np"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_np()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_nr"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_nr()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.tests.html#module-sinr.tests.test_sinr_workflow">sinr.tests.test_sinr_workflow module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings.setUp"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.setUp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings.tearDown"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.tearDown()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_community_exception"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_community_exception()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_detect_communities"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_detect_communities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_extract_embeddings"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_extract_embeddings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_load_voc"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_load_voc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_nfm_exception"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_nfm_exception()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.tests.html#module-sinr.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-sinr.graph_embeddings">
+<span id="sinr-graph-embeddings-module"></span><h2>sinr.graph_embeddings module<a class="headerlink" href="#module-sinr.graph_embeddings" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">InterpretableDimension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.add_interpreter">
+<span class="sig-name descname"><span class="pre">add_interpreter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.add_interpreter" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – </p></li>
+<li><p><strong>value</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.get_dict">
+<span class="sig-name descname"><span class="pre">get_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.get_dict" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.get_idx">
+<span class="sig-name descname"><span class="pre">get_idx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.get_idx" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.get_interpreter">
+<span class="sig-name descname"><span class="pre">get_interpreter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.get_interpreter" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.get_interpreters">
+<span class="sig-name descname"><span class="pre">get_interpreters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.get_interpreters" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.get_value">
+<span class="sig-name descname"><span class="pre">get_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.get_value" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.sort">
+<span class="sig-name descname"><span class="pre">sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">on_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.sort" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>on_value</strong> – (Default value = True)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.topk">
+<span class="sig-name descname"><span class="pre">topk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topk</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.topk" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>topk</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.with_value">
+<span class="sig-name descname"><span class="pre">with_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.with_value" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableWordsModelBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">InterpretableWordsModelBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">31</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableWordsModelBuilder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder" title="sinr.graph_embeddings.ModelBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelBuilder</span></code></a></p>
+<p>Object that should be used after training word or graph embeddings using the SINr object to get interpretable word vectors.
+The InterpretableWordsModelBuilder will make use of the SINr object to build a SINrVectors object that will allow to use the resulting vectors efficiently.
+No need to use parent methods starting by “with”, those are included in the “build” function.
+Juste provide the name of the model and build it.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableWordsModelBuilder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableWordsModelBuilder.build" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.ModelBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">ModelBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">31</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.ModelBuilder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Object that should be used after the training of word or graph embeddings using the SINr object.
+The ModelBuilder will make use of the SINr object to build a SINrVectors object that will allow to use the resulting vectors efficiently.
+…</p>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading"></a></h3>
+<p>Attributes should not be read</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.ModelBuilder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.ModelBuilder.build" title="Permalink to this definition"></a></dt>
+<dd><p>To get the SINrVectors object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.ModelBuilder.with_all">
+<span class="sig-name descname"><span class="pre">with_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.ModelBuilder.with_all" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.ModelBuilder.with_communities">
+<span class="sig-name descname"><span class="pre">with_communities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.ModelBuilder.with_communities" title="Permalink to this definition"></a></dt>
+<dd><p>To keep the interpretability of the model using the communities</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.ModelBuilder.with_embeddings_nfm">
+<span class="sig-name descname"><span class="pre">with_embeddings_nfm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.ModelBuilder.with_embeddings_nfm" title="Permalink to this definition"></a></dt>
+<dd><p>Adding NFM (Node Recall + Node Predominance) vectors to the SINrVectors object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.ModelBuilder.with_embeddings_nr">
+<span class="sig-name descname"><span class="pre">with_embeddings_nr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.ModelBuilder.with_embeddings_nr" title="Permalink to this definition"></a></dt>
+<dd><p>Adding Node Recall vectors to the SINrVectors object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>threshold</strong> – (Default value = 0)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.ModelBuilder.with_graph">
+<span class="sig-name descname"><span class="pre">with_graph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.ModelBuilder.with_graph" title="Permalink to this definition"></a></dt>
+<dd><p>To keep the underlying graph ; useful to get co-occ statistics, degree of nodes or to label communities with central nodes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.ModelBuilder.with_np">
+<span class="sig-name descname"><span class="pre">with_np</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.ModelBuilder.with_np" title="Permalink to this definition"></a></dt>
+<dd><p>Storing Node predominance values in order to label dimensions for instance</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.ModelBuilder.with_vocabulary">
+<span class="sig-name descname"><span class="pre">with_vocabulary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.ModelBuilder.with_vocabulary" title="Permalink to this definition"></a></dt>
+<dd><p>To deal with word vectors or graph when nodes have labels</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.NoCommunityDetectedException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">NoCommunityDetectedException</span></span><a class="headerlink" href="#sinr.graph_embeddings.NoCommunityDetectedException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.NoEmbeddingExtractedException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">NoEmbeddingExtractedException</span></span><a class="headerlink" href="#sinr.graph_embeddings.NoEmbeddingExtractedException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.NoInterpretabilityException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">NoInterpretabilityException</span></span><a class="headerlink" href="#sinr.graph_embeddings.NoInterpretabilityException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.NoVocabularyException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">NoVocabularyException</span></span><a class="headerlink" href="#sinr.graph_embeddings.NoVocabularyException" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.OnlyGraphModelBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">OnlyGraphModelBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">31</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.OnlyGraphModelBuilder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder" title="sinr.graph_embeddings.ModelBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelBuilder</span></code></a></p>
+<p>Object that should be used after training word or graph embeddings using the SINr object to get interpretable vectors.
+The OnlyGraphModelBuilder will make use of the SINr object to build a SINrVectors object that will allow to use the resulting vectors efficiently.
+No need to use parent methods starting by “with”, those are included in the “build” function.
+Just provide the name of the model and build it.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.OnlyGraphModelBuilder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.OnlyGraphModelBuilder.build" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">SINr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lgcc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrd_to_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Object that can be used to extract word or graph embeddings using the SINr approach.
+This object cannot then be used to inspect the resulting vectors. Instead, using the ModelBuilder class, a SINrVectors object should be created that will allow to use the resulting vectors.</p>
+<p>…</p>
+<section id="id1">
+<h3>Attributes<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<p>Attributes should not be read</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.detect_communities">
+<span class="sig-name descname"><span class="pre">detect_communities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inspect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.detect_communities" title="Permalink to this definition"></a></dt>
+<dd><p>Runs community detection on the graph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gamma</strong> (<em>int</em><em>, </em><em>optional</em>) – For Louvain algorithm which is the default algorithm (ignore this parameter if param algo is used), allows to control the size of the communities. The greater it is, the smaller the communities. The default is 100.</p></li>
+<li><p><strong>algo</strong> (<em>networkit.algo.community</em><em>, </em><em>optional</em>) – Community detection algorithm. The default, None allorws to run a Louvain algorithm</p></li>
+<li><p><strong>inspect</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Whether or not one wants to get insight about the communities extracted. The default is True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.extract_embeddings">
+<span class="sig-name descname"><span class="pre">extract_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">communities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.extract_embeddings" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>communities</strong> (<em>networkit partition</em>) – Community structures (Default value = None)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.get_communities">
+<span class="sig-name descname"><span class="pre">get_communities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.get_communities" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.get_cooc_graph">
+<span class="sig-name descname"><span class="pre">get_cooc_graph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.get_cooc_graph" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.get_nfm">
+<span class="sig-name descname"><span class="pre">get_nfm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.get_nfm" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.get_np">
+<span class="sig-name descname"><span class="pre">get_np</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.get_np" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.get_nr">
+<span class="sig-name descname"><span class="pre">get_nr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.get_nr" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.get_out_of_LgCC_coms">
+<span class="sig-name descname"><span class="pre">get_out_of_LgCC_coms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">communities</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.get_out_of_LgCC_coms" title="Permalink to this definition"></a></dt>
+<dd><p>Get communities that are not in the Largest Connected Component (LgCC).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>communities</strong> (<em>Partition</em>) – Partition object of the communities as obtained by calling a Networkit community detection algorithm</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Indices of the comunnities outside the LgCC</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.get_vocabulary">
+<span class="sig-name descname"><span class="pre">get_vocabulary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.get_vocabulary" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.get_wrd_to_id">
+<span class="sig-name descname"><span class="pre">get_wrd_to_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.get_wrd_to_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.load_from_adjacency_matrix">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_adjacency_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix_object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.load_from_adjacency_matrix" title="Permalink to this definition"></a></dt>
+<dd><p>Build a sinr object from an adjacency matrix as a sparse one (csr)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matrix_object</strong> (<em>csr_matrix</em>) – Matrix describing the graph.</p></li>
+<li><p><strong>norm</strong> (<em>strategy_norm</em><em>, </em><em>optional</em>) – If the graph weights be normalized (for example using PMI). The default is None.</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of jobs that should be used The default is 1.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.load_from_cooc_pkl">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_cooc_pkl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cooc_matrix_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.load_from_cooc_pkl" title="Permalink to this definition"></a></dt>
+<dd><p>Build a sinr object from a co-occurrence matrix stored as a pickle : useful to deal with textual data.
+Co-occurrence matrices should for instance be generated using sinr.text.cooccurrence</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cooc_matrix_path</strong> (<em>string</em>) – Path to the cooccurrence matrix generated using sinr.text.cooccurrence : the file should be a pickle</p></li>
+<li><p><strong>norm</strong> (<em>strategy_norm</em><em>, </em><em>optional</em>) – If the graph weights be normalized (for example using PMI). The default is None.</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of jobs that should be used The default is 1.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.load_from_graph">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.load_from_graph" title="Permalink to this definition"></a></dt>
+<dd><p>Build a sinr object from a networkit graph object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> (<em>networkit</em>) – Networkit graph object.</p></li>
+<li><p><strong>norm</strong> (<em>strategy_norm</em><em>, </em><em>optional</em>) – If the graph weights be normalized (for example using PMI). The default is None.</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of jobs that should be used The default is 1.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.run" title="Permalink to this definition"></a></dt>
+<dd><p>Runs the training of the embedding, i.e. community detection + vectors extraction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>algo</strong> (<em>networkit.algo.community</em><em>, </em><em>optional</em>) – Community detection algorithm. The default, None allorws to run a Louvain algorithm</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.size_of_voc">
+<span class="sig-name descname"><span class="pre">size_of_voc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.size_of_voc" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.transfert_communities_labels">
+<span class="sig-name descname"><span class="pre">transfert_communities_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">community_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.transfert_communities_labels" title="Permalink to this definition"></a></dt>
+<dd><p>Transfer communities computed on one graph to another, used mainly with co-occurence graphs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>community_labels</strong> – a list of communities described by sets of labels describing the nodes</p></li>
+<li><p><strong>refine</strong> – (Default value = False)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Initializes a partition where nodes are all singletons. Then, when communities in parameters contain labels</p>
+</dd>
+</dl>
+<p>that are in the graph at hand, these communities are transferred.</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">SINrVectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>After training word or graph embeddings using SINr object, use the ModelBuilder object to build SINrVectors.
+SINrVectors is the object to manipulate the model, explore the embedding space and its interpretability</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.cosine_sim">
+<span class="sig-name descname"><span class="pre">cosine_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.cosine_sim" title="Permalink to this definition"></a></dt>
+<dd><p>return cosine similarity between specified item of the model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_communities_as_labels_sets">
+<span class="sig-name descname"><span class="pre">get_communities_as_labels_sets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_communities_as_labels_sets" title="Permalink to this definition"></a></dt>
+<dd><p>Get partition of communities as a list of sets each containing the label associates to the node in the community.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of communities each represented by a set of labels associated to the node in each subset</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[set[str]]</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sinr.graph_embeddings.NoInterpretabilityException" title="sinr.graph_embeddings.NoInterpretabilityException"><strong>NoInterpretabilityException</strong></a> – SINrVector was not exported with interpretable dimensions</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_community_membership">
+<span class="sig-name descname"><span class="pre">get_community_membership</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_community_membership" title="Permalink to this definition"></a></dt>
+<dd><p>Get the community index of a node or label.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> – an integer of the node or of its label</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the community of a specific object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_community_sets">
+<span class="sig-name descname"><span class="pre">get_community_sets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_community_sets" title="Permalink to this definition"></a></dt>
+<dd><p>Get the indices of the nodes in for a specific community.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – an integer index of a community</p></li>
+<li><p><strong>idx</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the set of ids of nodes belonging to this community</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_dimension_descriptors">
+<span class="sig-name descname"><span class="pre">get_dimension_descriptors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_dimension_descriptors" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the objects that constitute the dimension of obj, i.e. the members of the community of obj</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – id, word</p></li>
+<li><p><strong>topk</strong> – (Default value = -1)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a set of object, the community of obj</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_dimension_descriptors_idx">
+<span class="sig-name descname"><span class="pre">get_dimension_descriptors_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_dimension_descriptors_idx" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the objects that constitute the dimension of obj, i.e. the members of the community of obj</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>topk</strong> – 1 returns all the members of the community, a positive int returns juste the topk members with</p>
+</dd>
+</dl>
+<p>highest nr values on the community (Default value = -1)
+:param idx: id of dimension
+:param index: 
+:returns: a set of object, the community of obj</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_dimension_stereotypes">
+<span class="sig-name descname"><span class="pre">get_dimension_stereotypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_dimension_stereotypes" title="Permalink to this definition"></a></dt>
+<dd><p>Get the words with the highest values on dimension obj.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – id of a dimension, or label of a word (then turned into the id of its community)</p></li>
+<li><p><strong>topk</strong> – topk value to consider on the dimension (Default value = 5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the topk words that describe this dimension (highest values)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_dimension_stereotypes_idx">
+<span class="sig-name descname"><span class="pre">get_dimension_stereotypes_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_dimension_stereotypes_idx" title="Permalink to this definition"></a></dt>
+<dd><p>Get the indices of the words with the highest values on dimension obj.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – id of a dimension, or label of a word (then turned into the id of its community)</p></li>
+<li><p><strong>topk</strong> – topk value to consider on the dimension (Default value = 5)</p></li>
+<li><p><strong>idx</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the topk words that describe this dimension (highest values)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_my_vector">
+<span class="sig-name descname"><span class="pre">get_my_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_my_vector" title="Permalink to this definition"></a></dt>
+<dd><p>Get the column or the row obj.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>int</em>) – Index of the row/column to return.</p></li>
+<li><p><strong>row</strong> (<em>bool</em>) – Return a row if True else a column. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A row/column.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_nnv">
+<span class="sig-name descname"><span class="pre">get_nnv</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_nnv" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of null-vetors in the embedding matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number of null vectors</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_nnz">
+<span class="sig-name descname"><span class="pre">get_nnz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_nnz" title="Permalink to this definition"></a></dt>
+<dd><p>Get the count of non-zero values in the embedding matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number of non zero values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_number_of_dimensions">
+<span class="sig-name descname"><span class="pre">get_number_of_dimensions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_number_of_dimensions" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of dimensions of model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Number of dimensions of the model.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_nz_dims">
+<span class="sig-name descname"><span class="pre">get_nz_dims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_nz_dims" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>set of indexes of non zero dimensions</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_obj_descriptors">
+<span class="sig-name descname"><span class="pre">get_obj_descriptors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_obj_descriptors" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the descriptors of the dimensions of obj.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>topk_dim</strong> – int, topk dimensions to consider to describe obj (Default value = 5)</p></li>
+<li><p><strong>obj</strong> – an id or a word/label</p></li>
+<li><p><strong>topk_val</strong> – 1 returns all the members of the community, a positive int returns juste the topk members with</p></li>
+</ul>
+</dd>
+</dl>
+<p>highest nr values on the community (Default value = -1)
+:returns: the dimensions (and the objects that constitute these dimensions) that matter to describe obj</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_obj_stereotypes">
+<span class="sig-name descname"><span class="pre">get_obj_stereotypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_obj_stereotypes" title="Permalink to this definition"></a></dt>
+<dd><p>Get the top dimensions for a word.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – the word to consider</p></li>
+<li><p><strong>topk_dim</strong> – topk dimension to consider (Default value = 5)</p></li>
+<li><p><strong>topk_val</strong> – topk values to describe each dimension (Default value = 3)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the most useful dimensions to describe a word and for each dimension,</p>
+</dd>
+</dl>
+<p>the topk words that describe this dimension (highest values)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_obj_stereotypes_and_descriptors">
+<span class="sig-name descname"><span class="pre">get_obj_stereotypes_and_descriptors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_obj_stereotypes_and_descriptors" title="Permalink to this definition"></a></dt>
+<dd><p>Get the stereotypes and descriptors for obj.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – </p></li>
+<li><p><strong>topk_dim</strong> – (Default value = 5)</p></li>
+<li><p><strong>topk_val</strong> – (Default value = 3)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>both stereotypes and descriptors</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_topk_dims">
+<span class="sig-name descname"><span class="pre">get_topk_dims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_topk_dims" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – </p></li>
+<li><p><strong>topk</strong> – (Default value = 5)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_value_dim_per_word">
+<span class="sig-name descname"><span class="pre">get_value_dim_per_word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim_index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_value_dim_per_word" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – </p></li>
+<li><p><strong>dim_index</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the NR value for a given vector on a given dimension</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_value_obj_dim">
+<span class="sig-name descname"><span class="pre">get_value_obj_dim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_value_obj_dim" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – </p></li>
+<li><p><strong>dim</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.labels">
+<span class="sig-name descname"><span class="pre">labels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.labels" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.light_model_save">
+<span class="sig-name descname"><span class="pre">light_model_save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.light_model_save" title="Permalink to this definition"></a></dt>
+<dd><p>Save a minimal version of the model that is readable as a dict for evaluation on word-embeddings-benchmark
+<a class="reference external" href="https://github.com/kudkudak/word-embeddings-benchmarks">https://github.com/kudkudak/word-embeddings-benchmarks</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.load" title="Permalink to this definition"></a></dt>
+<dd><p>Load a SINrVectors model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.most_similar">
+<span class="sig-name descname"><span class="pre">most_similar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.most_similar" title="Permalink to this definition"></a></dt>
+<dd><p>Get the most similar objects of the one passed as a parameter using the cosine of their vectors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<em>integer</em><em> or </em><em>string</em>) – The object for which to fetch the nearest neighbors. Can be int of str.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.pct_nnz">
+<span class="sig-name descname"><span class="pre">pct_nnz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.pct_nnz" title="Permalink to this definition"></a></dt>
+<dd><p>Get the percentage of non-zero values in the embedding matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>percentage of non-zero values in the embedding matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save a SINrVectors model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.set_communities">
+<span class="sig-name descname"><span class="pre">set_communities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">com</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.set_communities" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>com</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.set_graph">
+<span class="sig-name descname"><span class="pre">set_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.set_graph" title="Permalink to this definition"></a></dt>
+<dd><p>Set the graph property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>G</strong> (<em>networkit.Graph</em>) – A networkit graph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.set_n_jobs">
+<span class="sig-name descname"><span class="pre">set_n_jobs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.set_n_jobs" title="Permalink to this definition"></a></dt>
+<dd><p>Set the number of jobs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n_jobs</strong> – number of jobs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.set_np">
+<span class="sig-name descname"><span class="pre">set_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">np</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.set_np" title="Permalink to this definition"></a></dt>
+<dd><p>Set the embedding matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>np</strong> (<em>Scipy.sparse.csr_matrix</em>) – A sparse matrix of the embeddings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.set_vectors">
+<span class="sig-name descname"><span class="pre">set_vectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embeddings</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.set_vectors" title="Permalink to this definition"></a></dt>
+<dd><p>Set the embedding vectors and initialize nearest neighbors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>embeddings</strong> – initialize the vectors and build the nearest neighbors data structure using sklearn</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.set_vocabulary">
+<span class="sig-name descname"><span class="pre">set_vocabulary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">voc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.set_vocabulary" title="Permalink to this definition"></a></dt>
+<dd><p>Set the vocabulary for word-co-occurrence graphs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>voc</strong> – set the vocabulary when dealing with words or nodes with labels. label parameter is set to True.</p>
+</dd>
+</dl>
+<p>By default, labels from the vocab will be used.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.ThresholdedModelBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">ThresholdedModelBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">31</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.ThresholdedModelBuilder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder" title="sinr.graph_embeddings.ModelBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelBuilder</span></code></a></p>
+<p>Object that should be used after the training of word or graph embeddings using the SINr object to get interpretable word vectors.
+The ThresholdedModelBuilder will make use of the SINr object to build a SINrVectors object that will allow to use the resulting vectors efficiently.
+Values in the vectors that are lower than the threshold will be discarded. Vectors are then sparser and more interpretable.
+No need to use parent methods starting by “with”, those are included in the “build” function.
+Juste provide the name of the model and build it.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.ThresholdedModelBuilder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.ThresholdedModelBuilder.build" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>threshold</strong> – (Default value = 0.01)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.get_graph_from_matrix">
+<span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">get_graph_from_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.get_graph_from_matrix" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>matrix</strong> (<em>coo_matrix</em>) – A sparse matrix describing a graph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.get_lgcc">
+<span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">get_lgcc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.get_lgcc" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>networkit graph</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sinr.logger">
+<span id="sinr-logger-module"></span><h2>sinr.logger module<a class="headerlink" href="#module-sinr.logger" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-sinr.nfm">
+<span id="sinr-nfm-module"></span><h2>sinr.nfm module<a class="headerlink" href="#module-sinr.nfm" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.nfm.compute_NP">
+<span class="sig-prename descclassname"><span class="pre">sinr.nfm.</span></span><span class="sig-name descname"><span class="pre">compute_NP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">membership_matrix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.nfm.compute_NP" title="Permalink to this definition"></a></dt>
+<dd><p>Compute the node-predominance based on the adjacency matrix and the community-membership matrix of the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adjacency</strong> (<em>Scipy.sparse.csr_matrix</em>) – Adjacency matrix of the graph.</p></li>
+<li><p><strong>membership_matrix</strong> (<em>Scipy.sparse.csr_matrix</em>) – Community membership matrix.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>NP measures for each node and each community</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Scipy.sparse.csr_matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.nfm.compute_NR">
+<span class="sig-prename descclassname"><span class="pre">sinr.nfm.</span></span><span class="sig-name descname"><span class="pre">compute_NR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">membership_matrix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.nfm.compute_NR" title="Permalink to this definition"></a></dt>
+<dd><p>Compute the node-recall based on the adjacency matrix and the community-membership matrix of the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adjacency</strong> (<em>Scipy.sparse.csr_matrix</em>) – Adjacency matrix of the graph.</p></li>
+<li><p><strong>membership_matrix</strong> (<em>Scipy.sparse.csr_matrix</em>) – Community membership matrix.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>NR measures for each node and each community</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Scipy.sparse.csr_matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.nfm.distributed_degree">
+<span class="sig-prename descclassname"><span class="pre">sinr.nfm.</span></span><span class="sig-name descname"><span class="pre">distributed_degree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.nfm.distributed_degree" title="Permalink to this definition"></a></dt>
+<dd><p>Make values in the adjacency matrix be between 0 and 1 depending on how the degree of the node is distributed over each community.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>adjacency</strong> (<em>Scipy.sparse.csr_matrix</em>) – Adjacency matrix of the graph.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>l1 normalized adjacency matrix.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Scipy.sparse.csr_matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.nfm.get_community_weights">
+<span class="sig-prename descclassname"><span class="pre">sinr.nfm.</span></span><span class="sig-name descname"><span class="pre">get_community_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">membership_matrix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.nfm.get_community_weights" title="Permalink to this definition"></a></dt>
+<dd><p>Get the total weight of each community in terms of degree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adjacency</strong> (<em>Scipy.sparse.csr_matrix</em>) – Adjacency matrix of the graph.</p></li>
+<li><p><strong>membership_matrix</strong> (<em>Scipy.sparse.csr_matrix</em>) – Community membership matrix.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Degree-based weight of each community.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Scipy.sparse.csr_matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.nfm.get_membership">
+<span class="sig-prename descclassname"><span class="pre">sinr.nfm.</span></span><span class="sig-name descname"><span class="pre">get_membership</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.nfm.get_membership" title="Permalink to this definition"></a></dt>
+<dd><p>Return the membership matrix based on the community membership vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vector</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – The vector of community index for each node</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The community membership matrix of shape (#nodes x #communities).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Scipy.sparse.csr_matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.nfm.get_nfm_embeddings">
+<span class="sig-prename descclassname"><span class="pre">sinr.nfm.</span></span><span class="sig-name descname"><span class="pre">get_nfm_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_np</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.nfm.get_nfm_embeddings" title="Permalink to this definition"></a></dt>
+<dd><p>Compute the Node F-Measure metrics to build the embedding matrix using the graph and community structure detected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> (<em>networkit.Graph</em>) – Graph on which to compute the embeddings</p></li>
+<li><p><strong>vector</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – The node-community membership vector</p></li>
+<li><p><strong>compute_np</strong> (<em>bool</em><em>, </em><em>optional</em>) – Compute the node predominance metric, defaults to False</p></li>
+<li><p><strong>merge</strong> (<em>bool</em><em>, </em><em>optional</em>) – Merge the NR and NP measure in a common matrix, defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The node predominance, node recall and merged matrix (nfm) if applicable.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[Scipy.sparse.csr_matrix, Scipy.sparse.csr_matrix, Scipy.sparse.csr_matrix]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sinr.strategy_loader">
+<span id="sinr-strategy-loader-module"></span><h2>sinr.strategy_loader module<a class="headerlink" href="#module-sinr.strategy_loader" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.strategy_loader.load_adj_mat">
+<span class="sig-prename descclassname"><span class="pre">sinr.strategy_loader.</span></span><span class="sig-name descname"><span class="pre">load_adj_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.strategy_loader.load_adj_mat" title="Permalink to this definition"></a></dt>
+<dd><p>Load a cooccurrence matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matrix</strong> (<em>csr_matrix</em>) – an adjacency matrix</p></li>
+<li><p><strong>matrix</strong> – a dict matching labels with nodes</p></li>
+<li><p><strong>labels</strong> – (Default value = None)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The loaded cooccurrence matrix and the word index.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple(dict(), scipy.sparse.coo_matrix)`</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.strategy_loader.load_pkl_text">
+<span class="sig-prename descclassname"><span class="pre">sinr.strategy_loader.</span></span><span class="sig-name descname"><span class="pre">load_pkl_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.strategy_loader.load_pkl_text" title="Permalink to this definition"></a></dt>
+<dd><p>Load a cooccurrence matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cooc_mat_path</strong> (<em>str</em>) – Path to coocurrence matrix.</p></li>
+<li><p><strong>mat_path</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The loaded cooccurrence matrix and the word index.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple(dict(), scipy.sparse.coo_matrix)`</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sinr.strategy_norm">
+<span id="sinr-strategy-norm-module"></span><h2>sinr.strategy_norm module<a class="headerlink" href="#module-sinr.strategy_norm" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.strategy_norm.apply_norm">
+<span class="sig-prename descclassname"><span class="pre">sinr.strategy_norm.</span></span><span class="sig-name descname"><span class="pre">apply_norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.strategy_norm.apply_norm" title="Permalink to this definition"></a></dt>
+<dd><p>Apply a normalisation to the graph (IPMI, PMI…) before detecting communities</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>norm</strong> – Type of normalisation.</p></li>
+<li><p><strong>norm_args</strong> – Arguments to pass to the normalisation alfgorithm.</p></li>
+<li><p><strong>G</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The graph and the weighted degrees before and after normalisation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.strategy_norm.iterative_pmi">
+<span class="sig-prename descclassname"><span class="pre">sinr.strategy_norm.</span></span><span class="sig-name descname"><span class="pre">iterative_pmi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.strategy_norm.iterative_pmi" title="Permalink to this definition"></a></dt>
+<dd><p>Iteratively applies PMI to the graph to allow for community detection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>G</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The graph and the weighted degrees before and after normalisation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sinr.viz">
+<span id="sinr-viz-module"></span><h2>sinr.viz module<a class="headerlink" href="#module-sinr.viz" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sinr.viz.SINrViz">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.viz.</span></span><span class="sig-name descname"><span class="pre">SINrViz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vectors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors" title="sinr.graph_embeddings.SINrVectors"><span class="pre">SINrVectors</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.viz.SINrViz" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.viz.SINrViz.compare_stereotypes">
+<span class="sig-name descname"><span class="pre">compare_stereotypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.viz.SINrViz.compare_stereotypes" title="Permalink to this definition"></a></dt>
+<dd><p>Make a heatmap comparing top dimensions for elements in args (words).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – A list of indices (words).</p></li>
+<li><p><strong>topk_dim</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of top dimensions to fetch, defaults to 5</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sinr">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sinr" title="Permalink to this heading"></a></h2>
+<p>Top-level package for SINr Embeddings.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to SINr’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sinr.tests.html" class="btn btn-neutral float-right" title="sinr.tests package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Thibault Prouteau, Nicolas Dugué, Simon Guillot.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
