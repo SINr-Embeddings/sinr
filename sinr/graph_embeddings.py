@@ -125,7 +125,7 @@ class SINr(object):
 
         """
         if algo is None:
-            algo = community.PLM(self.cooc_graph, refine=False, gamma=100, turbo=True, recurse=False)
+            algo = community.PLM(self.cooc_graph, refine=False, gamma=1, turbo=True, recurse=False)
         self.communities = self.detect_communities(self.cooc_graph, algo=algo)
         self.extract_embeddings(communities=self.communities)
 
@@ -149,6 +149,7 @@ class SINr(object):
 
         """
         logger.info("Detecting communities.")
+        print(f"Gamma for louvain : {gamma}")
         if algo is None:
             algo = community.PLM(self.cooc_graph, refine=False, gamma=gamma, turbo=True, recurse=False)
         communities = community.detectCommunities(self.cooc_graph, algo=algo, inspect=inspect)
@@ -161,7 +162,7 @@ class SINr(object):
         return len(self.idx_to_wrd)
 
     def transfert_communities_labels(self, community_labels, refine=False):
-        '''
+        '''Transfer communities computed on one graph to another, used mainly with co-occurence graphs.
 
         @param community_labels: a list of communities described by sets of labels describing the nodes
         @return: Initializes a partition where nodes are all singletons. Then, when communities in parameters contain labels
@@ -225,9 +226,9 @@ class SINr(object):
         lgcc : networkit graph
             the largest connected component of graph
         wrd_to_idx : dict
-            A matching between a vocabulary and ids. Useful for text. Otherwise, the vocabulary and the ids are the same.
+            A matching between a vocabulary and ids. Useful for text. Otherwise, the vocabulary and the ids are the same
         n_jobs : int, optional
-            Number of jobs that should be runned. The default is 1.
+            Number of jobs that should be runned. The default is 1
 
         Returns
         -------
@@ -248,6 +249,14 @@ class SINr(object):
         self.wd_before, self.wd_after = None, None
 
     def get_out_of_LgCC_coms(self, communities):
+        """Get communities that are not in the Largest Connected Component (LgCC).
+
+        Args:
+            communities (Partition): Partition object of the communities as obtained by calling a Networkit community detection algorithm
+
+        Returns:
+            list[int]: Indices of the comunnities outside the LgCC
+        """
         set_out_of_LgCC = set(self.out_of_LgCC)
         out_of_LgCC_coms = []
         for com in communities.getSubsetIds():
@@ -335,12 +344,14 @@ def get_graph_from_matrix(matrix):
 
 
 class NoCommunityDetectedException(Exception):
-    "Raised when the communities were not detected"
+    """Raised when the communities were not detected
+    """
     pass
 
 
 class NoEmbeddingExtractedException(Exception):
-    "Raised when the embeddings were not extracted"
+    """
+    Raised when the embeddings were not extracted""""
     pass
 
 
@@ -469,11 +480,19 @@ class ModelBuilder:
 
         """
         return self.model
-
+    
+class OnlyGraphModelBuilder(ModelBuilder):
+    """Object that should be used after training word or graph embeddings using the SINr object to get interpretable vectors.
+    The OnlyGraphModelBuilder will make use of the SINr object to build a SINrVectors object that will allow to use the resulting vectors efficiently.
+    No need to use parent methods starting by "with", those are included in the "build" function.
+    Just provide the name of the model and build it.
+    """
+    def build(self):
+        self.with_np()
+        return self.model
 
 class InterpretableWordsModelBuilder(ModelBuilder):
-    """
-    bject that should be used after the training of word or graph embeddings using the SINr object to get interpretable word vectors.
+    """Object that should be used after training word or graph embeddings using the SINr object to get interpretable word vectors.
     The InterpretableWordsModelBuilder will make use of the SINr object to build a SINrVectors object that will allow to use the resulting vectors efficiently.
     No need to use parent methods starting by "with", those are included in the "build" function.
     Juste provide the name of the model and build it.
@@ -485,8 +504,7 @@ class InterpretableWordsModelBuilder(ModelBuilder):
 
 
 class ThresholdedModelBuilder(ModelBuilder):
-    """
-    Object that should be used after the training of word or graph embeddings using the SINr object to get interpretable word vectors.
+    """Object that should be used after the training of word or graph embeddings using the SINr object to get interpretable word vectors.
     The ThresholdedModelBuilder will make use of the SINr object to build a SINrVectors object that will allow to use the resulting vectors efficiently.
     Values in the vectors that are lower than the threshold will be discarded. Vectors are then sparser and more interpretable.
     No need to use parent methods starting by "with", those are included in the "build" function.
@@ -504,7 +522,7 @@ class NoInterpretabilityException(Exception):
 
 
 class NoVocabularyException(Exception):
-    "Raised when no vocabulary was included in the model that was built. One cant play with words."
+    "Raised when no vocabulary was included in the model that was built. One cannot play with words."
     pass
 
 
@@ -555,8 +573,7 @@ class InterpretableDimension:
 
 
 class SINrVectors(object):
-    """
-    After having trained word or graph embeddings using SINr object, use the ModelBuilder object to build SINrVectors.
+    """After training word or graph embeddings using SINr object, use the ModelBuilder object to build SINrVectors.
     SINrVectors is the object to manipulate the model, explore the embedding space and its interpretability
     """
     labels: bool
@@ -581,6 +598,14 @@ class SINrVectors(object):
         self.labels = False
 
     def get_communities_as_labels_sets(self):
+        """Get partition of communities as a list of sets each containing the label associates to the node in the community.
+
+        Raises:
+            NoInterpretabilityException: SINrVector was not exported with interpretable dimensions
+
+        Returns:
+            list[set[str]]: List of communities each represented by a set of labels associated to the node in each subset
+        """
         if self.communities_sets is None:
             raise NoInterpretabilityException
         labels_sets = []
@@ -592,23 +617,30 @@ class SINrVectors(object):
         return labels_sets
 
     def set_n_jobs(self, n_jobs):
-        """
+        """Set the number of jobs.
 
         @param n_jobs: number of jobs
         """
         self.n_jobs = n_jobs
 
     def set_graph(self, G):
+        """Set the graph property.
+
+        Args:
+            G (networkit.Graph): A networkit graph
+        """
         self.G = G
 
     def get_nnz(self):
-        """
+        """Get the count of non-zero values in the embedding matrix.
+
         @return: number of non zero values
         """
         return self.vectors.getnnz()
 
     def get_nnv(self):
-        """
+        """Get the number of null-vetors in the embedding matrix.
+
         @return: number of null vectors
         """
         sum = self.vectors.sum(axis=1)
@@ -616,15 +648,15 @@ class SINrVectors(object):
         return len(nulls)
 
     def pct_nnz(self):
-        """
-        percentage of non zero values in the matrix
-        @return:
+        """Get the percentage of non-zero values in the embedding matrix
+
+        @return: percentage of non-zero values in the embedding matrix
         """
         nnz = self.get_nnz()
         return (nnz * 100) / (self.vectors.shape[0] * self.vectors.shape[1])
 
     def set_vocabulary(self, voc):
-        """
+        """Set the vocabulary for word-co-occurrence graphs.
 
         @param voc: set the vocabulary when dealing with words or nodes with labels. label parameter is set to True.
         By default, labels from the vocab will be used.
@@ -634,7 +666,7 @@ class SINrVectors(object):
         self.labels = True
 
     def set_vectors(self, embeddings):
-        """
+        """Set the embedding vectors and initialize nearest neighbors.
 
         @param embeddings:  initialize the vectors and build the nearest neighbors data structure using sklearn
         """
@@ -643,6 +675,11 @@ class SINrVectors(object):
             self.vectors)
 
     def set_np(self, np):
+        """Set the embedding matrix.
+
+        Args:
+            np (Scipy.sparse.csr_matrix): A sparse matrix of the embeddings
+        """
         self.np = np
 
     def set_communities(self, com):
@@ -655,7 +692,7 @@ class SINrVectors(object):
             self.communities_sets[com].add(idx)
 
     def get_community_membership(self, obj):
-        """
+        """Get the community index of a node or label.
 
         @param obj: an integer of the node or of its label
         @return: the community of a specific object
@@ -666,7 +703,7 @@ class SINrVectors(object):
         return self.community_membership[index]
 
     def get_community_sets(self, idx):
-        """
+        """Get the indices of the nodes in for a specific community.
 
         @param obj: an integer index of a community
         @return: the set of ids of nodes belonging to this community
@@ -676,11 +713,10 @@ class SINrVectors(object):
         return self.communities_sets[idx]
 
     def _get_index(self, obj):
-        """
-        If obj is already an int, then it is the id to use, returns is
-        Else, returns the index of the object if there is a list of labels. If not, return the obj.
-        @param obj:
-        @return:
+        """Returns the index for a label or an index.
+
+        @param obj: The object fro which the index should be fetched
+        @return: The index of the object
         """
         if type(obj) is int:
             return obj
@@ -694,12 +730,12 @@ class SINrVectors(object):
         Parameters
         ----------
         obj : integer or string
-            DESCRIPTION.
+            The object for which to fetch the nearest neighbors. Can be int of str.
 
         Returns
         -------
         dict
-            DESCRIPTION.
+            A dict containing the query word and its nearest neighbors.
 
         """
         index = self._get_index(obj)
@@ -711,8 +747,8 @@ class SINrVectors(object):
                                list(zip(distances.flatten(), neighbor_idx.flatten()))[1::]]}
 
     def _get_vector(self, idx, row=True):
-        """
-        Returns a list from the csr matrix
+        """Returns a list from the csr matrix
+
         @param idx: id of the vector requested
         @param row: if the vector should be a row or a column of the csr matrix of embeddings
         @return: the vector
@@ -722,8 +758,8 @@ class SINrVectors(object):
         return vector
 
     def _get_topk(self, idx, topk=5, row=True):
-        """
-        return indices of the topk values in the vector of id idx
+        """Returns indices of the topk values in the vector of id idx
+
         @param idx: idx of the vector in which the topk values are searched
         @param topk: number of values to get
         @param row: if the vector is a row or a column
@@ -746,8 +782,8 @@ class SINrVectors(object):
 
     # Using communities to describe dimensions
     def get_dimension_descriptors(self, obj, topk=-1):
-        """
-        returns the objects that constitute the dimension of obj, i.e. the members of the community of obj
+        """Returns the objects that constitute the dimension of obj, i.e. the members of the community of obj
+
         @param obj: id, word
         @return: a set of object, the community of obj
         """
@@ -757,8 +793,8 @@ class SINrVectors(object):
         return self.get_dimension_descriptors_idx(self.community_membership[index], topk)
 
     def get_dimension_descriptors_idx(self, index, topk=-1):
-        """
-        returns the objects that constitute the dimension of obj, i.e. the members of the community of obj
+        """Returns the objects that constitute the dimension of obj, i.e. the members of the community of obj
+
         @param topk: -1 returns all the members of the community, a positive int returns juste the topk members with
         highest nr values on the community
         @param idx: id of dimension
@@ -784,7 +820,8 @@ class SINrVectors(object):
         #     return community_nr[:topk]
 
     def get_obj_descriptors(self, obj, topk_dim=5, topk_val=-1):
-        """
+        """Returns the descriptors of the dimensions of obj.
+
         @param topk_dim: int, topk dimensions to consider to describe obj
         @param obj: an id or a word/label
         @param topk_val: -1 returns all the members of the community, a positive int returns juste the topk members with
@@ -802,7 +839,8 @@ class SINrVectors(object):
 
     # Using top words to describe dimensions
     def get_dimension_stereotypes(self, obj, topk=5):
-        """
+        """Get the words with the highest values on dimension obj.
+
         @param obj: id of a dimension, or label of a word (then turned into the id of its community)
         @param topk: topk value to consider on the dimension
         @return: the topk words that describe this dimension (highest values)
@@ -811,7 +849,7 @@ class SINrVectors(object):
         return self.get_dimension_stereotypes_idx(self.get_community_membership(index), topk)
 
     def get_dimension_stereotypes_idx(self, idx, topk=5):
-        """
+        """Get the indices of the words with the highest values on dimension obj.
 
         @param obj: id of a dimension, or label of a word (then turned into the id of its community)
         @param topk: topk value to consider on the dimension
@@ -826,7 +864,7 @@ class SINrVectors(object):
         return in_dim
 
     def get_obj_stereotypes(self, obj, topk_dim=5, topk_val=3):
-        """
+        """Get the top dimensions for a word.
 
         @param obj: the word to consider
         @param topk_dim: topk dimension to consider
@@ -844,7 +882,8 @@ class SINrVectors(object):
         return highest_dims
 
     def get_obj_stereotypes_and_descriptors(self, obj, topk_dim=5, topk_val=3):
-        """
+        """Get the stereotypes and descriptors for obj.
+
         @return: both stereotypes and descriptors
         """
         sters = self.get_obj_stereotypes(obj, topk_dim, topk_val)
@@ -854,15 +893,24 @@ class SINrVectors(object):
         return sters
 
     def get_number_of_dimensions(self):
+        """Get the number of dimensions of model.
+
+        Returns:
+            int: Number of dimensions of the model.
+        """
         return len(self.communities_sets)
 
     def load(self):
+        """Load a SINrVectors model.
+        """
         f = open(self.name + ".pk", 'rb')
         tmp_dict = pk.load(f)
         f.close()
         self.__dict__.update(tmp_dict)
 
     def save(self):
+        """Save a SINrVectors model.
+        """
         f = open(self.name + ".pk", 'wb')
         pk.dump(self.__dict__, f, 2)
         f.close()
@@ -876,14 +924,22 @@ class SINrVectors(object):
 #            vocab, vectors = pk.load(file)
 #        return Model(vocab, vectors)
     def get_my_vector(self, obj, row=True):
+        """Get the column or the row obj.
+
+        Args:
+            obj (int): Index of the row/column to return.
+            row (bool, optional): Return a row if True else a column. Defaults to True.
+
+        Returns:
+            np.ndarray: A row/column.
+        """
         index = self._get_index(obj)
         vector = asarray(self.vectors.getrow(index).todense()).flatten() if row else asarray(
             self.vectors.getcol(index).todense()).flatten()
         return vector
     
     def light_model_save(self):
-        """
-        save a minimal version of the model that is readable as a dict for evaluation on word-embeddings-benchmark 
+        """Save a minimal version of the model that is readable as a dict for evaluation on word-embeddings-benchmark 
         https://github.com/kudkudak/word-embeddings-benchmarks
         """
         data={}
