@@ -18,6 +18,15 @@ class Corpus:
     LANGUAGE_EN = "en"
 
     def __init__(self, register, language, input_path):
+        """Initialise a corpus object.
+
+        :param register: Register of data in input.
+        :type register: str
+        :param language: Language of the data in input.
+        :type language: str
+        :param input_path: Input path for the data.
+        :type input_path: str
+        """
         self.language = language
         self.register = register
         self.input_path = input_path
@@ -25,12 +34,24 @@ class Corpus:
 
 class VRTMaker:
     def _get_model(self):
+        """Load a SpaCy model.
+
+        :return: A spacy.Language object with the loaded pipeline.
+        :rtype: spacy.Language
+        """
         if self.corpus.language == "fr":
             return spacy.load("fr_core_news_lg")
         elif self.corpus.language == "en":
             return spacy.load("en_core_web_lg")
 
     def _create_output(self, output_path):
+        """Create the output file for the processed data.
+
+        :param output_path: Path in which to output the data.
+        :type output_path: str
+        :return: The filepath in output.
+        :rtype: str
+        """
         op = Path(output_path)
         op.mkdir(exist_ok=True)
         corpus_output = op / f"{Path(self.corpus.input_path).stem}.vrt"  # Output path to write the corpus file
@@ -38,6 +59,15 @@ class VRTMaker:
         return corpus_output
 
     def __init__(self, corpus: Corpus, output_path, n_jobs=1):
+        """Initialize a VRTMaker object to build VRT preprocessed corpus files.
+
+        :param corpus: The corpus object to preprocess.
+        :type corpus: Corpus
+        :param output_path: The output filepath to write VRT file.
+        :type output_path: str
+        :param n_jobs: Number of jobs for preprocessing steps, defaults to 1
+        :type n_jobs: int, optional
+        """
         self.corpus = corpus
         self.corpus_output = self._create_output(output_path)
         self.model = self._get_model()
@@ -45,13 +75,22 @@ class VRTMaker:
         self.n_jobs = n_jobs
 
     def _open(self):
+        """Open the output file.
+
+        :return: The output buffer.
+        :rtype: file
+        """
         fichier = self.corpus_output.open("w")
         return fichier
 
     def _with_ner_merging(self):
+        """Merge named entities.
+        """
         self.model.add_pipe("merge_entities", after="ner")  # Merge Named-Entities
 
     def do_txt_to_vrt(self):
+        """Build VRT format file and write to output filepath.
+        """
         corpus_opened = self._open()
         id_corpus = str(uuid.uuid4())  # Generate a random corpus id
         corpus_opened.write(
@@ -95,8 +134,7 @@ class VRTMaker:
 def extract_text(corpus_path, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False,
                  exclude_pos=[],
                  en=True, min_freq=50, alpha=True, exclude_en=[], min_length_word=3):
-    '''corpus_path
-    Extracts the text from a VRT corpus file.
+    '''Extracts the text from a VRT corpus file.
 
 
     Parameters:

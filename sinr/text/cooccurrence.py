@@ -34,9 +34,9 @@ class Cooccurrence(object):
         the cooccurrence matrix.
 
         :param corpus: List of lists of strings (words) from the corpus.
-        :type corpus: `list(list())``
+        :type corpus: list[list[str]]
         :param window: The length of the (symmetric) context window used for cooccurrence, defaults to 2
-        :type window: `int`
+        :type window: int
         """
         words_sorted = sorted(set(itertools.chain(*corpus)))
         self.dictionary   = dict(zip(words_sorted, range(len(words_sorted))))
@@ -50,7 +50,7 @@ class Cooccurrence(object):
         Save cooccurrence object to a pickle file.
 
         :param filename: Output path to the filename of the pickle file.
-        :type filename: `str`
+        :type filename: str
         """
         with open(filename, 'wb') as savefile:
             pickle.dump((self.dictionary, self.matrix),
@@ -65,7 +65,7 @@ class Cooccurrence(object):
         :param filename: Path to the pickle file.
         :type filename: str
         :return: An instance of the :class: Cooccurrence.
-        :rtype: `community2vec.Cooccurrence`
+        :rtype: SINr.cooccurrence.Cooccurrence
         """
         instance = cls()
 

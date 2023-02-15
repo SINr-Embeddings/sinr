@@ -8,6 +8,13 @@ class SINrViz:
         self.sinr_vectors = sinr_vectors
 
     def compare_stereotypes(self, args, topk_dim=5):
+        """Make a heatmap comparing top dimensions for elements in args (words).
+
+        :param args: A list of indices (words).
+        :type args: list[int]
+        :param topk_dim: Number of top dimensions to fetch, defaults to 5
+        :type topk_dim: int, optional
+        """
         if len(args) == 0:
             print("No objects passed as parameters")
             return
