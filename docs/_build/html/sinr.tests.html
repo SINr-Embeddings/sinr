@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sinr.tests package &mdash; SINr  documentation</title>
+  <title>Test SINr &mdash; SINr  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,7 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="sinr package" href="sinr.html" /> 
+    <link rel="prev" title="SINr Text" href="sinr.text.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,25 +42,37 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="sinr.html">sinr package</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="sinr.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">sinr.tests package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-sinr.tests.test_sinr_nfm">sinr.tests.test_sinr_nfm module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-sinr.tests.test_sinr_workflow">sinr.tests.test_sinr_workflow module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-sinr.tests">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sinr.html">SINr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sinr.text.html">SINr Text</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Test SINr</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.tests.test_sinr_nfm">Test SINr NFM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.setUp"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.setUp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.tearDown"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.tearDown()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_adjacency"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_adjacency()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_community_weights"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_community_weights()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_membership"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_membership()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_nnz"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_nnz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_np"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_np()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_nr"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_nr()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="sinr.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.graph_embeddings">sinr.graph_embeddings module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.nfm">sinr.nfm module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.strategy_loader">sinr.strategy_loader module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.viz">sinr.viz module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.strategy_norm">sinr.strategy_norm module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.logger">sinr.logger module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.tests.test_sinr_workflow">Test SINr workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings.setUp"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.setUp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings.tearDown"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.tearDown()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_community_exception"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_community_exception()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_detect_communities"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_detect_communities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_extract_embeddings"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_extract_embeddings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_load_voc"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_load_voc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_nfm_exception"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_nfm_exception()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.tests">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -79,8 +91,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="sinr.html">sinr package</a></li>
-      <li class="breadcrumb-item active">sinr.tests package</li>
+      <li class="breadcrumb-item active">Test SINr</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/sinr.tests.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -90,13 +101,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="sinr-tests-package">
-<h1>sinr.tests package<a class="headerlink" href="#sinr-tests-package" title="Permalink to this heading"></a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
-</section>
+  <section id="test-sinr">
+<h1>Test SINr<a class="headerlink" href="#test-sinr" title="Permalink to this heading"></a></h1>
 <section id="module-sinr.tests.test_sinr_nfm">
-<span id="sinr-tests-test-sinr-nfm-module"></span><h2>sinr.tests.test_sinr_nfm module<a class="headerlink" href="#module-sinr.tests.test_sinr_nfm" title="Permalink to this heading"></a></h2>
+<span id="test-sinr-nfm"></span><h2>Test SINr NFM<a class="headerlink" href="#module-sinr.tests.test_sinr_nfm" title="Permalink to this heading"></a></h2>
 <p>Tests for <cite>sinr_embeddings</cite> package.</p>
 <p>python -m sinr.tests.test_sinr_nfm</p>
 <dl class="py class">
@@ -150,7 +158,7 @@
 
 </section>
 <section id="module-sinr.tests.test_sinr_workflow">
-<span id="sinr-tests-test-sinr-workflow-module"></span><h2>sinr.tests.test_sinr_workflow module<a class="headerlink" href="#module-sinr.tests.test_sinr_workflow" title="Permalink to this heading"></a></h2>
+<span id="test-sinr-workflow"></span><h2>Test SINr workflow<a class="headerlink" href="#module-sinr.tests.test_sinr_workflow" title="Permalink to this heading"></a></h2>
 <p>Tests for <cite>graph_emn</cite> package.</p>
 <p>python -m sinr.tests.test_sinr_workflow</p>
 <dl class="py class">
@@ -200,7 +208,7 @@
 </section>
 <section id="module-sinr.tests">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sinr.tests" title="Permalink to this heading"></a></h2>
-<p>Unit test package for sinr_embeddings.</p>
+<p>Unit test package for <cite>sinr_embeddings</cite>.</p>
 </section>
 </section>
 
@@ -208,7 +216,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="sinr.html" class="btn btn-neutral float-left" title="sinr package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sinr.text.html" class="btn btn-neutral float-left" title="SINr Text" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

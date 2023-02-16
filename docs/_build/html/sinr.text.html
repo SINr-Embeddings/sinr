@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SINr Text &mdash; SINr  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Test SINr" href="sinr.tests.html" />
+    <link rel="prev" title="SINr" href="sinr.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SINr
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="sinr.html">SINr</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SINr Text</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.text.cooccurrence">Co-occurrence</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.cooccurrence.Cooccurrence"><code class="docutils literal notranslate"><span class="pre">Cooccurrence</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.cooccurrence.Cooccurrence.fit"><code class="docutils literal notranslate"><span class="pre">Cooccurrence.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.cooccurrence.Cooccurrence.load"><code class="docutils literal notranslate"><span class="pre">Cooccurrence.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.cooccurrence.Cooccurrence.save"><code class="docutils literal notranslate"><span class="pre">Cooccurrence.save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.text.cooccurrence_cython">Co-occurrence Cython</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.cooccurrence_cython.construct_cooccurrence_matrix"><code class="docutils literal notranslate"><span class="pre">construct_cooccurrence_matrix()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.text.pmi">PMI Filtering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.pmi.pmi"><code class="docutils literal notranslate"><span class="pre">pmi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.pmi.pmi_filter"><code class="docutils literal notranslate"><span class="pre">pmi_filter()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.text.preprocess">Preprocess Text</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.preprocess.Corpus"><code class="docutils literal notranslate"><span class="pre">Corpus</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.preprocess.Corpus.LANGUAGE_EN"><code class="docutils literal notranslate"><span class="pre">Corpus.LANGUAGE_EN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.preprocess.Corpus.LANGUAGE_FR"><code class="docutils literal notranslate"><span class="pre">Corpus.LANGUAGE_FR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.preprocess.Corpus.REGISTER_NEWS"><code class="docutils literal notranslate"><span class="pre">Corpus.REGISTER_NEWS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.preprocess.Corpus.REGISTER_WEB"><code class="docutils literal notranslate"><span class="pre">Corpus.REGISTER_WEB</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.preprocess.VRTMaker"><code class="docutils literal notranslate"><span class="pre">VRTMaker</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.preprocess.VRTMaker.do_txt_to_vrt"><code class="docutils literal notranslate"><span class="pre">VRTMaker.do_txt_to_vrt()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.preprocess.extract_text"><code class="docutils literal notranslate"><span class="pre">extract_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.preprocess.open_corpus"><code class="docutils literal notranslate"><span class="pre">open_corpus()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.text">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sinr.tests.html">Test SINr</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SINr</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">SINr Text</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/sinr.text.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sinr-text">
+<h1>SINr Text<a class="headerlink" href="#sinr-text" title="Permalink to this heading"></a></h1>
+<section id="module-sinr.text.cooccurrence">
+<span id="co-occurrence"></span><h2>Co-occurrence<a class="headerlink" href="#module-sinr.text.cooccurrence" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sinr.text.cooccurrence.Cooccurrence">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.text.cooccurrence.</span></span><span class="sig-name descname"><span class="pre">Cooccurrence</span></span><a class="headerlink" href="#sinr.text.cooccurrence.Cooccurrence" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for constructing a cooccurrence matrix
+from a corpus.</p>
+<p>A dictionnary mapping the vocabulary of the corpus in lexicographic order
+will be constructed as well as the cooccurrence matrix.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.text.cooccurrence.Cooccurrence.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.cooccurrence.Cooccurrence.fit" title="Permalink to this definition"></a></dt>
+<dd><p>Perform a pass through the corpus to construct
+the cooccurrence matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>corpus</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>str</em><em>]</em><em>]</em>) – List of lists of strings (words) from the corpus.</p></li>
+<li><p><strong>window</strong> (<em>int</em>) – The length of the (symmetric) context window used for cooccurrence, defaults to 2</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.text.cooccurrence.Cooccurrence.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.cooccurrence.Cooccurrence.load" title="Permalink to this definition"></a></dt>
+<dd><p>Load Cooccurrence object from pickle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Path to the pickle file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of the :class: Cooccurrence.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>SINr.cooccurrence.Cooccurrence</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.text.cooccurrence.Cooccurrence.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.cooccurrence.Cooccurrence.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save cooccurrence object to a pickle file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Output path to the filename of the pickle file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sinr.text.cooccurrence_cython">
+<span id="co-occurrence-cython"></span><h2>Co-occurrence Cython<a class="headerlink" href="#module-sinr.text.cooccurrence_cython" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.cooccurrence_cython.construct_cooccurrence_matrix">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.cooccurrence_cython.</span></span><span class="sig-name descname"><span class="pre">construct_cooccurrence_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.cooccurrence_cython.construct_cooccurrence_matrix" title="Permalink to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Construct the word-id dictionary and cooccurrence matrix for
+a given corpus, using a given window size.</p>
+<p>The dictionary is constructed by lexicographix order.
+The matrix accounts for the number of cooccurrences of words, no matter the
+order in which they appear in the corpus. Consequently, the cooccurrence
+matrix is upper triangular (undirected graph in SINr) .</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>corpus</strong> (<cite>list(str)</cite>) – The sentences from the corpus.</p></li>
+<li><p><strong>dictionary</strong> (<cite>dict</cite>) – A dictionary mapping of words to their ids in the vocabulary (in lexicographic order)</p></li>
+<li><p><strong>window_size</strong> (<cite>int</cite>) – The size of the symmetric moving window.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The cooccurrence matrix built from the corpus.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>scipy.sparse.coo</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sinr.text.pmi">
+<span id="pmi-filtering"></span><h2>PMI Filtering<a class="headerlink" href="#module-sinr.text.pmi" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.pmi.pmi">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.pmi.</span></span><span class="sig-name descname"><span class="pre">pmi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">py</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_pmi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.pmi.pmi" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>Scipy.sparse.csr_matrix</em>) – word, word) sparse matrix</p></li>
+<li><p><strong>py</strong> (<em>numpy.ndarray</em>) – 1, word) shape, probability of context words. (Default value = None)</p></li>
+<li><p><strong>min_pmi</strong> (<em>int</em>) – Minimum value of PMI. all the values that smaller than min_pmi
+are reset to zero, defaults to 0</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Smoothing factor. pmi(x,y; alpha) = p_xy /(p_x * (p_y + alpha)),
+defaults to  0.0</p></li>
+<li><p><strong>beta</strong> (<em>int</em>) – Smoothing factor. pmi(x,y) = log ( Pxy / (Px x Py^beta) ),
+defaults to 1.0</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing the PPMI matrix, the probability of words</p>
+</dd>
+</dl>
+<p>and the exponential PMI matrix ‘(pmi, px, py, exp_pmi)’ .
+(word, word) pmi value sparse matrix  if beta &gt; 1 or beta &lt; 0:</p>
+<blockquote>
+<div><p>raise ValueError(“beta value {} is not in range ]0,1]”.format(beta))</p>
+</div></blockquote>
+<dl class="simple">
+<dt>if beta &gt; 1 or beta &lt; 0:</dt><dd><p>raise ValueError(“beta value {} is not in range ]0,1]”.format(beta))</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[scipy.sparse.csr_matrix, numpy.ndarray, numpy.ndarray, scipy.sparse.csr_matrix]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.pmi.pmi_filter">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.pmi.</span></span><span class="sig-name descname"><span class="pre">pmi_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">py</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_pmi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.pmi.pmi_filter" title="Permalink to this definition"></a></dt>
+<dd><p>Filter a matrix (word, word) by computing the PMI. Exclude the records for which
+the PMI is lower than a thershold min_pmi.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>scipy.sparse.csr_matrix</em>) – word, word) sparse matrix</p></li>
+<li><p><strong>py</strong> (<em>numpy.ndarray</em>) – 1, word) shape, probability of context words. (Default value = None)</p></li>
+<li><p><strong>min_pmi</strong> (<em>int</em>) – Minimum value of PMI. all the values that smaller than min_pmi are reset to zero, defaults to 0</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Smoothing factor. pmi(x,y; alpha) = p_xy /(p_x * (p_y + alpha)), defaults to  0.0</p></li>
+<li><p><strong>beta</strong> (<em>int</em>) – Smoothing factor. pmi(x,y) = log ( Pxy / (Px x Py^beta) ), defaults to 1.0</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing the PPMI matrix, the probability of words</p>
+</dd>
+</dl>
+<p>and the exponential PMI matrix ‘(pmi, px, py, exp_pmi)’ .
+(word, word) pmi value sparse matrix  if beta &gt; 1 or beta &lt; 0:</p>
+<blockquote>
+<div><p>raise ValueError(“beta value {} is not in range ]0,1]”.format(beta))</p>
+</div></blockquote>
+<dl class="simple">
+<dt>if beta &gt; 1 or beta &lt; 0:</dt><dd><p>raise ValueError(“beta value {} is not in range ]0,1]”.format(beta))</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>scipy.sparse.coo_matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sinr.text.preprocess">
+<span id="preprocess-text"></span><h2>Preprocess Text<a class="headerlink" href="#module-sinr.text.preprocess" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sinr.text.preprocess.Corpus">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.text.preprocess.</span></span><span class="sig-name descname"><span class="pre">Corpus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.preprocess.Corpus" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sinr.text.preprocess.Corpus.LANGUAGE_EN">
+<span class="sig-name descname"><span class="pre">LANGUAGE_EN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'en'</span></em><a class="headerlink" href="#sinr.text.preprocess.Corpus.LANGUAGE_EN" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sinr.text.preprocess.Corpus.LANGUAGE_FR">
+<span class="sig-name descname"><span class="pre">LANGUAGE_FR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'fr'</span></em><a class="headerlink" href="#sinr.text.preprocess.Corpus.LANGUAGE_FR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sinr.text.preprocess.Corpus.REGISTER_NEWS">
+<span class="sig-name descname"><span class="pre">REGISTER_NEWS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'news'</span></em><a class="headerlink" href="#sinr.text.preprocess.Corpus.REGISTER_NEWS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sinr.text.preprocess.Corpus.REGISTER_WEB">
+<span class="sig-name descname"><span class="pre">REGISTER_WEB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'web'</span></em><a class="headerlink" href="#sinr.text.preprocess.Corpus.REGISTER_WEB" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sinr.text.preprocess.VRTMaker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.text.preprocess.</span></span><span class="sig-name descname"><span class="pre">VRTMaker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sinr.text.preprocess.Corpus" title="sinr.text.preprocess.Corpus"><span class="pre">Corpus</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.preprocess.VRTMaker" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.text.preprocess.VRTMaker.do_txt_to_vrt">
+<span class="sig-name descname"><span class="pre">do_txt_to_vrt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.preprocess.VRTMaker.do_txt_to_vrt" title="Permalink to this definition"></a></dt>
+<dd><p>Build VRT format file and write to output filepath.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.preprocess.extract_text">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.preprocess.</span></span><span class="sig-name descname"><span class="pre">extract_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lemmatize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">punct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">en</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_en</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_length_word</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.preprocess.extract_text" title="Permalink to this definition"></a></dt>
+<dd><p>Extracts the text from a VRT corpus file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>corpus_path</strong> – str</p></li>
+<li><p><strong>lemmatize</strong> – bool (Default value = True)</p></li>
+<li><p><strong>stop_words</strong> – bool (Default value = False)</p></li>
+<li><p><strong>lower</strong> – bool</p></li>
+<li><p><strong>number</strong> – bool (Default value = False)</p></li>
+<li><p><strong>punct</strong> – bool (Default value = False)</p></li>
+<li><p><strong>exclude_pos</strong> – list (Default value = [])</p></li>
+<li><p><strong>en</strong> – bool (Default value = True)</p></li>
+<li><p><strong>min_freq</strong> – int (Default value = 50)</p></li>
+<li><p><strong>alpha</strong> – bool (Default value = True)</p></li>
+<li><p><strong>exclude_en</strong> – list (Default value = [])</p></li>
+<li><p><strong>lower_words</strong> – (Default value = True)</p></li>
+<li><p><strong>min_length_word</strong> – (Default value = 3)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>text (list(list(str))): A list of sentences containing words</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.preprocess.open_corpus">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.preprocess.</span></span><span class="sig-name descname"><span class="pre">open_corpus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.preprocess.open_corpus" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>corpus_path</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sinr.text">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sinr.text" title="Permalink to this heading"></a></h2>
+<p>Package to preprocess text into word co-occurrence graphs prior to running <cite>SINr</cite>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sinr.html" class="btn btn-neutral float-left" title="SINr" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sinr.tests.html" class="btn btn-neutral float-right" title="Test SINr" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Thibault Prouteau, Nicolas Dugué, Simon Guillot.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

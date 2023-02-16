@@ -1,1 +1,1 @@
-"""Unit test package for sinr_embeddings."""
+"""Unit test package for `sinr_embeddings`."""

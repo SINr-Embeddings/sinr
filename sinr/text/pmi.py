@@ -13,8 +13,7 @@ def _as_diag(px, alpha):
     :type px: numpy.ndarray
     :param alpha: Smoothing factor.
     :type alpha: float
-    :returns: A diagonal matrix of probabilities for px.
-
+    :return: A diagonal matrix of probabilities for px.
     """
     px_diag = diags(px.tolist()[0])
     px_diag.data[0] = np.asarray([0 if v == 0 else 1 / (v + alpha) for v in px_diag.data[0]])
@@ -28,7 +27,7 @@ def _logarithm_and_ppmi(exp_pmi, min_exp_pmi):
     :type exp_pmi: scipy.sparse.csr_matrix
     :param min_exp_pmi: Threshold for minimal PMI value.
     :type min_exp_pmi: int
-    :returns: PMI matrix after applying logarithm and excluding values lower than min_exp_pmi.
+    :return: PMI matrix after applying logarithm and excluding values lower than min_exp_pmi.
 
     """
     n, m = exp_pmi.shape
@@ -65,7 +64,7 @@ def pmi(X, py=None, min_pmi=0, alpha=0.0, beta=1):
     :param beta: Smoothing factor. pmi(x,y) = log ( Pxy / (Px x Py^beta) ),
         defaults to 1.0
     :type beta: int
-    :returns: A dictionary containing the PPMI matrix, the probability of words
+    :return: A dictionary containing the PPMI matrix, the probability of words
     and the exponential PMI matrix '(pmi, px, py, exp_pmi)' .
     (word, word) pmi value sparse matrix  if beta > 1 or beta < 0:
         raise ValueError("beta value {} is not in range ]0,1]".format(beta))
@@ -107,16 +106,13 @@ def pmi_filter(X, py=None, min_pmi=0, alpha=0.0, beta=1):
     :type X: scipy.sparse.csr_matrix
     :param py: 1, word) shape, probability of context words. (Default value = None)
     :type py: numpy.ndarray
-    :param min_pmi: Minimum value of PMI. all the values that smaller than min_pmi
-        are reset to zero, defaults to 0
+    :param min_pmi: Minimum value of PMI. all the values that smaller than min_pmi are reset to zero, defaults to 0
     :type min_pmi: int
-    :param alpha: Smoothing factor. pmi(x,y; alpha) = p_xy /(p_x * (p_y + alpha)),
-        defaults to  0.0
+    :param alpha: Smoothing factor. pmi(x,y; alpha) = p_xy /(p_x * (p_y + alpha)), defaults to  0.0
     :type alpha: float
-    :param beta: Smoothing factor. pmi(x,y) = log ( Pxy / (Px x Py^beta) ),
-        defaults to 1.0
+    :param beta: Smoothing factor. pmi(x,y) = log ( Pxy / (Px x Py^beta) ), defaults to 1.0
     :type beta: int
-    :returns: A dictionary containing the PPMI matrix, the probability of words
+    :return: A dictionary containing the PPMI matrix, the probability of words
     and the exponential PMI matrix '(pmi, px, py, exp_pmi)' .
     (word, word) pmi value sparse matrix  if beta > 1 or beta < 0:
         raise ValueError("beta value {} is not in range ]0,1]".format(beta))

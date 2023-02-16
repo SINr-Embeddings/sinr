@@ -1,0 +1,1 @@
+"""Package to preprocess text into word co-occurrence graphs prior to running `SINr`."""

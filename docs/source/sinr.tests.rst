@@ -1,10 +1,7 @@
-sinr.tests package
+Test SINr
 ==================
 
-Submodules
-----------
-
-sinr.tests.test\_sinr\_nfm module
+Test SINr NFM
 ---------------------------------
 
 .. automodule:: sinr.tests.test_sinr_nfm
@@ -12,7 +9,7 @@ sinr.tests.test\_sinr\_nfm module
    :undoc-members:
    :show-inheritance:
 
-sinr.tests.test\_sinr\_workflow module
+Test SINr workflow
 --------------------------------------
 
 .. automodule:: sinr.tests.test_sinr_workflow

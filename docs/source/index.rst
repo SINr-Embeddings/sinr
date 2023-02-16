@@ -11,6 +11,8 @@ Welcome to SINr's documentation!
    :caption: Contents:
 
    sinr
+   sinr.text
+   sinr.tests
 
 Introduction
 ============
