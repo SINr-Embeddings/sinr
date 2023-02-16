@@ -42,22 +42,25 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">sinr</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="sinr.html">sinr package</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="sinr.html#module-contents">Module contents</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sinr.html#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr-graph-embeddings-module">sinr.graph_embeddings module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr-nfm-module">sinr.nfm module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr-strategy-loader-module">sinr.strategy_loader module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr-strategy-norm-module">sinr.strategy_norm module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr-viz-module">sinr.viz module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr-logger-module">sinr.logger module</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="sinr.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l4 current"><a class="current reference internal" href="#">sinr.tests package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="sinr.html">sinr package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sinr.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sinr.tests package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sinr.tests.test_sinr_nfm">sinr.tests.test_sinr_nfm module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sinr.tests.test_sinr_workflow">sinr.tests.test_sinr_workflow module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sinr.tests">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.graph_embeddings">sinr.graph_embeddings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.nfm">sinr.nfm module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.strategy_loader">sinr.strategy_loader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.viz">sinr.viz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.strategy_norm">sinr.strategy_norm module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.logger">sinr.logger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -76,7 +79,6 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="modules.html">sinr</a></li>
           <li class="breadcrumb-item"><a href="sinr.html">sinr package</a></li>
       <li class="breadcrumb-item active">sinr.tests package</li>
       <li class="wy-breadcrumbs-aside">
@@ -93,14 +95,112 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
-<section id="sinr-tests-test-sinr-nfm-module">
-<h2>sinr.tests.test_sinr_nfm module<a class="headerlink" href="#sinr-tests-test-sinr-nfm-module" title="Permalink to this heading"></a></h2>
+<section id="module-sinr.tests.test_sinr_nfm">
+<span id="sinr-tests-test-sinr-nfm-module"></span><h2>sinr.tests.test_sinr_nfm module<a class="headerlink" href="#module-sinr.tests.test_sinr_nfm" title="Permalink to this heading"></a></h2>
+<p>Tests for <cite>sinr_embeddings</cite> package.</p>
+<p>python -m sinr.tests.test_sinr_nfm</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_nfm.TestSinr_embeddings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.tests.test_sinr_nfm.</span></span><span class="sig-name descname"><span class="pre">TestSinr_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<p>Tests for <cite>sinr_embeddings</cite> package.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_nfm.TestSinr_embeddings.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.setUp" title="Permalink to this definition"></a></dt>
+<dd><p>Set up test fixtures, if any.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_nfm.TestSinr_embeddings.tearDown">
+<span class="sig-name descname"><span class="pre">tearDown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.tearDown" title="Permalink to this definition"></a></dt>
+<dd><p>Tear down test fixtures, if any.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_adjacency">
+<span class="sig-name descname"><span class="pre">test_adjacency</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_adjacency" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_community_weights">
+<span class="sig-name descname"><span class="pre">test_community_weights</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_community_weights" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_membership">
+<span class="sig-name descname"><span class="pre">test_membership</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_membership" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_nnz">
+<span class="sig-name descname"><span class="pre">test_nnz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_nnz" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_np">
+<span class="sig-name descname"><span class="pre">test_np</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_np" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_nr">
+<span class="sig-name descname"><span class="pre">test_nr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_nr" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="sinr-tests-test-sinr-workflow-module">
-<h2>sinr.tests.test_sinr_workflow module<a class="headerlink" href="#sinr-tests-test-sinr-workflow-module" title="Permalink to this heading"></a></h2>
+<section id="module-sinr.tests.test_sinr_workflow">
+<span id="sinr-tests-test-sinr-workflow-module"></span><h2>sinr.tests.test_sinr_workflow module<a class="headerlink" href="#module-sinr.tests.test_sinr_workflow" title="Permalink to this heading"></a></h2>
+<p>Tests for <cite>graph_emn</cite> package.</p>
+<p>python -m sinr.tests.test_sinr_workflow</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_workflow.TestSinr_embeddings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.tests.test_sinr_workflow.</span></span><span class="sig-name descname"><span class="pre">TestSinr_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<p>Tests for <cite>graph_embeddings</cite> package.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_workflow.TestSinr_embeddings.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings.setUp" title="Permalink to this definition"></a></dt>
+<dd><p>Set up test fixtures, if any.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_workflow.TestSinr_embeddings.tearDown">
+<span class="sig-name descname"><span class="pre">tearDown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings.tearDown" title="Permalink to this definition"></a></dt>
+<dd><p>Tear down test fixtures, if any.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_community_exception">
+<span class="sig-name descname"><span class="pre">test_community_exception</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_community_exception" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_detect_communities">
+<span class="sig-name descname"><span class="pre">test_detect_communities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_detect_communities" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_extract_embeddings">
+<span class="sig-name descname"><span class="pre">test_extract_embeddings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_extract_embeddings" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_load_voc">
+<span class="sig-name descname"><span class="pre">test_load_voc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_load_voc" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_nfm_exception">
+<span class="sig-name descname"><span class="pre">test_nfm_exception</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_nfm_exception" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
+<section id="module-sinr.tests">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sinr.tests" title="Permalink to this heading"></a></h2>
+<p>Unit test package for sinr_embeddings.</p>
 </section>
 </section>
 

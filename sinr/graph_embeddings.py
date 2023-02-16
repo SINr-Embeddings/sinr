@@ -453,7 +453,10 @@ class NoVocabularyException(Exception):
 
 
 class InterpretableDimension:
-    """Encapsulation for interpretable model."""
+    """Encapsulation for interpretable model.
+    
+    """
+
     def __init__(self, idx, type):
         self.idx = idx
         self.type = type
@@ -474,11 +477,15 @@ class InterpretableDimension:
         return self.get_idx()
 
     def get_value(self):
-        """ """
+        """ 
+        
+        """
         return self.value
 
     def get_interpreters(self):
-        """ """
+        """ 
+        
+        """
         return self.interpreters
 
     def get_interpreter(self, id):
@@ -519,7 +526,9 @@ class InterpretableDimension:
         return self
 
     def get_dict(self):
-        """ """
+        """ 
+        
+        """
         result = {"dimension": self.idx, "value": self.value,
                   self.type: self.interpreters} if self.value is not None else {"dimension": self.idx,
                                                                                 self.type: self.interpreters}

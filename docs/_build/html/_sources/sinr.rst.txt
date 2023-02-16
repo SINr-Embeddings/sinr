@@ -1,13 +1,13 @@
 sinr package
 ============
 
-Module contents
----------------
+Subpackages
+-----------
 
-.. automodule:: sinr
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. toctree::
+   :maxdepth: 4
+
+   sinr.tests
 
 Submodules
 ----------
@@ -20,6 +20,8 @@ sinr.graph\_embeddings module
    :undoc-members:
    :show-inheritance:
 
+
+
 sinr.nfm module
 ---------------
 
@@ -28,19 +30,10 @@ sinr.nfm module
    :undoc-members:
    :show-inheritance:
 
-
 sinr.strategy\_loader module
 ----------------------------
 
 .. automodule:: sinr.strategy_loader
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-sinr.strategy\_norm module
---------------------------
-
-.. automodule:: sinr.strategy_norm
    :members:
    :undoc-members:
    :show-inheritance:
@@ -53,6 +46,14 @@ sinr.viz module
    :undoc-members:
    :show-inheritance:
 
+sinr.strategy\_norm module
+--------------------------
+
+.. automodule:: sinr.strategy_norm
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 sinr.logger module
 ------------------
 
@@ -61,10 +62,10 @@ sinr.logger module
    :undoc-members:
    :show-inheritance:
 
-Subpackages
------------
+Module contents
+---------------
 
-.. toctree::
-   :maxdepth: 4
-
-   sinr.tests
+.. automodule:: sinr
+   :members:
+   :undoc-members:
+   :show-inheritance:
