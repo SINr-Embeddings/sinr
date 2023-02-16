@@ -4,7 +4,8 @@ import numpy as np
 
 
 class SINrViz:
-    """ """
+    """Visualization package for SINr embdeddings. The goal is to visualize and interpret
+    the diemnesions of the embeddings produced."""
     def __init__(self, sinr_vectors: SINrVectors):
         self.sinr_vectors = sinr_vectors
 
