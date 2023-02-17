@@ -17,7 +17,9 @@
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SINr Text" href="sinr.text.html" />
+    <link rel="prev" title="SINr" href="README.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -39,138 +41,142 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">SINr</a><ul>
-<li><a class="reference internal" href="#module-sinr.graph_embeddings">Graph Embeddings</a><ul>
-<li><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension</span></code></a><ul>
-<li><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.add_interpreter"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.add_interpreter()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.get_dict"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_dict()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.get_idx"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_idx()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.get_interpreter"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_interpreter()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.get_interpreters"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_interpreters()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.get_value"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_value()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.sort"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.sort()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.topk"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.topk()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.with_value"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.with_value()</span></code></a></li>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">SINr</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SINr</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.graph_embeddings">Graph Embeddings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.add_interpreter"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.add_interpreter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.get_dict"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.get_idx"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_idx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.get_interpreter"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_interpreter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.get_interpreters"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_interpreters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.get_value"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.sort"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.sort()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.topk"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.topk()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension.with_value"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.with_value()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.InterpretableWordsModelBuilder"><code class="docutils literal notranslate"><span class="pre">InterpretableWordsModelBuilder</span></code></a><ul>
-<li><a class="reference internal" href="#sinr.graph_embeddings.InterpretableWordsModelBuilder.build"><code class="docutils literal notranslate"><span class="pre">InterpretableWordsModelBuilder.build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableWordsModelBuilder"><code class="docutils literal notranslate"><span class="pre">InterpretableWordsModelBuilder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.InterpretableWordsModelBuilder.build"><code class="docutils literal notranslate"><span class="pre">InterpretableWordsModelBuilder.build()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder"><code class="docutils literal notranslate"><span class="pre">ModelBuilder</span></code></a><ul>
-<li><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.build"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.build()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_all"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_all()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_communities"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_communities()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_embeddings_nfm"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_embeddings_nfm()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_embeddings_nr"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_embeddings_nr()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_graph"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_graph()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_np"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_np()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_vocabulary"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_vocabulary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder"><code class="docutils literal notranslate"><span class="pre">ModelBuilder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.build"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.build()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_all"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_all()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_communities"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_communities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_embeddings_nfm"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_embeddings_nfm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_embeddings_nr"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_embeddings_nr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_graph"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_np"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_np()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ModelBuilder.with_vocabulary"><code class="docutils literal notranslate"><span class="pre">ModelBuilder.with_vocabulary()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.NoCommunityDetectedException"><code class="docutils literal notranslate"><span class="pre">NoCommunityDetectedException</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.NoEmbeddingExtractedException"><code class="docutils literal notranslate"><span class="pre">NoEmbeddingExtractedException</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.NoInterpretabilityException"><code class="docutils literal notranslate"><span class="pre">NoInterpretabilityException</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.NoVocabularyException"><code class="docutils literal notranslate"><span class="pre">NoVocabularyException</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.OnlyGraphModelBuilder"><code class="docutils literal notranslate"><span class="pre">OnlyGraphModelBuilder</span></code></a><ul>
-<li><a class="reference internal" href="#sinr.graph_embeddings.OnlyGraphModelBuilder.build"><code class="docutils literal notranslate"><span class="pre">OnlyGraphModelBuilder.build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.NoCommunityDetectedException"><code class="docutils literal notranslate"><span class="pre">NoCommunityDetectedException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.NoEmbeddingExtractedException"><code class="docutils literal notranslate"><span class="pre">NoEmbeddingExtractedException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.NoInterpretabilityException"><code class="docutils literal notranslate"><span class="pre">NoInterpretabilityException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.NoVocabularyException"><code class="docutils literal notranslate"><span class="pre">NoVocabularyException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.OnlyGraphModelBuilder"><code class="docutils literal notranslate"><span class="pre">OnlyGraphModelBuilder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.OnlyGraphModelBuilder.build"><code class="docutils literal notranslate"><span class="pre">OnlyGraphModelBuilder.build()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr"><code class="docutils literal notranslate"><span class="pre">SINr</span></code></a><ul>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.detect_communities"><code class="docutils literal notranslate"><span class="pre">SINr.detect_communities()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.extract_embeddings"><code class="docutils literal notranslate"><span class="pre">SINr.extract_embeddings()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_communities"><code class="docutils literal notranslate"><span class="pre">SINr.get_communities()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_cooc_graph"><code class="docutils literal notranslate"><span class="pre">SINr.get_cooc_graph()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_nfm"><code class="docutils literal notranslate"><span class="pre">SINr.get_nfm()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_np"><code class="docutils literal notranslate"><span class="pre">SINr.get_np()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_nr"><code class="docutils literal notranslate"><span class="pre">SINr.get_nr()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_out_of_LgCC_coms"><code class="docutils literal notranslate"><span class="pre">SINr.get_out_of_LgCC_coms()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_vocabulary"><code class="docutils literal notranslate"><span class="pre">SINr.get_vocabulary()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_wrd_to_id"><code class="docutils literal notranslate"><span class="pre">SINr.get_wrd_to_id()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.load_from_adjacency_matrix"><code class="docutils literal notranslate"><span class="pre">SINr.load_from_adjacency_matrix()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.load_from_cooc_pkl"><code class="docutils literal notranslate"><span class="pre">SINr.load_from_cooc_pkl()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.load_from_graph"><code class="docutils literal notranslate"><span class="pre">SINr.load_from_graph()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.run"><code class="docutils literal notranslate"><span class="pre">SINr.run()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.size_of_voc"><code class="docutils literal notranslate"><span class="pre">SINr.size_of_voc()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINr.transfert_communities_labels"><code class="docutils literal notranslate"><span class="pre">SINr.transfert_communities_labels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.SINr"><code class="docutils literal notranslate"><span class="pre">SINr</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.detect_communities"><code class="docutils literal notranslate"><span class="pre">SINr.detect_communities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.extract_embeddings"><code class="docutils literal notranslate"><span class="pre">SINr.extract_embeddings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_communities"><code class="docutils literal notranslate"><span class="pre">SINr.get_communities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_cooc_graph"><code class="docutils literal notranslate"><span class="pre">SINr.get_cooc_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_nfm"><code class="docutils literal notranslate"><span class="pre">SINr.get_nfm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_np"><code class="docutils literal notranslate"><span class="pre">SINr.get_np()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_nr"><code class="docutils literal notranslate"><span class="pre">SINr.get_nr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_out_of_LgCC_coms"><code class="docutils literal notranslate"><span class="pre">SINr.get_out_of_LgCC_coms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_vocabulary"><code class="docutils literal notranslate"><span class="pre">SINr.get_vocabulary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.get_wrd_to_id"><code class="docutils literal notranslate"><span class="pre">SINr.get_wrd_to_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.load_from_adjacency_matrix"><code class="docutils literal notranslate"><span class="pre">SINr.load_from_adjacency_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.load_from_cooc_pkl"><code class="docutils literal notranslate"><span class="pre">SINr.load_from_cooc_pkl()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.load_from_graph"><code class="docutils literal notranslate"><span class="pre">SINr.load_from_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.run"><code class="docutils literal notranslate"><span class="pre">SINr.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.size_of_voc"><code class="docutils literal notranslate"><span class="pre">SINr.size_of_voc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr.transfert_communities_labels"><code class="docutils literal notranslate"><span class="pre">SINr.transfert_communities_labels()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors"><code class="docutils literal notranslate"><span class="pre">SINrVectors</span></code></a><ul>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.cosine_sim"><code class="docutils literal notranslate"><span class="pre">SINrVectors.cosine_sim()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_communities_as_labels_sets"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_communities_as_labels_sets()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_community_membership"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_community_membership()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_community_sets"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_community_sets()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_dimension_descriptors"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_dimension_descriptors()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_dimension_descriptors_idx"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_dimension_descriptors_idx()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_dimension_stereotypes"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_dimension_stereotypes()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_dimension_stereotypes_idx"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_dimension_stereotypes_idx()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_my_vector"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_my_vector()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_nnv"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_nnv()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_nnz"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_nnz()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_number_of_dimensions"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_number_of_dimensions()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_nz_dims"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_nz_dims()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_obj_descriptors"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_obj_descriptors()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_obj_stereotypes"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_obj_stereotypes()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_obj_stereotypes_and_descriptors"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_obj_stereotypes_and_descriptors()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_topk_dims"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_topk_dims()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_value_dim_per_word"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_value_dim_per_word()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_value_obj_dim"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_value_obj_dim()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.labels"><code class="docutils literal notranslate"><span class="pre">SINrVectors.labels</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.light_model_save"><code class="docutils literal notranslate"><span class="pre">SINrVectors.light_model_save()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.load"><code class="docutils literal notranslate"><span class="pre">SINrVectors.load()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.most_similar"><code class="docutils literal notranslate"><span class="pre">SINrVectors.most_similar()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.pct_nnz"><code class="docutils literal notranslate"><span class="pre">SINrVectors.pct_nnz()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.save"><code class="docutils literal notranslate"><span class="pre">SINrVectors.save()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_communities"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_communities()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_graph"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_graph()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_n_jobs"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_n_jobs()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_np"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_np()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_vectors"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_vectors()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_vocabulary"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_vocabulary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors"><code class="docutils literal notranslate"><span class="pre">SINrVectors</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.cosine_sim"><code class="docutils literal notranslate"><span class="pre">SINrVectors.cosine_sim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_communities_as_labels_sets"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_communities_as_labels_sets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_community_membership"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_community_membership()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_community_sets"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_community_sets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_dimension_descriptors"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_dimension_descriptors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_dimension_descriptors_idx"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_dimension_descriptors_idx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_dimension_stereotypes"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_dimension_stereotypes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_dimension_stereotypes_idx"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_dimension_stereotypes_idx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_my_vector"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_my_vector()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_nnv"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_nnv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_nnz"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_nnz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_number_of_dimensions"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_number_of_dimensions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_nz_dims"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_nz_dims()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_obj_descriptors"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_obj_descriptors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_obj_stereotypes"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_obj_stereotypes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_obj_stereotypes_and_descriptors"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_obj_stereotypes_and_descriptors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_topk_dims"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_topk_dims()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_value_dim_per_word"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_value_dim_per_word()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.get_value_obj_dim"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_value_obj_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.labels"><code class="docutils literal notranslate"><span class="pre">SINrVectors.labels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.light_model_save"><code class="docutils literal notranslate"><span class="pre">SINrVectors.light_model_save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.load"><code class="docutils literal notranslate"><span class="pre">SINrVectors.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.most_similar"><code class="docutils literal notranslate"><span class="pre">SINrVectors.most_similar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.pct_nnz"><code class="docutils literal notranslate"><span class="pre">SINrVectors.pct_nnz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.save"><code class="docutils literal notranslate"><span class="pre">SINrVectors.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_communities"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_communities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_graph"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_n_jobs"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_n_jobs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_np"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_np()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_vectors"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_vectors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors.set_vocabulary"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_vocabulary()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.ThresholdedModelBuilder"><code class="docutils literal notranslate"><span class="pre">ThresholdedModelBuilder</span></code></a><ul>
-<li><a class="reference internal" href="#sinr.graph_embeddings.ThresholdedModelBuilder.build"><code class="docutils literal notranslate"><span class="pre">ThresholdedModelBuilder.build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.ThresholdedModelBuilder"><code class="docutils literal notranslate"><span class="pre">ThresholdedModelBuilder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ThresholdedModelBuilder.build"><code class="docutils literal notranslate"><span class="pre">ThresholdedModelBuilder.build()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.get_graph_from_matrix"><code class="docutils literal notranslate"><span class="pre">get_graph_from_matrix()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.graph_embeddings.get_lgcc"><code class="docutils literal notranslate"><span class="pre">get_lgcc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.get_graph_from_matrix"><code class="docutils literal notranslate"><span class="pre">get_graph_from_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.graph_embeddings.get_lgcc"><code class="docutils literal notranslate"><span class="pre">get_lgcc()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-sinr.nfm">SINr NFM</a><ul>
-<li><a class="reference internal" href="#sinr.nfm.compute_NP"><code class="docutils literal notranslate"><span class="pre">compute_NP()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.nfm.compute_NR"><code class="docutils literal notranslate"><span class="pre">compute_NR()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.nfm.distributed_degree"><code class="docutils literal notranslate"><span class="pre">distributed_degree()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.nfm.get_community_weights"><code class="docutils literal notranslate"><span class="pre">get_community_weights()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.nfm.get_membership"><code class="docutils literal notranslate"><span class="pre">get_membership()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.nfm.get_nfm_embeddings"><code class="docutils literal notranslate"><span class="pre">get_nfm_embeddings()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.nfm">SINr NFM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.nfm.compute_NP"><code class="docutils literal notranslate"><span class="pre">compute_NP()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.nfm.compute_NR"><code class="docutils literal notranslate"><span class="pre">compute_NR()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.nfm.distributed_degree"><code class="docutils literal notranslate"><span class="pre">distributed_degree()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.nfm.get_community_weights"><code class="docutils literal notranslate"><span class="pre">get_community_weights()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.nfm.get_membership"><code class="docutils literal notranslate"><span class="pre">get_membership()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.nfm.get_nfm_embeddings"><code class="docutils literal notranslate"><span class="pre">get_nfm_embeddings()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-sinr.strategy_loader">Loader</a><ul>
-<li><a class="reference internal" href="#sinr.strategy_loader.load_adj_mat"><code class="docutils literal notranslate"><span class="pre">load_adj_mat()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.strategy_loader.load_pkl_text"><code class="docutils literal notranslate"><span class="pre">load_pkl_text()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.strategy_loader">Loader</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.strategy_loader.load_adj_mat"><code class="docutils literal notranslate"><span class="pre">load_adj_mat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.strategy_loader.load_pkl_text"><code class="docutils literal notranslate"><span class="pre">load_pkl_text()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-sinr.viz">Visualization</a><ul>
-<li><a class="reference internal" href="#sinr.viz.SINrViz"><code class="docutils literal notranslate"><span class="pre">SINrViz</span></code></a><ul>
-<li><a class="reference internal" href="#sinr.viz.SINrViz.compare_stereotypes"><code class="docutils literal notranslate"><span class="pre">SINrViz.compare_stereotypes()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-sinr.strategy_norm">SINr Normalization</a><ul>
-<li><a class="reference internal" href="#sinr.strategy_norm.apply_norm"><code class="docutils literal notranslate"><span class="pre">apply_norm()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.strategy_norm.iterative_pmi"><code class="docutils literal notranslate"><span class="pre">iterative_pmi()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-sinr.logger">Logger</a></li>
-<li><a class="reference internal" href="#module-sinr">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.viz">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.viz.SINrViz"><code class="docutils literal notranslate"><span class="pre">SINrViz</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.viz.SINrViz.compare_stereotypes"><code class="docutils literal notranslate"><span class="pre">SINrViz.compare_stereotypes()</span></code></a></li>
 </ul>
 </li>
 </ul>
-</div>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.strategy_norm">SINr Normalization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.strategy_norm.apply_norm"><code class="docutils literal notranslate"><span class="pre">apply_norm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.strategy_norm.iterative_pmi"><code class="docutils literal notranslate"><span class="pre">iterative_pmi()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.logger">Logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sinr.text.html">SINr Text</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sinr.tests.html">Test SINr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -203,15 +209,16 @@
 <dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">InterpretableDimension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Encapsulation for interpretable model.</p>
+<p>Internal class : should be used to encapsulate data about a dimension instead of using a simple dict.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.add_interpreter">
 <span class="sig-name descname"><span class="pre">add_interpreter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.add_interpreter" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Adding an element that would help to interpret the meaning of the dimension</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>obj</strong> – </p></li>
-<li><p><strong>value</strong> – </p></li>
+<li><p><strong>obj</strong> (<em>str</em>) – a descriptor or a stereotype of the dimension</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – a value describing the relevance of the descriptor for this dimension</p></li>
 </ul>
 </dd>
 </dl>
@@ -220,19 +227,44 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.get_dict">
 <span class="sig-name descname"><span class="pre">get_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.get_dict" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The dict that can be processed with the interpreters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a dict of interpreters for the dimension</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.get_idx">
 <span class="sig-name descname"><span class="pre">get_idx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.get_idx" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Getter of the idx attribute</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the id of the dimension</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.get_interpreter">
 <span class="sig-name descname"><span class="pre">get_interpreter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.get_interpreter" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get a specific interpreter</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>id</strong> – </p>
+<dd class="field-odd"><p><strong>id</strong> (<em>int</em>) – id of the interpreter</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the interpreter of id for this dimension</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>an interpreter as a tuple (obj: str, value: float) if there is a value</p>
 </dd>
 </dl>
 </dd></dl>
@@ -240,19 +272,38 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.get_interpreters">
 <span class="sig-name descname"><span class="pre">get_interpreters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.get_interpreters" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Getting the list of interpreters, object that allows to describe the dimension</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the list of interpreters</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.get_value">
 <span class="sig-name descname"><span class="pre">get_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.get_value" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Getter for the value parameter, which is a boolean to detect if numerical values are used in the interpreters or not</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the value attribute</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.sort">
 <span class="sig-name descname"><span class="pre">sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">on_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.sort" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Sorting the interpreters, according to values if values is True, according to the str described of the interpreters instead if False</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>on_value</strong> – (Default value = True)</p>
+<dd class="field-odd"><p><strong>on_value</strong> (<em>bool</em><em>, </em><em>optional</em>) – sorting on values or not, defaults to True</p>
 </dd>
 </dl>
 </dd></dl>
@@ -260,19 +311,24 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.topk">
 <span class="sig-name descname"><span class="pre">topk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topk</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.topk" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Selecting only the topk interpreters</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>topk</strong> – </p>
+<dd class="field-odd"><p><strong>topk</strong> (<em>int</em>) – number of interpreters to keep</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.InterpretableDimension.with_value">
-<span class="sig-name descname"><span class="pre">with_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.with_value" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>value</strong> – </p>
+<span class="sig-name descname"><span class="pre">with_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.InterpretableDimension.with_value" title="Permalink to this definition"></a></dt>
+<dd><p>Seeting the value to True</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the self object</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#sinr.graph_embeddings.InterpretableDimension" title="sinr.graph_embeddings.InterpretableDimension">InterpretableDimension</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1305,7 +1361,10 @@ the diemnesions of the embeddings produced.</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="README.html" class="btn btn-neutral float-left" title="SINr" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sinr.text.html" class="btn btn-neutral float-right" title="SINr Text" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
