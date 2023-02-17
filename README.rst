@@ -18,7 +18,7 @@ implementations to extract word co-occurrence graphs from large text corpora.
 One of the strength of `SINr` is its ability to work with text and produce 
 interpretable word embeddings that are competitive with similar approaches.
 For more details on the performances of `SINr` on downstream evaluation tasks,
-please refer to the :ref:`Publications` section.
+please refer to the :ref:`Publications`_ section.
 
 
 
