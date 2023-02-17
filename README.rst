@@ -25,8 +25,7 @@ please refer to the :ref:`Publications` section.
 Requirements
 ------------
 
-- As SINr relies on libraries implemented using C/C++, a modern C++ compiler is 
-required.
+- As SINr relies on libraries implemented using C/C++, a modern C++ compiler is required.
 - OpenMP (required for `Networkit`_ and compiling `SINr`'s `Cython`)
 - Python 3.9
 - Pip
@@ -38,18 +37,15 @@ Install
 
 SINr can be installed through `pip` or from source using `poetry` directives.
 
-pip
+pip::
 ^^^^^^^
-..  code-block:: zsh
     #Activate conda environment
     conda activate sinr
     pip install sinr
 
 
-from source
+from source::
 ^^^^^^^^^^^
-..  code-block:: zsh
-^
     #Activate conda environment
     conda activate sinr
     git clone git@github.com:SINr-Embeddings/sinr.git
@@ -65,9 +61,8 @@ To get started using SINr to build graph and word embeddings, have a look at the
 `notebook <https://github.com/SINr-Embeddings/sinr/tree/main/notebooks>`_ 
 directory.
 
-Here is a minimum working example of SINr :
+Here is a minimum working example of SINr : ::
 
-.. code-block:: python
     import urllib
     import io
     import gzip
@@ -93,13 +88,11 @@ Here is a minimum working example of SINr :
     embeddings = model.get_nr()
     print(embeddings)
 
-    code
-
 
 Documentation
 -------------
 
-The documentation for SINr is `available online <https://sinr-embeddings.github.io/sinr/_build/html/index.html>`_
+The documentation for SINr is `available online <https://sinr-embeddings.github.io/sinr/_build/html/index.html>`_.
 
 Contributing
 ------------
@@ -112,12 +105,14 @@ License
 
 Releaser under `CeCILL 2.1 <https://cecill.info/>`_
 
+.. _Publications:
+
 Publications
 ------------
 
 SINr is currently maintained at the University of Le Mans. If you find SINr useful
 for your own research, please cite the appropriate papers from the list below. 
-Publications can also be found on `Publications <https://sinr-embeddings.github.io/sinr/_build/html/publications.html>`_.
+Publications can also be found on `publications page in the documentation <https://sinr-embeddings.github.io/sinr/_build/html/publications.html>`_.
 
 Initial SINr paper, 2021
 ------------------------

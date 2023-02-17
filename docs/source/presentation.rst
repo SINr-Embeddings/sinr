@@ -92,7 +92,7 @@ Here is a minimum working example of SINr : ::
 Documentation
 -------------
 
-The documentation for SINr is `available online <https://sinr-embeddings.github.io/sinr/_build/html/index.html>`_
+The documentation for SINr is `available online <https://sinr-embeddings.github.io/sinr/_build/html/index.html>`_.
 
 Contributing
 ------------
