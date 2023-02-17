@@ -107,7 +107,7 @@ to disccus the changes to be made.
 License
 =======
 
-Released under `CeCILL 2.1 <https://cecill.info/>`__.
+Released under `CeCILL 2.1 <https://cecill.info/>`__, see `LICENSE <./LICENSE>`__ for more details.
 
 Publications
 ============
