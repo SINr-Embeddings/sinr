@@ -1,4 +1,4 @@
-SINr
+SINr Core
 ============
 
 
@@ -9,9 +9,6 @@ Graph Embeddings
    :members:
    :undoc-members:
    :show-inheritance:
-
-
-sinr.text
 
 SINr NFM
 ---------------
@@ -52,8 +49,6 @@ Logger
    :members:
    :undoc-members:
    :show-inheritance:
-
-sinr.test
 
 Module contents
 ---------------

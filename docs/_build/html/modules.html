@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sinr &mdash; SINr  documentation</title>
+  <title>SINr Embeddings &mdash; SINr  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -18,7 +18,9 @@
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SINr Core" href="sinr.html" />
+    <link rel="prev" title="Welcome to SINr’s documentation!" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,8 +43,13 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="sinr.html">SINr</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SINr Embeddings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sinr.html">SINr Core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.text.html">SINr Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.tests.html">Test SINr</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
 </ul>
 
@@ -60,7 +67,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">sinr</li>
+      <li class="breadcrumb-item active">SINr Embeddings</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -70,11 +77,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="sinr">
-<h1>sinr<a class="headerlink" href="#sinr" title="Permalink to this heading"></a></h1>
+  <section id="sinr-embeddings">
+<h1>SINr Embeddings<a class="headerlink" href="#sinr-embeddings" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="sinr.html">SINr</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="sinr.html">SINr Core</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.graph_embeddings">Graph Embeddings</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.InterpretableDimension"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.InterpretableDimension.add_interpreter"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.add_interpreter()</span></code></a></li>
@@ -202,6 +209,75 @@
 <li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="sinr.text.html">SINr Text</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sinr.text.html#module-sinr.text.cooccurrence">Co-occurrence</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.cooccurrence.Cooccurrence"><code class="docutils literal notranslate"><span class="pre">Cooccurrence</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sinr.text.html#sinr.text.cooccurrence.Cooccurrence.fit"><code class="docutils literal notranslate"><span class="pre">Cooccurrence.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.text.html#sinr.text.cooccurrence.Cooccurrence.load"><code class="docutils literal notranslate"><span class="pre">Cooccurrence.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.text.html#sinr.text.cooccurrence.Cooccurrence.save"><code class="docutils literal notranslate"><span class="pre">Cooccurrence.save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.text.html#module-sinr.text.cooccurrence_cython">Co-occurrence Cython</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.cooccurrence_cython.construct_cooccurrence_matrix"><code class="docutils literal notranslate"><span class="pre">construct_cooccurrence_matrix()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.text.html#module-sinr.text.pmi">PMI Filtering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.pmi.pmi"><code class="docutils literal notranslate"><span class="pre">pmi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.pmi.pmi_filter"><code class="docutils literal notranslate"><span class="pre">pmi_filter()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.text.html#module-sinr.text.preprocess">Preprocess Text</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.preprocess.Corpus"><code class="docutils literal notranslate"><span class="pre">Corpus</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sinr.text.html#sinr.text.preprocess.Corpus.LANGUAGE_EN"><code class="docutils literal notranslate"><span class="pre">Corpus.LANGUAGE_EN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.text.html#sinr.text.preprocess.Corpus.LANGUAGE_FR"><code class="docutils literal notranslate"><span class="pre">Corpus.LANGUAGE_FR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.text.html#sinr.text.preprocess.Corpus.REGISTER_NEWS"><code class="docutils literal notranslate"><span class="pre">Corpus.REGISTER_NEWS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.text.html#sinr.text.preprocess.Corpus.REGISTER_WEB"><code class="docutils literal notranslate"><span class="pre">Corpus.REGISTER_WEB</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.preprocess.VRTMaker"><code class="docutils literal notranslate"><span class="pre">VRTMaker</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sinr.text.html#sinr.text.preprocess.VRTMaker.do_txt_to_vrt"><code class="docutils literal notranslate"><span class="pre">VRTMaker.do_txt_to_vrt()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.preprocess.extract_text"><code class="docutils literal notranslate"><span class="pre">extract_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.preprocess.open_corpus"><code class="docutils literal notranslate"><span class="pre">open_corpus()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.text.html#module-sinr.text">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sinr.tests.html">Test SINr</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sinr.tests.html#module-sinr.tests.test_sinr_nfm">Test SINr NFM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.setUp"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.setUp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.tearDown"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.tearDown()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_adjacency"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_adjacency()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_community_weights"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_community_weights()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_membership"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_membership()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_nnz"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_nnz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_np"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_np()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_nfm.TestSinr_embeddings.test_nr"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_nr()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.tests.html#module-sinr.tests.test_sinr_workflow">Test SINr workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings.setUp"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.setUp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings.tearDown"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.tearDown()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_community_exception"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_community_exception()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_detect_communities"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_detect_communities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_extract_embeddings"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_extract_embeddings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_load_voc"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_load_voc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.tests.html#sinr.tests.test_sinr_workflow.TestSinr_embeddings.test_nfm_exception"><code class="docutils literal notranslate"><span class="pre">TestSinr_embeddings.test_nfm_exception()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.tests.html#module-sinr.tests">Module contents</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
@@ -209,7 +285,10 @@
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to SINr’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sinr.html" class="btn btn-neutral float-right" title="SINr Core" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
