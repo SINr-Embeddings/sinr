@@ -7,6 +7,7 @@
   <title>SINr Text &mdash; SINr  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,7 +18,9 @@
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Test SINr" href="sinr.tests.html" />
+    <link rel="prev" title="SINr" href="sinr.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -39,48 +42,52 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">SINr Text</a><ul>
-<li><a class="reference internal" href="#module-sinr.text.cooccurrence">Co-occurrence</a><ul>
-<li><a class="reference internal" href="#sinr.text.cooccurrence.Cooccurrence"><code class="docutils literal notranslate"><span class="pre">Cooccurrence</span></code></a><ul>
-<li><a class="reference internal" href="#sinr.text.cooccurrence.Cooccurrence.fit"><code class="docutils literal notranslate"><span class="pre">Cooccurrence.fit()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.text.cooccurrence.Cooccurrence.load"><code class="docutils literal notranslate"><span class="pre">Cooccurrence.load()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.text.cooccurrence.Cooccurrence.save"><code class="docutils literal notranslate"><span class="pre">Cooccurrence.save()</span></code></a></li>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="presentation.html">Presentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sinr.html">SINr</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SINr Text</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.text.cooccurrence">Co-occurrence</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.cooccurrence.Cooccurrence"><code class="docutils literal notranslate"><span class="pre">Cooccurrence</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.cooccurrence.Cooccurrence.fit"><code class="docutils literal notranslate"><span class="pre">Cooccurrence.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.cooccurrence.Cooccurrence.load"><code class="docutils literal notranslate"><span class="pre">Cooccurrence.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.cooccurrence.Cooccurrence.save"><code class="docutils literal notranslate"><span class="pre">Cooccurrence.save()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-sinr.text.cooccurrence_cython">Co-occurrence Cython</a><ul>
-<li><a class="reference internal" href="#sinr.text.cooccurrence_cython.construct_cooccurrence_matrix"><code class="docutils literal notranslate"><span class="pre">construct_cooccurrence_matrix()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.text.cooccurrence_cython">Co-occurrence Cython</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.cooccurrence_cython.construct_cooccurrence_matrix"><code class="docutils literal notranslate"><span class="pre">construct_cooccurrence_matrix()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-sinr.text.pmi">PMI Filtering</a><ul>
-<li><a class="reference internal" href="#sinr.text.pmi.pmi"><code class="docutils literal notranslate"><span class="pre">pmi()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.text.pmi.pmi_filter"><code class="docutils literal notranslate"><span class="pre">pmi_filter()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.text.pmi">PMI Filtering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.pmi.pmi"><code class="docutils literal notranslate"><span class="pre">pmi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.pmi.pmi_filter"><code class="docutils literal notranslate"><span class="pre">pmi_filter()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-sinr.text.preprocess">Preprocess Text</a><ul>
-<li><a class="reference internal" href="#sinr.text.preprocess.Corpus"><code class="docutils literal notranslate"><span class="pre">Corpus</span></code></a><ul>
-<li><a class="reference internal" href="#sinr.text.preprocess.Corpus.LANGUAGE_EN"><code class="docutils literal notranslate"><span class="pre">Corpus.LANGUAGE_EN</span></code></a></li>
-<li><a class="reference internal" href="#sinr.text.preprocess.Corpus.LANGUAGE_FR"><code class="docutils literal notranslate"><span class="pre">Corpus.LANGUAGE_FR</span></code></a></li>
-<li><a class="reference internal" href="#sinr.text.preprocess.Corpus.REGISTER_NEWS"><code class="docutils literal notranslate"><span class="pre">Corpus.REGISTER_NEWS</span></code></a></li>
-<li><a class="reference internal" href="#sinr.text.preprocess.Corpus.REGISTER_WEB"><code class="docutils literal notranslate"><span class="pre">Corpus.REGISTER_WEB</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.text.preprocess">Preprocess Text</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.preprocess.Corpus"><code class="docutils literal notranslate"><span class="pre">Corpus</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.preprocess.Corpus.LANGUAGE_EN"><code class="docutils literal notranslate"><span class="pre">Corpus.LANGUAGE_EN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.preprocess.Corpus.LANGUAGE_FR"><code class="docutils literal notranslate"><span class="pre">Corpus.LANGUAGE_FR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.preprocess.Corpus.REGISTER_NEWS"><code class="docutils literal notranslate"><span class="pre">Corpus.REGISTER_NEWS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.preprocess.Corpus.REGISTER_WEB"><code class="docutils literal notranslate"><span class="pre">Corpus.REGISTER_WEB</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#sinr.text.preprocess.VRTMaker"><code class="docutils literal notranslate"><span class="pre">VRTMaker</span></code></a><ul>
-<li><a class="reference internal" href="#sinr.text.preprocess.VRTMaker.do_txt_to_vrt"><code class="docutils literal notranslate"><span class="pre">VRTMaker.do_txt_to_vrt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.preprocess.VRTMaker"><code class="docutils literal notranslate"><span class="pre">VRTMaker</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.preprocess.VRTMaker.do_txt_to_vrt"><code class="docutils literal notranslate"><span class="pre">VRTMaker.do_txt_to_vrt()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#sinr.text.preprocess.extract_text"><code class="docutils literal notranslate"><span class="pre">extract_text()</span></code></a></li>
-<li><a class="reference internal" href="#sinr.text.preprocess.open_corpus"><code class="docutils literal notranslate"><span class="pre">open_corpus()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.preprocess.extract_text"><code class="docutils literal notranslate"><span class="pre">extract_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sinr.text.preprocess.open_corpus"><code class="docutils literal notranslate"><span class="pre">open_corpus()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-sinr.text">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-sinr.text">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="sinr.tests.html">Test SINr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
 </ul>
-</div>
+
         </div>
       </div>
     </nav>
@@ -107,6 +114,8 @@
              
   <section id="sinr-text">
 <h1>SINr Text<a class="headerlink" href="#sinr-text" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+</div>
 <section id="module-sinr.text.cooccurrence">
 <span id="co-occurrence"></span><h2>Co-occurrence<a class="headerlink" href="#module-sinr.text.cooccurrence" title="Permalink to this heading"></a></h2>
 <dl class="py class">
@@ -356,7 +365,10 @@ the PMI is lower than a thershold min_pmi.</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sinr.html" class="btn btn-neutral float-left" title="SINr" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sinr.tests.html" class="btn btn-neutral float-right" title="Test SINr" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

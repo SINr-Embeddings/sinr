@@ -13,7 +13,7 @@ author = 'Thibault Prouteau, Nicolas Dugué, Simon Guillot'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.autodoc']
+extensions = ['sphinx.ext.autodoc', 'sphinx_tabs.tabs']
 
 templates_path = ['_templates']
 exclude_patterns = []

@@ -1,6 +1,9 @@
 Test SINr
 ==================
 
+.. toctree::
+   :maxdepth: 2
+
 Test SINr NFM
 ---------------------------------
 

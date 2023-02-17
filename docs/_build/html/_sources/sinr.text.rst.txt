@@ -1,6 +1,9 @@
 SINr Text
 =================
 
+.. toctree::
+   :maxdepth: 2
+
 
 Co-occurrence
 -----------------------------

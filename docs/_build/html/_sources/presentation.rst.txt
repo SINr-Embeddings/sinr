@@ -1,9 +1,7 @@
 .. _Networkit: https://networkit.github.io
 
-
-==============================
-SINr
-==============================
+Presentation
+============
 
 SINr is an open-source tool to efficiently compute graph and word embeddings.
 Its aim is to provide sparse interpretable vectors from a graph structure.
@@ -37,26 +35,23 @@ Install
 -------
 
 SINr can be installed through `pip` or from source using `poetry` directives.
+
 ..  tabs::
 
-    ..  group-tab:: pip
+    ..  code-tab:: zsh pip
 
-        ..  code-block:: bash
+        #Activate conda environment
+        conda activate sinr
+        pip install sinr
 
-            #Activate conda environment
-            conda activate sinr
-            pip install sinr
+    ..  code-tab:: zsh from source
 
-    ..  group-tab:: from source
-
-        ..  code-block:: bash
-
-            #Activate conda environment
-            conda activate sinr
-            git clone git@github.com:SINr-Embeddings/sinr.git
-            cd sinr
-            pip install poetry #poetry solves dependencies and installs SINr
-            poetry install #Installs SINr based on the pyproject.toml file
+        #Activate conda environment
+        conda activate sinr
+        git clone git@github.com:SINr-Embeddings/sinr.git
+        cd sinr
+        pip install poetry #poetry solves dependencies and installs SINr
+        poetry install #Installs SINr based on the pyproject.toml file
 
 
 Usage example
@@ -118,6 +113,7 @@ Publications
 
 SINr is currently maintained at the University of Le Mans. If you find SINr useful
 for your own research, please cite the appropriate papers from the list below.
+Publications can also be found on :ref:`Publications`.
 
 Initial SINr paper, 2021
 ------------------------

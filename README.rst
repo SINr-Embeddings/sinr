@@ -37,26 +37,25 @@ Install
 -------
 
 SINr can be installed through `pip` or from source using `poetry` directives.
-..  tabs::
 
-    ..  group-tab:: pip
+pip
+^^^^^^^
+..  code-block:: zsh
+    #Activate conda environment
+    conda activate sinr
+    pip install sinr
 
-        ..  code-block:: bash
 
-            #Activate conda environment
-            conda activate sinr
-            pip install sinr
-
-    ..  group-tab:: from source
-
-        ..  code-block:: bash
-
-            #Activate conda environment
-            conda activate sinr
-            git clone git@github.com:SINr-Embeddings/sinr.git
-            cd sinr
-            pip install poetry #poetry solves dependencies and installs SINr
-            poetry install #Installs SINr based on the pyproject.toml file
+from source
+^^^^^^^^^^^
+..  code-block:: zsh
+^
+    #Activate conda environment
+    conda activate sinr
+    git clone git@github.com:SINr-Embeddings/sinr.git
+    cd sinr
+    pip install poetry #poetry solves dependencies and installs SINr
+    poetry install #Installs SINr based on the pyproject.toml file
 
 
 Usage example
@@ -117,12 +116,13 @@ Publications
 ------------
 
 SINr is currently maintained at the University of Le Mans. If you find SINr useful
-for your own research, please cite the appropriate papers from the list below.
+for your own research, please cite the appropriate papers from the list below. 
+Publications can also be found on `Publications <https://sinr-embeddings.github.io/sinr/_build/html/publications.html>`_.
 
 Initial SINr paper, 2021
 ------------------------
 
-- Thibault Prouteau, Victor Connes, Nicolas Dugué, Anthony Perez, Jean-Charles Lamirel, et al.. SINr: Fast Computing of Sparse Interpretable Node Representations is not a Sin!. Advances in Intelligent Data Analysis XIX, 19th International Symposium on Intelligent Data Analysis, IDA 2021, Apr 2021, Porto, Portugal. pp.325-337, ⟨`10.1007/978-3-030-74251-5_26<https://dx.doi.org/10.1007/978-3-030-74251-5_26>`_⟩. `⟨hal-03197434⟩ <https://hal.science/hal-03197434>`_
+- Thibault Prouteau, Victor Connes, Nicolas Dugué, Anthony Perez, Jean-Charles Lamirel, et al.. SINr: Fast Computing of Sparse Interpretable Node Representations is not a Sin!. Advances in Intelligent Data Analysis XIX, 19th International Symposium on Intelligent Data Analysis, IDA 2021, Apr 2021, Porto, Portugal. pp.325-337, ⟨`10.1007/978-3-030-74251-5_26 <https://dx.doi.org/10.1007/978-3-030-74251-5_26>`_⟩. `⟨hal-03197434⟩ <https://hal.science/hal-03197434>`_
 
 Interpretability of SINr embeddings, 2022
 -----------------------------------------
