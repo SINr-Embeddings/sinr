@@ -18,7 +18,9 @@
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Test SINr" href="sinr.tests.html" />
+    <link rel="prev" title="SINr Core" href="sinr.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,8 +43,37 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="sinr.html">SINr</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="presentation.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">SINr Embeddings</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sinr.html">SINr Core</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">SINr Text</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-sinr.text.cooccurrence">Co-occurrence</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.cooccurrence.Cooccurrence"><code class="docutils literal notranslate"><span class="pre">Cooccurrence</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sinr.text.cooccurrence_cython">Co-occurrence Cython</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.cooccurrence_cython.construct_cooccurrence_matrix"><code class="docutils literal notranslate"><span class="pre">construct_cooccurrence_matrix()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sinr.text.pmi">PMI Filtering</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.pmi.pmi"><code class="docutils literal notranslate"><span class="pre">pmi()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.pmi.pmi_filter"><code class="docutils literal notranslate"><span class="pre">pmi_filter()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sinr.text.preprocess">Preprocess Text</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.preprocess.Corpus"><code class="docutils literal notranslate"><span class="pre">Corpus</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.preprocess.VRTMaker"><code class="docutils literal notranslate"><span class="pre">VRTMaker</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.preprocess.extract_text"><code class="docutils literal notranslate"><span class="pre">extract_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.preprocess.open_corpus"><code class="docutils literal notranslate"><span class="pre">open_corpus()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sinr.text">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sinr.tests.html">Test SINr</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
 </ul>
 
@@ -60,6 +91,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">SINr Embeddings</a></li>
       <li class="breadcrumb-item active">SINr Text</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/sinr.text.rst.txt" rel="nofollow"> View page source</a>
@@ -323,7 +355,10 @@ the PMI is lower than a thershold min_pmi.</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sinr.html" class="btn btn-neutral float-left" title="SINr Core" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sinr.tests.html" class="btn btn-neutral float-right" title="Test SINr" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

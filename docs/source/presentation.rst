@@ -1,6 +1,7 @@
 .. _Networkit: https://networkit.github.io
 
-Presentation
+============
+Overview
 ============
 
 SINr is an open-source tool to efficiently compute graph and word embeddings.
@@ -23,8 +24,7 @@ please refer to the :ref:`Publications` section.
 Requirements
 ------------
 
-- As SINr relies on libraries implemented using C/C++, a modern C++ compiler is 
-required.
+- As SINr relies on libraries implemented using C/C++, a modern C++ compiler is required.
 - OpenMP (required for `Networkit`_ and compiling `SINr`'s `Cython`)
 - Python 3.9
 - Pip
@@ -55,15 +55,14 @@ SINr can be installed through `pip` or from source using `poetry` directives.
 
 
 Usage example
----------
+--------------
 
 To get started using SINr to build graph and word embeddings, have a look at the
 `notebook <https://github.com/SINr-Embeddings/sinr/tree/main/notebooks>`_ 
 directory.
 
-Here is a minimum working example of SINr :
+Here is a minimum working example of SINr : ::
 
-.. code-block:: python
     import urllib
     import io
     import gzip
@@ -88,8 +87,6 @@ Here is a minimum working example of SINr :
     model.run(algo=nk.community.PLM())
     embeddings = model.get_nr()
     print(embeddings)
-
-    code
 
 
 Documentation
@@ -118,7 +115,7 @@ Publications can also be found on :ref:`Publications`.
 Initial SINr paper, 2021
 ------------------------
 
-- Thibault Prouteau, Victor Connes, Nicolas Dugué, Anthony Perez, Jean-Charles Lamirel, et al.. SINr: Fast Computing of Sparse Interpretable Node Representations is not a Sin!. Advances in Intelligent Data Analysis XIX, 19th International Symposium on Intelligent Data Analysis, IDA 2021, Apr 2021, Porto, Portugal. pp.325-337, ⟨`10.1007/978-3-030-74251-5_26<https://dx.doi.org/10.1007/978-3-030-74251-5_26>`_⟩. `⟨hal-03197434⟩ <https://hal.science/hal-03197434>`_
+- Thibault Prouteau, Victor Connes, Nicolas Dugué, Anthony Perez, Jean-Charles Lamirel, et al.. SINr: Fast Computing of Sparse Interpretable Node Representations is not a Sin!. Advances in Intelligent Data Analysis XIX, 19th International Symposium on Intelligent Data Analysis, IDA 2021, Apr 2021, Porto, Portugal. pp.325-337, ⟨`10.1007/978-3-030-74251-5_26 <https://dx.doi.org/10.1007/978-3-030-74251-5_26>`_⟩. `⟨hal-03197434⟩ <https://hal.science/hal-03197434>`_
 
 Interpretability of SINr embeddings, 2022
 -----------------------------------------

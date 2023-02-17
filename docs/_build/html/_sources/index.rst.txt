@@ -7,10 +7,10 @@ Welcome to SINr's documentation!
 ================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
-   Presentation
+   presentation
    modules
    publications
 

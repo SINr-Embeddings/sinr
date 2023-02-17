@@ -3,7 +3,7 @@ SINr Embeddings
 ===============
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 6
 
    sinr
    sinr.text
