@@ -38,12 +38,15 @@ Install
 SINr can be installed through `pip` or from source using `poetry` directives.
 
 
-pip ::
+pip 
+.. code-block:: zsh
 
     conda activate sinr
     pip install sinr
 
-from source ::
+from source 
+
+.. code-block:: zsh
 
     conda activate sinr
     git clone git@github.com:SINr-Embeddings/sinr.git
