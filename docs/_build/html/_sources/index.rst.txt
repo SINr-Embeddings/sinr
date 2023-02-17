@@ -9,18 +9,12 @@ Welcome to SINr's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
+   
+   README
    sinr
    sinr.text
    sinr.tests
-
-Introduction
-============
-
-Get Started
-===============
-
-
+   publications
 
 Indices and tables
 ==================
