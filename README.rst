@@ -1,6 +1,7 @@
 =====
 SINr
 =====
+|languages| |downloads| |license| |version| |cpython| |wheel| |python| |docs| |activity| |contributors| |quality| |build|
 
 *SINr* is an open-source tool to efficiently compute graph and word
 embeddings. Its aim is to provide sparse interpretable vectors from a
@@ -135,3 +136,17 @@ documentation <https://sinr-embeddings.github.io/sinr/_build/html/publications.h
    Are Embedding Spaces Interpretable? Results of an Intrusion Detection
    Evaluation on a Large French Corpus. LREC 2022, Jun 2022, Marseille,
    France. `⟨hal-03770444⟩ <https://hal.science/hal-03770444>`__
+   
+   
+.. |languages| image:: https://img.shields.io/github/languages/count/SINr-Embeddings/sinr
+.. |downloads| image:: https://img.shields.io/pypi/dm/sinr
+.. |license| image:: https://img.shields.io/pypi/l/sinr?color=green
+.. |version| image:: https://img.shields.io/pypi/v/sinr
+.. |cpython| image:: https://img.shields.io/pypi/implementation/sinr
+.. |wheel| image:: https://img.shields.io/pypi/wheel/sinr
+.. |python| image:: https://img.shields.io/pypi/pyversions/sinr
+.. |docs| image:: https://img.shields.io/website?url=https%3A%2F%2Fsinr-embeddings.github.io%2Fsinr%2F_build%2Fhtml%2Findex.html
+.. |activity| image:: https://img.shields.io/github/commit-activity/y/SINr-Embeddings/sinr
+.. |contributors| image:: https://img.shields.io/github/contributors/SINr-Embeddings/sinr
+.. |quality| image:: https://scrutinizer-ci.com/g/SINr-Embeddings/sinr/badges/quality-score.png?b=main
+.. |build| image:: https://scrutinizer-ci.com/g/SINr-Embeddings/sinr/badges/build.png?b=main
