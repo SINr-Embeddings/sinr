@@ -39,6 +39,7 @@ SINr can be installed through `pip` or from source using `poetry` directives.
 
 
 pip 
+
 .. code-block:: zsh
 
     conda activate sinr
