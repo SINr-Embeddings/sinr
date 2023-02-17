@@ -42,7 +42,7 @@ class SINrViz:
             fig, ax = plt.subplots()
             im = ax.imshow(data)
             cbar = ax.figure.colorbar(im, ax=ax)
-            cbar.ax.set_ylabel("test", rotation=-90, va="bottom")
+            cbar.ax.set_ylabel("Strength of relatedness", rotation=-90, va="bottom")
             ax.set_xticks(np.arange(len(stereotypes)), labels=stereotypes)
             ax.set_yticks(np.arange(len(args)), labels=args)
 

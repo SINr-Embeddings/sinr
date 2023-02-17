@@ -453,81 +453,101 @@ class NoVocabularyException(Exception):
 
 
 class InterpretableDimension:
-    """Encapsulation for interpretable model.
-    
+    """ Internal class : should be used to encapsulate data about a dimension instead of using a simple dict.
     """
 
     def __init__(self, idx, type):
+        """_summary_
+
+        :param idx: identifier of the dimension
+        :type idx: int
+        :param type: whether one uses stereotypes or descriptors
+        :type type: str
+        """
         self.idx = idx
         self.type = type
         self.value = None
         self.interpreters = []
 
     def add_interpreter(self, obj, value):
-        """
+        """Adding an element that would help to interpret the meaning of the dimension
 
-        :param obj: 
-        :param value: 
-
+        :param obj: a descriptor or a stereotype of the dimension
+        :type obj: str
+        :param value: a value describing the relevance of the descriptor for this dimension
+        :type value: float
         """
         self.interpreters.append((round(value, 2), obj))
 
     def get_idx(self):
-        """ """
-        return self.get_idx()
+        """Getter of the idx attribute
+
+        :return: the id of the dimension
+        :rtype: int
+        """
+        return self.idx
 
     def get_value(self):
-        """ 
-        
+        """Getter for the value parameter, which is a boolean to detect if numerical values are used in the interpreters or not
+
+        :return: the value attribute
+        :rtype: bool
         """
         return self.value
 
     def get_interpreters(self):
-        """ 
-        
+        """Getting the list of interpreters, object that allows to describe the dimension
+
+        :return: the list of interpreters
+        :rtype: list
         """
         return self.interpreters
 
     def get_interpreter(self, id):
-        """
+        """Get a specific interpreter
 
-        :param id: 
-
+        :param id: id of the interpreter
+        :type id: int
+        :return: the interpreter of id for this dimension
+        :rtype: an interpreter as a tuple (obj: str, value: float) if there is a value
         """
         return self.interpreters[id]
 
     def sort(self, on_value=True):
+        """Sorting the interpreters, according to values if values is True, according to the str described of the interpreters instead if False
+
+        :param on_value: sorting on values or not, defaults to True
+        :type on_value: bool, optional
         """
 
-        :param on_value:  (Default value = True)
-
-        """
         if on_value:
             self.interpreters.sort(key=lambda x: x[0], reverse=True)
         else:
             self.interpreters.sort(key=lambda x: x[1], reverse=True)
 
     def topk(self, topk):
-        """
+        """ Selecting only the topk interpreters
 
-        :param topk: 
-
+        :param topk: number of interpreters to keep
+        :type topk: int
         """
         topk = min(topk, len(self.interpreters))
         self.interpreters = self.interpreters[:topk]
 
-    def with_value(self, value):
-        """
+    def with_value(self):
+        """Seeting the value to True
 
-        :param value: 
-
+        :return: the self object
+        :rtype: InterpretableDimension
         """
-        self.value = value
+        self.value = True
         return self
 
     def get_dict(self):
-        """ 
-        
+        """The dict that can be processed with the interpreters
+
+        :return: a dict of interpreters for the dimension
+        :rtype: dict
         """
         result = {"dimension": self.idx, "value": self.value,
                   self.type: self.interpreters} if self.value is not None else {"dimension": self.idx,
