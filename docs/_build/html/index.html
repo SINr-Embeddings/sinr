@@ -16,10 +16,11 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/tabs.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Presentation" href="presentation.html" /> 
+    <link rel="next" title="SINr" href="sinr.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,10 +44,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="presentation.html">Presentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sinr.html">SINr</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sinr.text.html">SINr Text</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sinr.tests.html">Test SINr</a></li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
 </ul>
 
@@ -79,18 +77,6 @@
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="presentation.html">Presentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="presentation.html#requirements">Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="presentation.html#install">Install</a></li>
-<li class="toctree-l2"><a class="reference internal" href="presentation.html#usage-example">Usage example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="presentation.html#documentation">Documentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="presentation.html#contributing">Contributing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="presentation.html#license">License</a></li>
-<li class="toctree-l2"><a class="reference internal" href="presentation.html#publications">Publications</a></li>
-<li class="toctree-l2"><a class="reference internal" href="presentation.html#initial-sinr-paper-2021">Initial SINr paper, 2021</a></li>
-<li class="toctree-l2"><a class="reference internal" href="presentation.html#interpretability-of-sinr-embeddings-2022">Interpretability of SINr embeddings, 2022</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="sinr.html">SINr</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.graph_embeddings">Graph Embeddings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.nfm">SINr NFM</a></li>
@@ -101,20 +87,6 @@
 <li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="sinr.text.html">SINr Text</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sinr.text.html#module-sinr.text.cooccurrence">Co-occurrence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sinr.text.html#module-sinr.text.cooccurrence_cython">Co-occurrence Cython</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sinr.text.html#module-sinr.text.pmi">PMI Filtering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sinr.text.html#module-sinr.text.preprocess">Preprocess Text</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sinr.text.html#module-sinr.text">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="sinr.tests.html">Test SINr</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sinr.tests.html#module-sinr.tests.test_sinr_nfm">Test SINr NFM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sinr.tests.html#module-sinr.tests.test_sinr_workflow">Test SINr workflow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sinr.tests.html#module-sinr.tests">Module contents</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="publications.html#initial-sinr-paper-2021">Initial SINr paper, 2021</a></li>
 <li class="toctree-l2"><a class="reference internal" href="publications.html#interpretability-of-sinr-embeddings-2022">Interpretability of SINr embeddings, 2022</a></li>
@@ -122,6 +94,118 @@
 </li>
 </ul>
 </div>
+<section id="presentation">
+<h2>Presentation<a class="headerlink" href="#presentation" title="Permalink to this heading"></a></h2>
+<p>SINr is an open-source tool to efficiently compute graph and word embeddings.
+Its aim is to provide sparse interpretable vectors from a graph structure.
+The dimensions of the vector produced are related to the community structure
+detected in the graph. By leveraging the relative connection of vertices to
+communities, SINr builds an interpretable space. SINr is focused on providing
+tools to build and interpret the embeddings produced.</p>
+<p>SINr is a Python module relying on <a class="reference external" href="https://networkit.github.io">Networkit</a>
+for the graph structure and community detection. SINr also provides efficient
+implementations to extract word co-occurrence graphs from large text corpora.
+One of the strength of SINr is its ability to work with text and produce
+interpretable word embeddings that are competitive with similar approaches.
+For more details on the performances of SINr on downstream evaluation tasks,
+please refer to the <a class="reference internal" href="publications.html#publications"><span class="std std-ref">Publications</span></a> section.</p>
+<section id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>As SINr relies on libraries implemented using C/C++, a modern C++ compiler is</p></li>
+</ul>
+<p>required.
+- OpenMP (required for <a class="reference external" href="https://networkit.github.io">Networkit</a> and compiling <cite>SINr</cite>’s <cite>Cython</cite>)
+- Python 3.9
+- Pip
+- Cython
+- Conda (recommended)</p>
+</section>
+<section id="install">
+<h3>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h3>
+<p>SINr can be installed through <cite>pip</cite> or from source using <cite>poetry</cite> directives.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-cGlw" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-cGlw" name="cGlw" role="tab" tabindex="0">pip</button><button aria-controls="panel-0-ZnJvbSBzb3VyY2U=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-ZnJvbSBzb3VyY2U=" name="ZnJvbSBzb3VyY2U=" role="tab" tabindex="-1">from source</button></div><div aria-labelledby="tab-0-cGlw" class="sphinx-tabs-panel code-tab group-tab" id="panel-0-cGlw" name="cGlw" role="tabpanel" tabindex="0"><div class="highlight-zsh notranslate"><div class="highlight"><pre><span></span><span class="c1">#Activate conda environment</span>
+conda<span class="w"> </span>activate<span class="w"> </span>sinr
+pip<span class="w"> </span>install<span class="w"> </span>sinr
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-ZnJvbSBzb3VyY2U=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-ZnJvbSBzb3VyY2U=" name="ZnJvbSBzb3VyY2U=" role="tabpanel" tabindex="0"><div class="highlight-zsh notranslate"><div class="highlight"><pre><span></span><span class="c1">#Activate conda environment</span>
+conda<span class="w"> </span>activate<span class="w"> </span>sinr
+git<span class="w"> </span>clone<span class="w"> </span>git@github.com:SINr-Embeddings/sinr.git
+<span class="nb">cd</span><span class="w"> </span>sinr
+pip<span class="w"> </span>install<span class="w"> </span>poetry<span class="w"> </span><span class="c1">#poetry solves dependencies and installs SINr</span>
+poetry<span class="w"> </span>install<span class="w"> </span><span class="c1">#Installs SINr based on the pyproject.toml file</span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="usage-example">
+<h3>Usage example<a class="headerlink" href="#usage-example" title="Permalink to this heading"></a></h3>
+<p>To get started using SINr to build graph and word embeddings, have a look at the
+<a class="reference external" href="https://github.com/SINr-Embeddings/sinr/tree/main/notebooks">notebook</a>
+directory.</p>
+<p>Here is a minimum working example of SINr :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">urllib</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">networkit</span> <span class="k">as</span> <span class="nn">nk</span>
+<span class="kn">import</span> <span class="nn">sinr.graph_embeddings</span> <span class="k">as</span> <span class="nn">ge</span>
+
+
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://snap.stanford.edu/data/wiki-Vote.txt.gz&quot;</span>
+<span class="n">graph_file</span> <span class="o">=</span> <span class="s2">&quot;wikipedia-votes.txt&quot;</span>
+<span class="c1"># Read a graph from SNAP</span>
+<span class="n">sock</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>  <span class="c1"># open URL</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">sock</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>  <span class="c1"># read into BytesIO &quot;file&quot;</span>
+<span class="n">sock</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_in</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">graph_file</span><span class="p">,</span> <span class="s2">&quot;wt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_out</span><span class="p">:</span>
+        <span class="n">f_out</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">f_in</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
+<span class="c1"># Initialize a networkit.Graph object from SNAP graph</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">readGraph</span><span class="p">(</span><span class="n">graph_file</span><span class="p">,</span> <span class="n">nk</span><span class="o">.</span><span class="n">Format</span><span class="o">.</span><span class="n">SNAP</span><span class="p">)</span>
+
+<span class="c1"># Build a SINr model and extract embeddings</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">SINr</span><span class="o">.</span><span class="n">load_from_graph</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">algo</span><span class="o">=</span><span class="n">nk</span><span class="o">.</span><span class="n">community</span><span class="o">.</span><span class="n">PLM</span><span class="p">())</span>
+<span class="n">embeddings</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_nr</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">embeddings</span><span class="p">)</span>
+
+<span class="n">code</span>
+</pre></div>
+</div>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h3>
+<p>The documentation for SINr is <a class="reference external" href="https://sinr-embeddings.github.io/sinr/_build/html/index.html">available online</a></p>
+</section>
+<section id="contributing">
+<h3>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading"></a></h3>
+<p>Pull requests are welcome. For major changes, please open an issue first to disccus the changes to be made.</p>
+</section>
+<section id="license">
+<h3>License<a class="headerlink" href="#license" title="Permalink to this heading"></a></h3>
+<p>Releaser under <a class="reference external" href="https://cecill.info/">CeCILL 2.1</a></p>
+</section>
+<section id="publications">
+<h3>Publications<a class="headerlink" href="#publications" title="Permalink to this heading"></a></h3>
+<p>SINr is currently maintained at the University of Le Mans. If you find SINr useful
+for your own research, please cite the appropriate papers from the list below.
+Publications can also be found on <a class="reference internal" href="publications.html#publications"><span class="std std-ref">Publications</span></a>.</p>
+</section>
+<section id="initial-sinr-paper-2021">
+<h3>Initial SINr paper, 2021<a class="headerlink" href="#initial-sinr-paper-2021" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Thibault Prouteau, Victor Connes, Nicolas Dugué, Anthony Perez, Jean-Charles Lamirel, et al.. SINr: Fast Computing of Sparse Interpretable Node Representations is not a Sin!. Advances in Intelligent Data Analysis XIX, 19th International Symposium on Intelligent Data Analysis, IDA 2021, Apr 2021, Porto, Portugal. pp.325-337, ⟨<a href="#id1"><span class="problematic" id="id2">`10.1007/978-3-030-74251-5_26&lt;https://dx.doi.org/10.1007/978-3-030-74251-5_26&gt;`_</span></a>⟩. <a class="reference external" href="https://hal.science/hal-03197434">⟨hal-03197434⟩</a></p></li>
+</ul>
+</section>
+<section id="interpretability-of-sinr-embeddings-2022">
+<h3>Interpretability of SINr embeddings, 2022<a class="headerlink" href="#interpretability-of-sinr-embeddings-2022" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Thibault Prouteau, Nicolas Dugué, Nathalie Camelin, Sylvain Meignier. Are Embedding Spaces Interpretable? Results of an Intrusion Detection Evaluation on a Large French Corpus. LREC 2022, Jun 2022, Marseille, France. <a class="reference external" href="https://hal.science/hal-03770444">⟨hal-03770444⟩</a></p></li>
+</ul>
+</section>
+</section>
 <section id="indices-and-tables">
 <h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h2>
 <ul class="simple">
@@ -136,7 +220,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="presentation.html" class="btn btn-neutral float-right" title="Presentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="sinr.html" class="btn btn-neutral float-right" title="SINr" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
