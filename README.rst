@@ -39,12 +39,10 @@ SINr can be installed through `pip` or from source using `poetry` directives.
 
 
 pip ::
-        #Activate conda environment
         conda activate sinr
         pip install sinr
 
 from source ::
-        #Activate conda environment
         conda activate sinr
         git clone git@github.com:SINr-Embeddings/sinr.git
         cd sinr
