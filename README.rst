@@ -41,23 +41,23 @@ SINr can be installed through `pip` or from source using `poetry` directives.
 pip
 ^^^^
 
-.. code:: zsh
+```
         #Activate conda environment
         conda activate sinr
         pip install sinr
-
+```
 
 from source
 ^^^^^^^^^^^
 
-.. code:: zsh
+```
         #Activate conda environment
         conda activate sinr
         git clone git@github.com:SINr-Embeddings/sinr.git
         cd sinr
         pip install poetry #poetry solves dependencies and installs SINr
         poetry install #Installs SINr based on the pyproject.toml file
-
+```        
 
 Usage example
 ---------
