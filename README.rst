@@ -1,4 +1,6 @@
-# SINr
+=====
+SINr
+=====
 
 *SINr* is an open-source tool to efficiently compute graph and word
 embeddings. Its aim is to provide sparse interpretable vectors from a
@@ -105,7 +107,7 @@ to disccus the changes to be made.
 License
 =======
 
-Releaser under `CeCILL 2.1 <https://cecill.info/>`__
+Released under `CeCILL 2.1 <https://cecill.info/>`__.
 
 Publications
 ============
