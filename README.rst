@@ -37,10 +37,11 @@ Install
 
 SINr can be installed through `pip` or from source using `poetry` directives.
 
-. highlight:: sh
+.. highlight:: sh
 
 pip
 ^^^^
+
 ::
     #Activate conda environment
     conda activate sinr
@@ -49,6 +50,7 @@ pip
 
 from source
 ^^^^^^^^^^^
+
 ::
     #Activate conda environment
     conda activate sinr
@@ -64,6 +66,8 @@ Usage example
 To get started using SINr to build graph and word embeddings, have a look at the
 `notebook <https://github.com/SINr-Embeddings/sinr/tree/main/notebooks>`_ 
 directory.
+
+.. highlight:: py
 
 Here is a minimum working example of SINr : ::
 
