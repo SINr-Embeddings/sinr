@@ -70,5 +70,5 @@ sphinx-tabs = "^3.4.1"
 
 [tool.poetry.build]
 script = "build.py"
-
+generate-setup-file = false
 
