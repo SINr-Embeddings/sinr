@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../../../sinr-experiments"
+		},
+		{
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"esbonio.sphinx.confDir": ""
+	}
+}

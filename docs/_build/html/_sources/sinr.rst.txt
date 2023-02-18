@@ -34,14 +34,6 @@ Visualization
    :undoc-members:
    :show-inheritance:
 
-SINr Normalization
---------------------------
-
-.. automodule:: sinr.strategy_norm
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Logger
 ------------------
 

@@ -81,11 +81,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#sinr.viz.SINrViz"><code class="docutils literal notranslate"><span class="pre">SINrViz</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#module-sinr.strategy_norm">SINr Normalization</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#sinr.strategy_norm.apply_norm"><code class="docutils literal notranslate"><span class="pre">apply_norm()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#sinr.strategy_norm.iterative_pmi"><code class="docutils literal notranslate"><span class="pre">iterative_pmi()</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-sinr.logger">Logger</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-sinr">Module contents</a></li>
 </ul>
@@ -478,13 +473,12 @@ This object cannot then be used to inspect the resulting vectors. Instead, using
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.load_from_adjacency_matrix">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_adjacency_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix_object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.load_from_adjacency_matrix" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_adjacency_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix_object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.load_from_adjacency_matrix" title="Permalink to this definition"></a></dt>
 <dd><p>Build a sinr object from an adjacency matrix as a sparse one (csr)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>matrix_object</strong> (<em>csr_matrix</em>) – Matrix describing the graph.</p></li>
-<li><p><strong>norm</strong> (<em>strategy_norm</em><em>, </em><em>optional</em>) – If the graph weights be normalized (for example using PMI). The default is None.</p></li>
 <li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of jobs that should be used The default is 1.</p></li>
 </ul>
 </dd>
@@ -493,14 +487,13 @@ This object cannot then be used to inspect the resulting vectors. Instead, using
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.load_from_cooc_pkl">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_cooc_pkl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cooc_matrix_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.load_from_cooc_pkl" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_cooc_pkl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cooc_matrix_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.load_from_cooc_pkl" title="Permalink to this definition"></a></dt>
 <dd><p>Build a sinr object from a co-occurrence matrix stored as a pickle : useful to deal with textual data.
 Co-occurrence matrices should for instance be generated using sinr.text.cooccurrence</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>cooc_matrix_path</strong> (<em>string</em>) – Path to the cooccurrence matrix generated using sinr.text.cooccurrence : the file should be a pickle</p></li>
-<li><p><strong>norm</strong> (<em>strategy_norm</em><em>, </em><em>optional</em>) – If the graph weights be normalized (for example using PMI). The default is None.</p></li>
 <li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of jobs that should be used The default is 1.</p></li>
 </ul>
 </dd>
@@ -509,13 +502,12 @@ Co-occurrence matrices should for instance be generated using sinr.text.cooccurr
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.load_from_graph">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.load_from_graph" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.load_from_graph" title="Permalink to this definition"></a></dt>
 <dd><p>Build a sinr object from a networkit graph object</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>graph</strong> (<em>networkit</em>) – Networkit graph object.</p></li>
-<li><p><strong>norm</strong> (<em>strategy_norm</em><em>, </em><em>optional</em>) – If the graph weights be normalized (for example using PMI). The default is None.</p></li>
 <li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of jobs that should be used The default is 1.</p></li>
 </ul>
 </dd>
@@ -1232,41 +1224,6 @@ the diemnesions of the embeddings produced.</p>
 </dl>
 </dd></dl>
 
-</dd></dl>
-
-</section>
-<section id="module-sinr.strategy_norm">
-<span id="sinr-normalization"></span><h2>SINr Normalization<a class="headerlink" href="#module-sinr.strategy_norm" title="Permalink to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="sinr.strategy_norm.apply_norm">
-<span class="sig-prename descclassname"><span class="pre">sinr.strategy_norm.</span></span><span class="sig-name descname"><span class="pre">apply_norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.strategy_norm.apply_norm" title="Permalink to this definition"></a></dt>
-<dd><p>Apply a normalisation to the graph (IPMI, PMI…) before detecting communities</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>norm</strong> – Type of normalisation.</p></li>
-<li><p><strong>norm_args</strong> – Arguments to pass to the normalisation alfgorithm.</p></li>
-<li><p><strong>G</strong> – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The graph and the weighted degrees before and after normalisation.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="sinr.strategy_norm.iterative_pmi">
-<span class="sig-prename descclassname"><span class="pre">sinr.strategy_norm.</span></span><span class="sig-name descname"><span class="pre">iterative_pmi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.strategy_norm.iterative_pmi" title="Permalink to this definition"></a></dt>
-<dd><p>Iteratively applies PMI to the graph to allow for community detection.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>G</strong> – </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The graph and the weighted degrees before and after normalisation.</p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>

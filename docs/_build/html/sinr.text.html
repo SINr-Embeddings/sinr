@@ -165,27 +165,26 @@ the cooccurrence matrix.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="sinr.text.cooccurrence_cython.construct_cooccurrence_matrix">
 <span class="sig-prename descclassname"><span class="pre">sinr.text.cooccurrence_cython.</span></span><span class="sig-name descname"><span class="pre">construct_cooccurrence_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.cooccurrence_cython.construct_cooccurrence_matrix" title="Permalink to this definition"></a></dt>
-<dd><blockquote>
-<div><p>Construct the word-id dictionary and cooccurrence matrix for
+<dd><p>Construct the word-id dictionary and cooccurrence matrix for
 a given corpus, using a given window size.</p>
 <p>The dictionary is constructed by lexicographix order.
 The matrix accounts for the number of cooccurrences of words, no matter the
 order in which they appear in the corpus. Consequently, the cooccurrence
 matrix is upper triangular (undirected graph in SINr) .</p>
-</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>corpus</strong> (<cite>list(str)</cite>) – The sentences from the corpus.</p></li>
-<li><p><strong>dictionary</strong> (<cite>dict</cite>) – A dictionary mapping of words to their ids in the vocabulary (in lexicographic order)</p></li>
-<li><p><strong>window_size</strong> (<cite>int</cite>) – The size of the symmetric moving window.</p></li>
+<li><p><strong>corpus</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – The sentences from the corpus.</p></li>
+<li><p><strong>dictionary</strong> (<em>dictionary: dict</em><em>[</em><em>str:int</em><em>]</em>) – A dictionary mapping of words to their ids in the vocabulary (in lexicographic order)</p></li>
+<li><p><strong>window_size</strong> (<em>int</em>) – The size of the symmetric moving window.</p></li>
+<li><p><strong>window_size</strong> – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The cooccurrence matrix built from the corpus.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><cite>scipy.sparse.coo</cite></p>
+<dd class="field-odd"><p>scipy.sparse.coo</p>
 </dd>
 </dl>
 </dd></dl>
