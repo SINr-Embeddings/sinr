@@ -10,7 +10,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "sinr"
-version = "1.0.10"
+version = "1.1.0"
 description = "Build word and graph embeddings based on community detection in graphs."
 authors = ["Thibault Prouteau <thibault.prouteau@univ-lemans.fr>", "Nicolas Dugue <nicolas.dugue@univ-lemans.fr>", " Simon Guillot <simon.guillot@univ-lemans.fr>"]
 license = "CeCILL 2.1"
@@ -69,5 +69,5 @@ sphinx-tabs = "^3.4.1"
 
 [tool.poetry.build]
 script = "build.py"
-
+generate-setup-file = false
 
