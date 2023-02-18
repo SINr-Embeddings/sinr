@@ -6,7 +6,6 @@ from sklearn.neighbors import NearestNeighbors
 from scipy import spatial
 
 from . import strategy_loader
-from . import strategy_norm
 from .logger import logger
 from .nfm import get_nfm_embeddings
 
@@ -24,14 +23,12 @@ class SINr(object):
     """
 
     @classmethod
-    def load_from_cooc_pkl(cls, cooc_matrix_path, norm=None, n_jobs=1):
+    def load_from_cooc_pkl(cls, cooc_matrix_path, n_jobs=1):
         """Build a sinr object from a co-occurrence matrix stored as a pickle : useful to deal with textual data.
         Co-occurrence matrices should for instance be generated using sinr.text.cooccurrence
 
         :param cooc_matrix_path: Path to the cooccurrence matrix generated using sinr.text.cooccurrence : the file should be a pickle
         :type cooc_matrix_path: string
-        :param norm: If the graph weights be normalized (for example using PMI). The default is None.
-        :type norm: strategy_norm, optional
         :param n_jobs: Number of jobs that should be used The default is 1.
         :type n_jobs: int, optional
 
@@ -41,19 +38,16 @@ class SINr(object):
 
         word_to_idx, matrix = strategy_loader.load_pkl_text(cooc_matrix_path)
         graph = get_graph_from_matrix(matrix)
-        graph = strategy_norm.apply_norm(graph, norm)
         out_of_LgCC = get_lgcc(graph)
         logger.info("Finished building graph.")
         return cls(graph, out_of_LgCC, word_to_idx)
 
     @classmethod
-    def load_from_adjacency_matrix(cls, matrix_object, norm=None, n_jobs=1):
+    def load_from_adjacency_matrix(cls, matrix_object, n_jobs=1):
         """Build a sinr object from an adjacency matrix as a sparse one (csr)
 
         :param matrix_object: Matrix describing the graph.
         :type matrix_object: csr_matrix
-        :param norm: If the graph weights be normalized (for example using PMI). The default is None.
-        :type norm: strategy_norm, optional
         :param n_jobs: Number of jobs that should be used The default is 1.
         :type n_jobs: int, optional
 
@@ -62,19 +56,16 @@ class SINr(object):
         logger.info("Building Graph.")
         word_to_idx, matrix = strategy_loader.load_adj_mat(matrix_object)
         graph = get_graph_from_matrix(matrix)
-        graph = strategy_norm.apply_norm(graph, norm)
         out_of_LgCC = get_lgcc(graph)
         logger.info("Finished building graph.")
         return cls(graph, out_of_LgCC, word_to_idx)
 
     @classmethod
-    def load_from_graph(cls, graph, norm=None, n_jobs=1):
+    def load_from_graph(cls, graph, n_jobs=1):
         """Build a sinr object from a networkit graph object
 
         :param graph: Networkit graph object.
         :type graph: networkit
-        :param norm: If the graph weights be normalized (for example using PMI). The default is None.
-        :type norm: strategy_norm, optional
         :param n_jobs: Number of jobs that should be used The default is 1.
         :type n_jobs: int, optional
 
@@ -85,7 +76,6 @@ class SINr(object):
         for u in graph.iterNodes():
             word_to_idx[u] = idx
             idx += 1
-        graph = strategy_norm.apply_norm(graph, norm)
         out_of_LgCC = get_lgcc(graph)
         logger.info("Finished building graph.")
         return cls(graph, out_of_LgCC, word_to_idx)
