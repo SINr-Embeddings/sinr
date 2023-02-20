@@ -90,7 +90,7 @@ Here is a minimum working example of SINr :
 
     # Build a SINr model and extract embeddings
     model = ge.SINr.load_from_graph(G)
-    model.run(algo=nk.community.PLM())
+    model.run(algo=nk.community.PLM(G))
     embeddings = model.get_nr()
     print(embeddings)
 

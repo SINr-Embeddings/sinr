@@ -158,7 +158,7 @@ directory.</p>
 
 <span class="c1"># Build a SINr model and extract embeddings</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">SINr</span><span class="o">.</span><span class="n">load_from_graph</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">algo</span><span class="o">=</span><span class="n">nk</span><span class="o">.</span><span class="n">community</span><span class="o">.</span><span class="n">PLM</span><span class="p">())</span>
+<span class="n">model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">algo</span><span class="o">=</span><span class="n">nk</span><span class="o">.</span><span class="n">community</span><span class="o">.</span><span class="n">PLM</span><span class="p">(</span><span class="n">G</span><span class="p">))</span>
 <span class="n">embeddings</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_nr</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">embeddings</span><span class="p">)</span>
 </pre></div>
