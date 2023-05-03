@@ -43,18 +43,19 @@ class SINr(object):
         return cls(graph, out_of_LgCC, word_to_idx)
 
     @classmethod
-    def load_from_adjacency_matrix(cls, matrix_object, n_jobs=1):
+    def load_from_adjacency_matrix(cls, matrix_object, labels, n_jobs=1):
         """Build a sinr object from an adjacency matrix as a sparse one (csr)
 
         :param matrix_object: Matrix describing the graph.
         :type matrix_object: csr_matrix
+        :param labels:  (Default value = None)
         :param n_jobs: Number of jobs that should be used The default is 1.
         :type n_jobs: int, optional
 
         
         """
         logger.info("Building Graph.")
-        word_to_idx, matrix = strategy_loader.load_adj_mat(matrix_object)
+        word_to_idx, matrix = strategy_loader.load_adj_mat(matrix_object, labels)
         graph = get_graph_from_matrix(matrix)
         out_of_LgCC = get_lgcc(graph)
         logger.info("Finished building graph.")
