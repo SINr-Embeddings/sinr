@@ -1,6 +1,6 @@
 import pickle as pk
 
-from networkit import Graph, components, community, setNumberOfThreads, Partition
+from networkit import Graph, components, community, setNumberOfThreads, getCurrentNumberOfThreads, getMaxNumberOfThreads, Partition
 from numpy import argpartition, argsort, asarray, where, nonzero
 from sklearn.neighbors import NearestNeighbors
 from scipy import spatial
@@ -23,13 +23,13 @@ class SINr(object):
     """
 
     @classmethod
-    def load_from_cooc_pkl(cls, cooc_matrix_path, n_jobs=1):
+    def load_from_cooc_pkl(cls, cooc_matrix_path, n_jobs=-1):
         """Build a sinr object from a co-occurrence matrix stored as a pickle : useful to deal with textual data.
         Co-occurrence matrices should for instance be generated using sinr.text.cooccurrence
 
         :param cooc_matrix_path: Path to the cooccurrence matrix generated using sinr.text.cooccurrence : the file should be a pickle
         :type cooc_matrix_path: string
-        :param n_jobs: Number of jobs that should be used The default is 1.
+        :param n_jobs: Number of jobs that should be used The default is -1.
         :type n_jobs: int, optional
 
         
@@ -43,13 +43,13 @@ class SINr(object):
         return cls(graph, out_of_LgCC, word_to_idx)
 
     @classmethod
-    def load_from_adjacency_matrix(cls, matrix_object, labels, n_jobs=1):
+    def load_from_adjacency_matrix(cls, matrix_object, labels, n_jobs=-1):
         """Build a sinr object from an adjacency matrix as a sparse one (csr)
 
         :param matrix_object: Matrix describing the graph.
         :type matrix_object: csr_matrix
         :param labels:  (Default value = None)
-        :param n_jobs: Number of jobs that should be used The default is 1.
+        :param n_jobs: Number of jobs that should be used The default is -1.
         :type n_jobs: int, optional
 
         
@@ -62,12 +62,12 @@ class SINr(object):
         return cls(graph, out_of_LgCC, word_to_idx)
 
     @classmethod
-    def load_from_graph(cls, graph, n_jobs=1):
+    def load_from_graph(cls, graph, n_jobs=-1):
         """Build a sinr object from a networkit graph object
 
         :param graph: Networkit graph object.
         :type graph: networkit
-        :param n_jobs: Number of jobs that should be used The default is 1.
+        :param n_jobs: Number of jobs that should be used The default is -1.
         :type n_jobs: int, optional
 
         
@@ -89,27 +89,30 @@ class SINr(object):
 
         
         """
-        if algo is None:
-            algo = community.PLM(self.cooc_graph, refine=False, gamma=1, turbo=True, recurse=False)
         self.communities = self.detect_communities(self.cooc_graph, algo=algo)
         self.extract_embeddings(communities=self.communities)
 
-    def detect_communities(self, gamma=100, algo=None, inspect=True):
+    def detect_communities(self, gamma=1, algo=None, inspect=True, par="balanced"):
         """Runs community detection on the graph
 
-        :param gamma: For Louvain algorithm which is the default algorithm (ignore this parameter if param algo is used), allows to control the size of the communities. The greater it is, the smaller the communities. The default is 100.
+        :param gamma: For Louvain algorithm which is the default algorithm (ignore this parameter if param algo is used), allows to control the size of the communities. The greater it is, the smaller the communities. The default is 1.
         :type gamma: int, optional
         :param algo: Community detection algorithm. The default, None allorws to run a Louvain algorithm
         :type algo: networkit.algo.community, optional
         :param inspect: Whether or not one wants to get insight about the communities extracted. The default is True.
         :type inspect: boolean, optional
+        :param par: Parallelisation strategy for networkit community detection (Louvain), see https://networkit.github.io/dev-docs/python_api/community.html#networkit.community.PLM for more details, "none randomized" allows randomness in Louvain in single thread mode. To force determinism pass the "none" parallelisation strategy. The default is balanced.
 
         
         """
         logger.info("Detecting communities.")
         print(f"Gamma for louvain : {gamma}")
+        if getCurrentNumberOfThreads() == 1 and par!="none randomized":
+            logger.warning(f"The current number of threads is set to {getCurrentNumberOfThreads()} with parallelization strategy
+                           {par}. Nodes will not be randomized in Louvain. Consider using more threads by resetting the setNumberOfThreads
+                           parameter of networkit ({getMaxNumberOfThreads()} available) or use the 'none radomized' parallelization strategy.")
         if algo is None:
-            algo = community.PLM(self.cooc_graph, refine=False, gamma=gamma, turbo=True, recurse=False)
+            algo = community.PLM(self.cooc_graph, refine=False, gamma=gamma, turbo=True, recurse=False, par=par)
         communities = community.detectCommunities(self.cooc_graph, algo=algo, inspect=inspect)
         communities.compact(useTurbo=True)  # Consecutive communities from 0 to number of communities - 1
         self.communities = communities
@@ -171,7 +174,7 @@ class SINr(object):
         logger.info("NFM successfully applied.")
         logger.info("Finished extracting embeddings.")
 
-    def __init__(self, graph, lgcc, wrd_to_idx, n_jobs=1):
+    def __init__(self, graph, lgcc, wrd_to_idx, n_jobs=-1):
         """Should not be used ! Some factory methods below starting with "load_" should be used instead.
 
         Parameters
@@ -182,7 +185,7 @@ class SINr(object):
         wrd_to_idx : dict
             A matching between a vocabulary and ids. Useful for text. Otherwise, the vocabulary and the ids are the same
         n_jobs : int, optional
-            Number of jobs that should be runned. The default is 1
+            Number of jobs that should be runned. The default is -1, all available threads
 
         Returns
         -------
@@ -194,11 +197,16 @@ class SINr(object):
         self.np = None
         self.communities = None
         self.n_jobs = n_jobs
-        setNumberOfThreads(n_jobs)
         self.wrd_to_idx = wrd_to_idx
         self.idx_to_wrd = _flip_keys_values(self.wrd_to_idx)
         self.cooc_graph = graph
         self.out_of_LgCC = lgcc
+
+        assert type(n_jobs) == int, "n_jobs must be of type int"
+        assert n_jobs == -1 or n_jobs>0, "Value for n_jobs must be -1 or greater than 0"
+
+        if n_jobs > 0:
+            setNumberOfThreads(n_jobs)
 
         self.wd_before, self.wd_after = None, None
 
@@ -317,7 +325,7 @@ class ModelBuilder:
     Attributes should not be read
     """
 
-    def __init__(self, sinr, name, n_jobs=1, n_neighbors=31):
+    def __init__(self, sinr, name, n_jobs=-1, n_neighbors=31):
         """
         Creating a ModelBuilder object to build a `SINrVectors`.
 
@@ -328,7 +336,7 @@ class ModelBuilder:
         name : string
             Name of the model
         n_jobs : int, optional
-            DESCRIPTION. The default is 1.
+            DESCRIPTION. The default is -1, all the available threads.
         n_neighbors : int, optional
             Number of neighbors to use for similarity. The default is 31.
 
@@ -556,12 +564,12 @@ class SINrVectors(object):
     """
     labels: bool
 
-    def __init__(self, name, n_jobs=1, n_neighbors=20):
+    def __init__(self, name, n_jobs=-1, n_neighbors=20):
         """
         Initializing `SINr` vectors objets
         :param name: name of the model, useful to save it
         :type name: str
-        :param n_jobs: number of jobs to use (k-nearest neighbors to obtain most similar words or nodes)
+        :param n_jobs: number of jobs to use (k-nearest neighbors to obtain most similar words or nodes), defaluts to -1
         :type n_jobs: int
         :param n_neighbors: number of neighbors to consider when querying the most similar words or nodes
         :type n_neighbors: int
