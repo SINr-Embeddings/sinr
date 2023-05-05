@@ -107,10 +107,8 @@ class SINr(object):
         """
         logger.info("Detecting communities.")
         print(f"Gamma for louvain : {gamma}")
-        if getCurrentNumberOfThreads() == 1 and par!="none randomized":
-            logger.warning(f"""The current number of threads is set to {getCurrentNumberOfThreads()} with parallelization strategy 
-                           {par}. Nodes will not be randomized in Louvain. Consider using more threads by resetting the setNumberOfThreads
-                           parameter of networkit ({getMaxNumberOfThreads()} available) or use the 'none radomized' parallelization strategy.""")
+        if getMaxNumberOfThreads() == 1 and par!="none randomized":
+            logger.warning(f"""The current number of threads is set to {getMaxNumberOfThreads()} with parallelization strategy {par}. Nodes will not be randomized in Louvain. Consider using more threads by resetting the setNumberOfThreads parameter of networkit or use the 'none radomized' parallelization strategy.""")
         if algo is None:
             algo = community.PLM(self.cooc_graph, refine=False, gamma=gamma, turbo=True, recurse=False, par=par)
         communities = community.detectCommunities(self.cooc_graph, algo=algo, inspect=inspect)
