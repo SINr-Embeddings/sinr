@@ -197,7 +197,7 @@ def extract_text(corpus_path, lemmatize=True, stop_words=False, lower_words=True
                                 if ent_type != "None":
                                     sentence.append(token)
                                 elif len(lemma) > min_length_word:
-                                    sentence.append(lemma)
+                                    sentence.append(lemma.lower())
                     else:
                         pass
                 else:
@@ -207,7 +207,7 @@ def extract_text(corpus_path, lemmatize=True, stop_words=False, lower_words=True
                         else:
                             if lower_words:
                                 if ent_type != "None" and len(token) > 1:
-                                    sentence.append(token)  # (token)
+                                    sentence.append(token.lower())  # (token)
                                 elif len(token) > min_length_word:
                                     sentence.append(token.lower())
                             else:
