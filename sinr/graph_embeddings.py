@@ -917,7 +917,7 @@ class SINrVectors(object):
         index = self._get_index(obj)
         highest_dims = self._get_topk(index, topk_dim, row=True)
         vector = self._get_vector(index, row=True)
-        highest_dims = [self.get_dimension_descriptors_idx(idx, topk_val).with_value(vector[idx]).get_dict() for idx in
+        highest_dims = [self.get_dimension_descriptors_idx(idx, topk_val).with_value().get_dict() for idx in
                         highest_dims]
         return highest_dims
 
@@ -973,7 +973,7 @@ class SINrVectors(object):
         # get the topk dimensions for this word
         highest_dims = self._get_topk(index, topk_dim, row=True)
         vector = self._get_vector(index, row=True)
-        highest_dims = [self.get_dimension_stereotypes_idx(idx, topk_val).with_value(vector[idx]).get_dict() for idx in
+        highest_dims = [self.get_dimension_stereotypes_idx(idx, topk_val).with_value().get_dict() for idx in
                         highest_dims]
         return highest_dims
 
