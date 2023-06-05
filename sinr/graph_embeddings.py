@@ -1,7 +1,8 @@
 import pickle as pk
 
 from networkit import Graph, components, community, setNumberOfThreads, getCurrentNumberOfThreads, getMaxNumberOfThreads, Partition
-from numpy import argpartition, argsort, asarray, where, nonzero
+from numpy import argpartition, argsort, asarray, where, nonzero, zeros
+import numpy as np
 from sklearn.neighbors import NearestNeighbors
 from scipy import spatial
 
@@ -149,7 +150,7 @@ class SINr(object):
         self.communities.compact()
         if refine:
             self._refine_transfered_communities()
-
+        
 
     def extract_embeddings(self, communities=None):
         """Extract the embeddings based on the graph and the partition in communities previously detected.
@@ -729,7 +730,8 @@ class SINrVectors(object):
 
         :param obj: an integer of the node or of its label
         :type obj: int or str
-        :returns: the community of a specific object
+        :returns: the community 
+        of a specific object
 
         """
         if self.communities_sets is None:
@@ -763,7 +765,115 @@ class SINrVectors(object):
             return obj
         index = self.vocab.index(obj) if self.labels else obj
         return index
+    
+    ###############################
+    ###########################
+    ########################
+    ########################
+    ###########################
+    ###############################
+    ###########################
+    ########################
+    ########################
+    ###########################
+    ###############################
+    ###########################
+    ########################
+    ########################
+    ###########################
+    
+    def transfert_hackatal(self, word, cooccurrences):
+        vector = zeros(self.get_number_of_dimensions())
+        for mot, freq in cooccurrences.items():
+            if mot in self.vocab:
+                com = self.get_community_membership(mot)
+                #print("pouet")
+                vector[com] += freq        
+        tri = argsort(vector)
+        vector[vector < vector[tri[-20]]] = 0
+        return vector / np.linalg.norm(vector)
+        
+        
+    def most_similar_vector(self, obj, vector):
+        distances, neighbor_idx = self.neighbors.kneighbors(vector, return_distance=True)
+        # print(similarities, neighbor_idx)
+        return {"object ": obj,
+                "neighbors ": [(self.vocab[nbr] if self.labels else nbr, round(1 - dist, 2)) for dist, nbr in
+                               list(zip(distances.flatten(), neighbor_idx.flatten()))[1::]]}
+        
+    def get_topk_dims_vector(self, vector, topk=5):
+        """Get `topk` dimensions for an object.
 
+        :param obj: the object for which to get `topk` dimensions
+        :type obj: int or str
+        :param topk:  (Default value = 5)
+        :type topk: int
+
+        :returns: the `topk` dimensions for `obj`
+        :rtype: list[int]
+
+        """
+        topk = -topk
+        ind = argpartition(vector, topk)[topk:]
+        ind = ind[argsort(vector[ind])[::-1]]
+        return ind
+    
+    def _get_topk_vector(self, vector, topk=5, row=True):
+        """Returns indices of the `topk` values in the vector of id `idx`
+
+        :param idx: idx of the vector in which the topk values are searched
+        :type idx: int
+        :param topk: number of values to get (Default value = 5)
+        :type topk: int
+        :param row: if the vector is a row or a column (Default value = True)
+        :type row: int
+        :returns: the indices of the topk values in the vector
+        :rtype: list[int]
+
+        """
+        topk = -topk
+        ind = argpartition(vector, topk)[topk:]
+        ind = ind[argsort(vector[ind])[::-1]]
+        return ind
+    
+    def get_obj_stereotypes_vector(self, vector, topk_dim=5, topk_val=3):
+        """Get the top dimensions for a word.
+
+        :param obj: the word to consider
+        :type obj: int or str
+        :param topk_dim: `topk` dimension to consider (Default value = 5)
+        :type topk_dim: int
+        :param topk_val: `topk` values to describe each dimension (Default value = 3)
+        :type topk_val: int
+        :returns: the most useful dimensions to describe a word and for each dimension,
+        the topk words that describe this dimension (highest values)
+
+        """
+        # get the topk dimensions for this word
+        highest_dims = self._get_topk_vector(vector, topk_dim, row=True)
+        highest_dims = [self.get_dimension_stereotypes_idx(idx, topk_val).with_value().get_dict() for idx in
+                        highest_dims]
+        return highest_dims
+    
+    
+    ###############################
+    ###########################
+    ########################
+    ########################
+    ###########################
+    ###############################
+    ###########################
+    ########################
+    ########################
+    ###########################
+    ###############################
+    ###########################
+    ########################
+    ########################
+    ###########################
+    
+    
+    
     def most_similar(self, obj):
         """Get the most similar objects of the one passed as a parameter using the cosine of their vectors.
 
@@ -829,6 +939,7 @@ class SINrVectors(object):
         ind = argpartition(vector, topk)[topk:]
         ind = ind[argsort(vector[ind])[::-1]]
         return ind
+    
     
     def get_topk_dims(self, obj, topk=5):
         """Get `topk` dimensions for an object.
