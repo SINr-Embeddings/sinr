@@ -1,9 +1,11 @@
 import pickle as pk
 
 from networkit import Graph, components, community, setNumberOfThreads, getCurrentNumberOfThreads, getMaxNumberOfThreads, Partition
-from numpy import argpartition, argsort, asarray, where, nonzero
+from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat
 from sklearn.neighbors import NearestNeighbors
 from scipy import spatial
+from scipy.sparse import csr_matrix
+import sklearn.preprocessing as skp
 
 from . import strategy_loader
 from .logger import logger
@@ -723,6 +725,63 @@ class SINrVectors(object):
             self.communities_sets.append(set())
         for idx, com in enumerate(self.community_membership):
             self.communities_sets[com].add(idx)
+
+    def sparsify(self, k):
+
+        """Sparsify the vectors keeping activated the top k dimensions
+        
+        :param k: int
+        
+        """
+    
+        data = list()
+        rows = list()
+        cols = list()
+    
+        m_shape = self.vectors.get_shape()
+    
+        if not self.vectors.has_sorted_indices:
+            self.vectors.sort_indices()
+    
+        for i_row in range(m_shape[0]):  
+    
+            if(i_row == 0):
+                # datas/indices of the first line
+                data_row = self.vectors.data[ 0 : self.vectors.indptr[1] - self.vectors.indptr[0]]
+                indices_row = self.vectors.indices[ 0 : self.vectors.indptr[1] - self.vectors.indptr[0]]
+            else :
+                # datas/indices of a line : data/indices[indptr[line] - indptr[0] : indptr[next_line] - indptr[0]]
+                data_row = self.vectors.data[self.vectors.indptr[i_row] - self.vectors.indptr[0] : 
+                                            self.vectors.indptr[i_row + 1] - self.vectors.indptr[0]]
+                indices_row = self.vectors.indices[self.vectors.indptr[i_row] - self.vectors.indptr[0] : 
+                                                    self.vectors.indptr[i_row + 1] - self.vectors.indptr[0]]
+                
+            # datas are sorted if the number of activated dimensions is more than k
+            # we save the top k dimensions 
+            # if there is less than k datas for the line, we keep all the datas
+            if(k < len(data_row)):
+                ind_sort = argsort(data_row)
+                
+                data = concatenate((data_row[ind_sort[len(ind_sort)-k :]], data))
+                rows = concatenate((repeat(i_row,k), rows))
+                cols = concatenate((indices_row[ind_sort[len(ind_sort)-k :]],cols))
+    
+            else:
+                data = concatenate((data_row, data))
+                rows = concatenate((repeat(i_row,len(data_row)), rows))
+                cols = concatenate((indices_row,cols))
+                
+        new_vec = csr_matrix((data, (rows, cols)), shape=m_shape)
+        
+        self.set_vectors(new_vec)
+
+    def binarize(self):
+
+        """Binarize the vectors
+        
+        """
+        
+        self.set_vectors(skp.binarize(self.vectors))
 
     def get_community_membership(self, obj):
         """Get the community index of a node or label.
