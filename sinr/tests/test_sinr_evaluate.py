@@ -3,14 +3,14 @@
 python -m sinr.tests.test_sinr_evaluate
 """
 
-#import sys
-#sys.path.append("../text/")
 
 import unittest
 
 import sinr.graph_embeddings as ge
-#from evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353
 from ..text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353
+import urllib.request
+import os
+
 
 class TestSinr_embeddings(unittest.TestCase):
     """Tests for `graph_embeddings` package."""
@@ -19,7 +19,15 @@ class TestSinr_embeddings(unittest.TestCase):
         """Set up test fixtures, if any."""
 
         # Load SINrVectors from OANC
-        vectors = ge.SINrVectors('./models/oanc/oanc')
+
+        file = open('oanc.pk','wb')
+
+        with urllib.request.urlopen('https://lium-cloud.univ-lemans.fr/index.php/s/d2gQ5DTK37DJq6H/download/model_consist_oanc0.pk') as response:
+            file.write(response.read())
+            
+        file.close()
+        
+        vectors = ge.SINrVectors('oanc')
         vectors.load()
         self.vectors = vectors
 
