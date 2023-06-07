@@ -19,7 +19,7 @@ class TestSinr_embeddings(unittest.TestCase):
         """Set up test fixtures, if any."""
 
         # Load SINrVectors from OANC
-        vectors = ge.SINrVectors('/lium/raid01_c/sguillot/consistance/last_consist/oanc/model_consist_oanc0')
+        vectors = ge.SINrVectors('./models/oanc/oanc')
         vectors.load()
         self.vectors = vectors
 
