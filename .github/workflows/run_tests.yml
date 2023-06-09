@@ -5,7 +5,7 @@ name: Run-tests
 
 on:
   push:
-    branches: [ "main", "dev" ]
+    branches: [ "main", "dev", "24-workflow-for-tests" ]
   pull_request:
     branches: [ "main", "dev" ]
 
