@@ -7,7 +7,7 @@ import pytest
 import unittest
 
 import numpy as np
-import ..sinr.graph_embeddings as ge
+import sinr.graph_embeddings as ge
 from scipy.sparse import csr_matrix
 
 

@@ -6,8 +6,8 @@ python -m sinr.tests.test_sinr_evaluate
 import pytest
 import unittest
 
-import ..sinr.graph_embeddings as ge
-from ..sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353
+import sinr.graph_embeddings as ge
+from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353
 import urllib.request
 import os
 
