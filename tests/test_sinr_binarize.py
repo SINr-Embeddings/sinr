@@ -3,6 +3,7 @@
 python -m sinr.tests.test_sinr_binarize
 """
 
+import pytest
 import unittest
 
 import numpy as np

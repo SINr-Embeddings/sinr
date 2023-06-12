@@ -3,6 +3,7 @@
 python -m sinr.tests.test_sinr_sparsify
 """
 
+import pytest
 import unittest
 
 import numpy as np

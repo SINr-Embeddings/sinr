@@ -5,20 +5,20 @@
 python -m sinr.tests.test_sinr_workflow
 """
 
-
+import pytest
 import unittest
 
-from .. import graph_embeddings
-from ..text.cooccurrence import Cooccurrence
-from ..text.pmi import pmi_filter
+from sinr import graph_embeddings
+from sinr.text.cooccurrence import Cooccurrence
+from sinr.text.pmi import pmi_filter
 
-from ..graph_embeddings import NoCommunityDetectedException, NoEmbeddingExtractedException
+from sinr.graph_embeddings import NoCommunityDetectedException, NoEmbeddingExtractedException
 from scipy.sparse import csr_matrix, coo_matrix
 import networkit as nk
 
 from sklearn.metrics import rand_score
 
-from ..logger import logger
+from sinr.logger import logger
 import logging
 
 import numpy.testing as npt
