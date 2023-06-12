@@ -5,10 +5,10 @@
 python -m sinr.tests.test_sinr_nfm
 """
 
-
+import pytest
 import unittest
 
-from .. import nfm
+from sinr import nfm
 from scipy.sparse import csr_matrix, coo_matrix
 import networkit as nk
 
