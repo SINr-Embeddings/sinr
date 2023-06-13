@@ -6,6 +6,7 @@ from sklearn.neighbors import NearestNeighbors
 from scipy import spatial
 from scipy.sparse import csr_matrix
 import sklearn.preprocessing as skp
+from math import log
 
 from . import strategy_loader
 from .logger import logger
@@ -419,7 +420,21 @@ class InterpretableWordsModelBuilder(ModelBuilder):
         """Build `InterpretableWordsModelBuilder` which contains the vocabulary, the embeddings and the communities. """
         self.with_embeddings_nr().with_vocabulary().with_communities()
         return self.model
+    
 
+class InterpretableGraphModelBuilder(ModelBuilder):
+    """Object that should be used after training word or graph embeddings using the `SINr` object to get interpretable word vectors.
+    The `InterpretableGraphModelBuilder` will make use of the `SINr` object to build a `SINrVectors` object that will allow to use the resulting vectors efficiently.
+    No need to use parent methods starting by "with", those are included in the `build` function.
+    Just provide the name of the model and build it.
+
+    """
+
+    def build(self):
+        """Build `InterpretableWordsModelBuilder` which contains the vocabulary, the embeddings and the communities. """
+        self.with_embeddings_nr().with_vocabulary().with_communities().with_graph()
+        return self.model
+    
 
 class ThresholdedModelBuilder(ModelBuilder):
     """Object that should be used after the training of word or graph embeddings using the SINr object to get interpretable word vectors.
@@ -1099,6 +1114,83 @@ class SINrVectors(object):
         vector = asarray(self.vectors.getrow(index).todense()).flatten() if row else asarray(
             self.vectors.getcol(index).todense()).flatten()
         return vector
+    
+    def get_sum_cooccurrences(self, i = None):
+        """Get the sum of the values of the entire co-occurrence matrix or of the row with index i.
+
+        :param i: Index of the row/object.
+        :type i: int
+        :returns: The sum of the values.
+        :rtype: float
+
+        """
+        if i is None:
+            return self.G.totalEdgeWeight()
+        else:
+            return self.G.weightedDegree(i)
+        
+    def get_p_i(self, i):
+        """Get probability of occurence of the object at index i.
+
+        :param i: Index of the row/object.
+        :type i: int
+        :returns: The probability
+        :rtype: float
+
+        """
+        return self.get_sum_cooccurrences(i) / self.get_sum_cooccurrences()
+    
+    def get_cooc(self, i ,j):
+        """Get co-occurrence of the object at index i and the object at index j.
+
+        :param i: Index of the row/object 1.
+        :type i: int
+        :param j: Index of the row/object 2.
+        :type j: int
+        :returns: The number of co-occurence.
+        :rtype: float
+
+        """
+        return self.G.weight(i, j)
+    
+    def get_p_i_j(self, i ,j ):
+        """Get the probability of co-occurrence of the object at index i and the object at index j.
+
+        :param i: Index of the row/object 1.
+        :type i: int
+        :param j: Index of the row/object 2.
+        :type j: int
+        :returns: The probability of co-occurence.
+        :rtype: float
+
+        """
+        return self.get_cooc(i, j) / self.get_sum_cooccurrences()
+    
+    def get_pmi(self, i, j):
+        """Get the PMI of the object at index i and the object at index j.
+
+        :param i: Index of the row/object 1.
+        :type i: int
+        :param j: Index of the row/object 2.
+        :type j: int
+        :returns: The PMI.
+        :rtype: float
+
+        """
+        return self.get_p_i_j(i, j) / (self.get_p_i(i) * self.get_p_i(j))
+    
+    def get_npmi(self, i, j):
+        """Get the NPMI of the object at index i and the object at index j.
+
+        :param i: Index of the row/object 1.
+        :type i: int
+        :param j: Index of the row/object 2.
+        :type j: int
+        :returns: The NPMI.
+        :rtype: float
+
+        """
+        return self.get_pmi(i, j) / (-log(self.get_p_i_j(i, j)))
     
     def light_model_save(self):
         """Save a minimal version of the model that is readable as a `dict` for evaluation on `word-embeddings-benchmark`
