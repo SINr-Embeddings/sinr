@@ -137,7 +137,7 @@ class VRTMaker:
         corpus_opened.close()
         logger.info(f"VRT-style file written in {self.corpus_output.absolute()}")
 
-def extract_text2(corpus_path, exceptions_path=None, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False,
+def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False,
                  exclude_pos=[],
                  en="chunking", min_freq=50, alpha=True, exclude_en=[], min_length_word=3):
     """Extracts the text from a VRT corpus file.
