@@ -790,7 +790,7 @@ class SINrVectors(object):
                 #print("pouet")
                 vector[com] += freq        
         tri = argsort(vector)
-        vector[vector < vector[tri[-20]]] = 0
+        vector[vector < vector[tri[-50]]] = 0
         return vector / np.linalg.norm(vector)
         
         
@@ -852,6 +852,26 @@ class SINrVectors(object):
         # get the topk dimensions for this word
         highest_dims = self._get_topk_vector(vector, topk_dim, row=True)
         highest_dims = [self.get_dimension_stereotypes_idx(idx, topk_val).with_value().get_dict() for idx in
+                        highest_dims]
+        return highest_dims
+
+    def get_obj_descriptors_vector(self, vector, topk_dim=5, topk_val=-1):
+        """Returns the descriptors of the dimensions of obj.
+
+        :param topk_dim: int, topk dimensions to consider to describe obj (Default value = 5)
+        :type topk_dim: int
+        :param obj: an id or a word/label
+        :type obj: int or str
+        :param topk_val: 1 returns all the members of the community, a positive int returns juste the topk members with
+        highest nr values on the community (Default value = -1)
+        :type topk_val: int
+        :returns: the dimensions (and the objects that constitute these dimensions) that matter to describe obj
+
+        """
+        if self.communities_sets is None:
+            raise NoInterpretabilityException
+        highest_dims = self._get_topk_vector(vector, topk_dim, row=True)
+        highest_dims = [self.get_dimension_descriptors_idx(idx, topk_val).with_value().get_dict() for idx in
                         highest_dims]
         return highest_dims
     
