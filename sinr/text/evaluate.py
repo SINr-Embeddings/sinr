@@ -6,6 +6,7 @@ from sklearn.datasets._base import Bunch
 import pandas as pd
 import urllib.request
 import os
+from tqdm.auto import tqdm
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
@@ -65,7 +66,32 @@ def fetch_data_WS353():
     
     return data
 
-def eval_similarity(sinr_vec, dataset):
+def fetch_data_SCWS():
+    """Fetch SCWS dataset for testing relatedness similarity
+    
+    :return: dictionary-like object. Keys of interest:
+             'X': matrix of 2 words per column,
+             'y': vector with scores
+    :rtype: sklearn.datasets.base.Bunch
+    
+    """
+    
+    file = open('dataset.txt','wb')
+
+    with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SCWS1994_dataset.csv') as response:
+        file.write(response.read())
+    
+    file.close()
+
+    data = pd.read_csv('dataset.txt', header=None, sep=";")
+    
+    os.remove('dataset.txt')
+
+    data = Bunch(X=data.values[:, 0:2].astype("object"), y=(data.values[:, 2:].astype(float) / 5.0).ravel())
+
+    return data
+
+def eval_similarity(sinr_vec, dataset, print_missing=True):
     """Evaluate similarity with Spearman correlation
     
     :param sinr_vec: SINrVectors object
@@ -74,6 +100,8 @@ def eval_similarity(sinr_vec, dataset):
                     dictionary-like object. Keys of interest:
                     'X': matrix of 2 words per column,
                     'y': vector with scores
+
+    :param print_missing: boolean (default : True)
     
     :return: Spearman correlation between cosine similarity and human rated similarity
     :rtype: float
@@ -84,47 +112,58 @@ def eval_similarity(sinr_vec, dataset):
     cosine_sim = list()
     
     vocab = sinr_vec.vocab
-    missing_words = 0
+    missing_words = list()
     
     # Mean vector
     vec_mean = np.ravel(sinr_vec.vectors.mean(axis=0))
 
-    for i in range(len(dataset.X)):
+    for i in tqdm(range(len(dataset.X)), desc = 'eval similarity', leave = False):
 
         # Words into vectors
         # Missing words replaced by mean vector
         
         if dataset.X[i][0] not in vocab:
-            vec1 = vec_mean
-            missing_words += 1
+            if dataset.X[i][0].lower() in vocab:
+                vec1 = sinr_vec._get_vector(sinr_vec._get_index(dataset.X[i][0].lower()))
+            else:
+                vec1 = vec_mean
+                if dataset.X[i][0] not in missing_words:
+                    missing_words.append(dataset.X[i][0])
         else:
             vec1 = sinr_vec._get_vector(sinr_vec._get_index(dataset.X[i][0]))
             
         if dataset.X[i][1] not in vocab:
-            vec2 = vec_mean
-            missing_words += 1
+            if dataset.X[i][1].lower() in vocab:
+                vec2 = sinr_vec._get_vector(sinr_vec._get_index(dataset.X[i][1].lower()))
+            else:
+                vec2 = vec_mean
+                if dataset.X[i][1] not in missing_words:
+                    missing_words.append(dataset.X[i][0])
         else:
             vec2 = sinr_vec._get_vector(sinr_vec._get_index(dataset.X[i][1]))
         
         # Cosine similarity
         cosine_sim.append(np.dot(vec1,vec2)/(norm(vec1)*norm(vec2)))
         scores.append(dataset.y[i])
-    
-    print(str(missing_words) + ' missing words')
+    if print_missing == True:
+        print(str(len(missing_words)) + ' missing words')
     
     return scipy.stats.spearmanr(cosine_sim, scores).correlation
 
-def similarity_MEN_WS353(sinr_vec):
-    """Evaluate similarity with MEN and WS353 datasets
+def similarity_MEN_WS353_SCWS(sinr_vec, print_missing=True):
+    """Evaluate similarity with MEN, WS353 and SCWS datasets
 
     :param sinr_vec: SINrVectors object
+
+    :param print_missing: boolean (default : True)
     
-    :return: Spearman correlation for MEN and WS353 datasets
+    :return: Spearman correlation for MEN, WS353 and SCWS datasets
     :rtype: dict
     
     """
     
-    sim_MEN = eval_similarity(sinr_vec, fetch_data_MEN())
-    sim_WS353 = eval_similarity(sinr_vec, fetch_data_WS353())
+    sim_MEN = eval_similarity(sinr_vec, fetch_data_MEN(), print_missing=print_missing)
+    sim_WS353 = eval_similarity(sinr_vec, fetch_data_WS353(), print_missing=print_missing)
+    sim_SCWS = eval_similarity(sinr_vec, fetch_data_SCWS(), print_missing=print_missing)
 
-    return {"MEN": sim_MEN, "WS353" : sim_WS353}
+    return {"MEN": sim_MEN, "WS353" : sim_WS353, "SCWS" : sim_SCWS}

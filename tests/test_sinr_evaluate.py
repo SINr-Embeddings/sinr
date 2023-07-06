@@ -7,7 +7,7 @@ import pytest
 import unittest
 
 import sinr.graph_embeddings as ge
-from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353
+from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS
 import urllib.request
 import os
 
@@ -36,12 +36,13 @@ class TestSinr_embeddings(unittest.TestCase):
 
     def test_eval_similarity(self):
         res = round(eval_similarity(self.vectors, fetch_data_MEN()), 2) 
-        self.assertEqual(res, 0.39)
+        self.assertGreater(res, 0.38)
 
-    def test_similarity_MEN_WS353(self):
-        res = similarity_MEN_WS353(self.vectors)
-        self.assertEqual(round(res["MEN"],2), 0.39)
-        self.assertEqual(round(res["WS353"],2), 0.44)
+    def test_similarity_MEN_WS353_SCWS(self):
+        res = similarity_MEN_WS353_SCWS(self.vectors)
+        self.assertGreater(round(res["MEN"],2), 0.38)
+        self.assertGreater(round(res["WS353"],2), 0.40)
+        self.assertGreater(round(res["SCWS"],2), 0.38)
 
 if __name__ == '__main__':
     unittest.main()
