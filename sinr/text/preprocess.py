@@ -137,7 +137,97 @@ class VRTMaker:
         corpus_opened.close()
         logger.info(f"VRT-style file written in {self.corpus_output.absolute()}")
 
-def extract_text2(corpus_path, exceptions_path=None, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False,
+def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False, exclude_pos=[], en="chunking", min_freq=50, alpha=True, exclude_en=[], min_length_word=3):
+    """Extracts the text from a VRT corpus file.
+
+    :param corpus_path: str
+    :param lemmatize: bool (Default value = True)
+    :param stop_words: bool (Default value = False)
+    :param lower: bool
+    :param number: bool (Default value = False)
+    :param punct: bool (Default value = False)
+    :param exclude_pos: list (Default value = [])
+    :param en: str ("chunking", "tagging", "deleting") (Default value = "chunking")
+    :param min_freq: int (Default value = 50)
+    :param alpha: bool (Default value = True)
+    :param exclude_en: list (Default value = [])
+    :param lower_words:  (Default value = True)
+    :param min_length_word:  (Default value = 3)
+    :returns: text (list(list(str))): A list of sentences containing words
+
+    """
+    corpus_file = open_corpus(corpus_path)
+    text = corpus_file.read().splitlines()
+    out = []
+    pattern = re.compile(r"<text[^<>]*\"\>{1}")
+    stop_words, number, punct, alpha = str(stop_words), str(number), str(punct), str(alpha)
+    sentence = []
+    
+    if en != "chunking" and en != "tagging" and en != "deleting" :
+        logger.info(f"No correct option for en was provided: {en} is not valid. en option was thus set to chunking")
+        en = "chunking"
+        
+    if exceptions_path != None :
+        exceptions_file = open_corpus(exceptions_path)
+        exceptions = exceptions_file.read().splitlines()
+        if lower_words:
+            exceptions = [w.lower() for w in exceptions]
+    else : 
+        exceptions = []
+        
+    for line in tqdm(text, total=len(text)):
+        if line.startswith("<s>"):
+            sentence = []
+        elif line.startswith("</s>"):
+            if len(sentence) > 2:
+                out.append(sentence)
+        elif len(pattern.findall(line)) > 0:
+            pass
+        else:
+            listline = line.split("\t")
+            if len(listline) == 10:
+                for i in listline:
+                    if bool(re.match('^\t\t', str(i))):
+                        continue
+                token, lemma, pos, ent_iob, ent_type, is_punct, is_stop, is_alpha, is_digit, like_num = line.split("\t")
+                if lower_words:
+                    token_ = token.lower()
+                    lemma_ = lemma.lower()
+                else:
+                    token_ = token
+                    lemma_ = lemma
+                if not lemmatize:
+                    lemma_ = token_
+                if token_ in exceptions : 
+                    sentence.append(token_)
+                else :
+                    if stop_words == is_stop and is_punct == punct and is_digit == number and like_num == number and not pos in exclude_pos and not ent_type in exclude_en and (alpha == is_alpha or ent_type != "None"):
+                        if exclude_en and ent_iob != "None":
+                            pass
+                        else:
+                            if ent_type != "None" and len(lemma_) > 1:
+                                if en == "chunking" :
+                                    sentence.append(token_)
+                                elif en == "tagging" :
+                                    sentence.append(ent_type)  
+                                elif en == "deleting" :
+                                    pass
+                            elif len(lemma) > min_length_word:
+                                sentence.append(lemma_)
+                    else:
+                        pass
+            else:
+                continue
+    if min_freq > 1:
+        counts = Counter([word for sent in out for word in sent])
+        accepted_tokens = {word for word, count in counts.items() if count >= min_freq}
+        out = [[word for word in sent if word in accepted_tokens] for sent in out]
+        # line = corpus.readline().rstrip()
+        # x+=1
+    return out
+        
+
+def pouet(corpus_path, exceptions_path=None, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False,
                  exclude_pos=[],
                  en="chunking", min_freq=50, alpha=True, exclude_en=[], min_length_word=3):
     """Extracts the text from a VRT corpus file.
