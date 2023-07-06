@@ -137,10 +137,49 @@ class VRTMaker:
         corpus_opened.close()
         logger.info(f"VRT-style file written in {self.corpus_output.absolute()}")
 
+    def do_txt_to_vrt_lines(self):
+        """Build VRT format file and write to output filepath."""
+        corpus_opened = self._open()
+        id_corpus = str(uuid.uuid4())  # Generate a random corpus id
+        corpus_opened.write(
+            f'<text id="{id_corpus}" filename="{Path(self.corpus.input_path).as_posix()}" register="{self.corpus.register}" language="{self.corpus.language}">\n')  # Write corpus identifier
+        input_file = Path(self.corpus.input_path).open("r")
+        input_txt = input_file.read().splitlines()  # Read INPUT_FILE
+        logger.info(str(len(input_txt)) + "lines to preprocess")
+        input_file.close()
+        for doc in tqdm(self.model.pipe(input_txt, n_process=self.n_jobs), total=len(input_txt)):
+            corpus_opened.write("<l>\n")  # Write a sentence start
+            for token in doc:  # For each token
+                    if token.ent_type_ == '':  # If current token is not a Named-Entity
+                        ent_type = None
+                        text = token.text
+                        lemma = token.lemma_
+                    else:
+                        ent_type = token.ent_type_
+                        if ' ' in token.text:  # Entities are merged with a space by default
+                            text = token.text.replace(' ', '_')  # We want to merge named entities with a _
+                            lemma = text
+                        else:
+                            text = token.text
+                            lemma = text
+                    content = "\t".join([text,
+                                         lemma,
+                                         token.pos_,
+                                         token.ent_iob_,
+                                         str(ent_type),
+                                         str(token.is_punct),
+                                         str(token.is_stop),
+                                         str(token.is_alpha),
+                                         str(token.is_digit),
+                                         str(token.like_num)])
+                    corpus_opened.write(f'{content}\n')  # Write the token info
+            corpus_opened.write("</l>\n")
+        corpus_opened.close()
+        logger.info(f"VRT-style file written in {self.corpus_output.absolute()}")
 
 def extract_text(corpus_path, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False,
                  exclude_pos=[],
-                 en=True, min_freq=50, alpha=True, exclude_en=[], min_length_word=3):
+                 en=True, min_freq=50, alpha=True, exclude_en=[], min_length_word=3, document = False):
     """Extracts the text from a VRT corpus file.
 
     :param corpus_path: str
@@ -156,7 +195,8 @@ def extract_text(corpus_path, lemmatize=True, stop_words=False, lower_words=True
     :param exclude_en: list (Default value = [])
     :param lower_words:  (Default value = True)
     :param min_length_word:  (Default value = 3)
-    :returns: text (list(list(str))): A list of sentences containing words
+    :param document:  (Default value = False) 
+    :returns: text (list(list(str))): A list of sentences (or documents) containing words
 
     """
     corpus_file = open_corpus(corpus_path)
@@ -167,9 +207,9 @@ def extract_text(corpus_path, lemmatize=True, stop_words=False, lower_words=True
     sentence = []
 
     for line in tqdm(text, total=len(text)):
-        if line.startswith("<s>"):
+        if (line.startswith("<s>") and document == False) or (line.startswith("<l>") and document == True):
             sentence = []
-        elif line.startswith("</s>"):
+        elif (line.startswith("</s>") and document == False) or (line.startswith("</l>") and document == True):
             if len(sentence) > 2:
                 out.append(sentence)
         elif len(pattern.findall(line)) > 0:

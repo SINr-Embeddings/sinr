@@ -11,6 +11,7 @@ from math import log
 from . import strategy_loader
 from .logger import logger
 from .nfm import get_nfm_embeddings
+from tqdm.auto import tqdm
 
 
 class SINr(object):
@@ -758,7 +759,7 @@ class SINrVectors(object):
         if not self.vectors.has_sorted_indices:
             self.vectors.sort_indices()
     
-        for i_row in range(m_shape[0]):  
+        for i_row in tqdm(range(m_shape[0]), desc = 'sparsification', leave=False):  
     
             if(i_row == 0):
                 # datas/indices of the first line
@@ -1177,7 +1178,7 @@ class SINrVectors(object):
         :rtype: float
 
         """
-        return self.get_p_i_j(i, j) / (self.get_p_i(i) * self.get_p_i(j))
+        return log(self.get_p_i_j(i, j) / (self.get_p_i(i) * self.get_p_i(j)))
     
     def get_npmi(self, i, j):
         """Get the NPMI of the object at index i and the object at index j.
@@ -1190,7 +1191,11 @@ class SINrVectors(object):
         :rtype: float
 
         """
-        return self.get_pmi(i, j) / (-log(self.get_p_i_j(i, j)))
+        if self.get_p_i_j(i, j) != 0:
+            return self.get_pmi(i, j) / (-log(self.get_p_i_j(i, j)))
+        else:
+            return -1
+
     
     def light_model_save(self):
         """Save a minimal version of the model that is readable as a `dict` for evaluation on `word-embeddings-benchmark`

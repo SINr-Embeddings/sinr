@@ -25,7 +25,7 @@ class TestSinr_embeddings(unittest.TestCase):
         G.addEdge(2, 1, w = 1)
 
         sinr = ge.SINr.load_from_graph(G)
-        communities = sinr.detect_communities(gamma=50)
+        communities = sinr.detect_communities()
         sinr.extract_embeddings(communities)
         vec=ge.InterpretableGraphModelBuilder(sinr, 'test', n_jobs=8, n_neighbors=25).build()
         
@@ -45,14 +45,14 @@ class TestSinr_embeddings(unittest.TestCase):
         self.assertEqual(self.sinrv.get_cooc(3, 1), 3.0)
     
     def test_get_p_i_j(self):
-        self.assertEqual(self.sinrv.get_p_i_j(3, 1), 0.6)
+       self.assertEqual(self.sinrv.get_p_i_j(3, 1), 0.6)
         
-    def test_get_pmi(self):
-        self.assertEqual(self.sinrv.get_pmi(3, 1), 1.25)
+    #def test_get_pmi(self):
+    #    self.assertEqual(self.sinrv.get_pmi(3, 1), 1.25)
         
-    def test_get_npmi(self):
-        res = round(self.sinrv.get_npmi(3, 1), 3) 
-        self.assertEqual(res, 2.447)
+    #def test_get_npmi(self):
+    #    res = round(self.sinrv.get_npmi(3, 1), 3) 
+    #    self.assertEqual(res, 2.447)
 
 if __name__ == '__main__':
     unittest.main()

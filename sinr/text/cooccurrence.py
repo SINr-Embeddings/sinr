@@ -23,10 +23,10 @@ class Cooccurrence(object):
 
     """
 
-    def __init__(self):
+    def __init__(self, dictionnary={}, matrix=None):
 
-        self.dictionary = {}
-        self.matrix = None
+        self.dictionary = dictionnary
+        self.matrix = matrix
 
     def fit(self, corpus, window=2):
         """Perform a pass through the corpus to construct
@@ -67,9 +67,9 @@ class Cooccurrence(object):
         :rtype: SINr.cooccurrence.Cooccurrence
 
         """
-        instance = cls()
+        #instance = cls()
 
         with open(filename, 'rb') as savefile:
-            instance.dictionary, instance.matrix = pickle.load(savefile)
+            dictionary, matrix = pickle.load(savefile)
 
-        return instance
+        return cls(dictionary, matrix)
