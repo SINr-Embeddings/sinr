@@ -45,7 +45,7 @@ class SINr(object):
         return cls(graph, out_of_LgCC, word_to_idx)
 
     @classmethod
-    def load_from_adjacency_matrix(cls, matrix_object, labels, n_jobs=-1):
+    def load_from_adjacency_matrix(cls, matrix_object, labels=None, n_jobs=-1):
         """Build a sinr object from an adjacency matrix as a sparse one (csr)
 
         :param matrix_object: Matrix describing the graph.
@@ -982,7 +982,7 @@ class SINrVectors(object):
         index = self._get_index(obj)
         highest_dims = self._get_topk(index, topk_dim, row=True)
         vector = self._get_vector(index, row=True)
-        highest_dims = [self.get_dimension_descriptors_idx(idx, topk_val).with_value(vector[idx]).get_dict() for idx in
+        highest_dims = [self.get_dimension_descriptors_idx(idx, topk_val).with_value().get_dict() for idx in
                         highest_dims]
         return highest_dims
 
