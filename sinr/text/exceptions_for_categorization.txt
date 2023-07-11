@@ -1,5 +1,6 @@
 acceptance
 acne
+acquire
 aeon
 agency
 aircraft
@@ -16,6 +17,7 @@ ant
 anthrax
 apricot
 architect
+arrive
 arthritis
 artist
 assignment
@@ -43,7 +45,6 @@ birch
 bismuth
 blast
 blouse
-boat
 bomb
 bomber
 bond
@@ -53,7 +54,7 @@ borough
 bowling
 box
 branch
-breaksuggest
+break
 breathe
 brigade
 broccoli
@@ -75,6 +76,7 @@ capital
 carbon
 carp
 carrot
+carry
 castle
 casuarina
 catfish
@@ -87,12 +89,9 @@ cello
 cent
 chair
 charcoal
-check
-checkarrive
 cheque
 chess
 chestnut
-chicken
 chill
 cholera
 cinchona
@@ -140,7 +139,7 @@ crinkle
 crosswind
 crow
 cruiser
-crylisten
+cry
 cube
 cuboid
 cucumber
@@ -170,7 +169,7 @@ dirham
 dishwasher
 disincentive
 dispensation
-distractionpollution
+distraction
 divan
 dodecahedron
 dog
@@ -190,6 +189,7 @@ droop
 duck
 dynamic
 earache
+eat
 eczema
 elm
 empire
@@ -198,6 +198,7 @@ enthronement
 epoch
 escudo
 ethics
+evaluate
 extension
 falcon
 fall
@@ -257,7 +258,6 @@ grenade
 guilder
 guitar
 gun
-hammerjealousy
 handball
 happiness
 hat
@@ -265,7 +265,6 @@ hatchet
 hawk
 headache
 heaviness
-helicopterchicken
 helium
 hepatitis
 hereafter
@@ -299,10 +298,12 @@ jacaranda
 jacket
 jag
 jar
+jealousy
 jet
 joy
 keno
 kettle
+kill
 kingdom
 kitten
 kiwi
@@ -311,7 +312,7 @@ know
 land
 law
 league
-leaverun
+leave
 legion
 lend
 length
@@ -321,6 +322,7 @@ licence
 life
 lightning
 lira
+listen
 lithium
 lizard
 look
@@ -357,6 +359,7 @@ motivator
 mouse
 move
 mug
+mushroom
 musician
 musket
 mystery
@@ -366,7 +369,7 @@ neon
 neuralgia
 nitrogen
 nonce
-noticecarry
+notice
 obligation
 obsession
 occasion
@@ -389,7 +392,7 @@ parish
 parsley
 party
 passion
-payevaluate
+pay
 payoff
 peacockcherry
 pen
@@ -402,7 +405,6 @@ photographer
 piano
 pickup
 pigeon
-pineapplemushroom
 pistachio
 pistol
 plague
@@ -411,6 +413,7 @@ platinum
 platoon
 pleasure
 plum
+pollution
 poplar
 possession
 potassium
@@ -422,7 +425,7 @@ producer
 profit
 prom
 pub
-pullkill
+pull
 puppy
 push
 quaternary
@@ -434,7 +437,7 @@ radius
 raffle
 rainstorm
 rake
-readacquire
+read
 rededication
 reflexion
 remember
@@ -455,6 +458,7 @@ robin
 rouble
 rowan
 rugby
+run
 rupee
 sadness
 salient
@@ -511,6 +515,7 @@ straddle
 stretch
 suburb
 suffering
+suggest
 sultanate
 superego
 sweater
@@ -523,8 +528,6 @@ tanker
 taper
 taxation
 team
-telephone
-telephoneboat
 television
 temperature
 temptation
@@ -552,7 +555,6 @@ trumpet
 truth
 tuna
 turnip
-turtlebottle
 twister
 typhoon
 urge
@@ -572,7 +574,7 @@ wardrobe
 washer
 wasp
 watermelon
-weathereat
+weather
 wedding
 weight
 whale
