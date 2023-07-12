@@ -40,5 +40,4 @@ jobs:
       - name: Run ghp-import
         run: |
           pip install ghp-import
-          pwd
           ghp-import -n -p -f docs/_build/html
