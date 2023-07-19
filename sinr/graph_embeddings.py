@@ -6,6 +6,7 @@ from sklearn.neighbors import NearestNeighbors
 from scipy import spatial
 from scipy.sparse import csr_matrix
 import sklearn.preprocessing as skp
+from tqdm.auto import tqdm
 
 from . import strategy_loader
 from .logger import logger
@@ -110,7 +111,7 @@ class SINr(object):
         logger.info("Detecting communities.")
         print(f"Gamma for louvain : {gamma}")
         if getMaxNumberOfThreads() == 1 and par!="none randomized":
-            logger.warning(f"""The current number of threads is set to {getMaxNumberOfThreads()} with parallelization strategy {par}. Nodes will not be randomized in Louvain. Consider using more threads by resetting the setNumberOfThreads parameter of networkit or use the 'none radomized' parallelization strategy.""")
+            logger.warning(f"""The current number of threads is set to {getMaxNumberOfThreads()} with parallelization strategy {par}. Nodes will not be randomized in Louvain. Consider using more threads by resetting the setNumberOfThreads parameter of networkit or use the 'none randomized' parallelization strategy.""")
         if algo is None:
             algo = community.PLM(self.cooc_graph, refine=False, gamma=gamma, turbo=True, recurse=False, par=par)
         communities = community.detectCommunities(self.cooc_graph, algo=algo, inspect=inspect)
@@ -782,7 +783,55 @@ class SINrVectors(object):
         """
         
         self.set_vectors(skp.binarize(self.vectors))
+        
+    def dim_nnz_count(self, dim):
+        """ Count the number of non zero values in a dimension.
+        :param dim: index of the dimension
+        :type dim: int
+        
+        :return: the number of non zero values in the dimension
+        :rtype: int
+        """
+        
+        d = self.vectors.getcol(dim)
+        return d.nnz
+        
+    def remove_communities_dim_nnz(self, threshold_min, threshold_max):
+        """Remove dimensions (communities) which are the less activated ones and those which are the most activated ones.
+        
+        :param threshold_min: minimal number of non zero values to have for a dimension to be kept
+        :type threshold_min: int
+        :param threshold_max: maximal number of non zero values to have for a dimension to be kept
+        :type threshold_max: int
+        
+        """
+        
+        dims = self.get_number_of_dimensions()
+        
+        ind_min = list()
+        ind_max = list()
+        
+        for dim in tqdm(range(dims)):
+            if self.dim_nnz_count(dim) < threshold_min:
+                ind_min.append(dim)
+            if self.dim_nnz_count(dim) > threshold_max:
+                ind_max.append(dim)
+        
+        # Remove dimensions from the matrix of embeddings
+        self.set_vectors(self.vectors[:,list(set(range(self.vectors.shape[1]))-set(ind_min + ind_max))])
+        
+        # Remove communities from communities sets
+        for i in tqdm(sorted(ind_max + ind_min, reverse = True)):
+            self.communities_sets.pop(i)
+        
+        # Update the communities members
+        self.community_membership = set()
 
+        for c in self.communities_sets:
+            self.community_membership = self.community_membership.union(c)
+        
+        self.community_membership = sorted(list(self.community_membership))
+        
     def get_community_membership(self, obj):
         """Get the community index of a node or label.
 
@@ -821,8 +870,8 @@ class SINrVectors(object):
         if type(obj) is int:
             return obj
         index = self.vocab.index(obj) if self.labels else obj
-        return index
-
+        return index   
+        
     def most_similar(self, obj):
         """Get the most similar objects of the one passed as a parameter using the cosine of their vectors.
 
