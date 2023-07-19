@@ -98,8 +98,8 @@ def fetch_data_SCWS():
 
     return data
 
-def fetch_SIMLEX(which="665"):
-    """Fetch SIMLEX datasets for testing relatedness similarity
+def fetch_SimLex(which="665"):
+    """Fetch SimLex datasets for testing relatedness similarity
     
     :param which: dataset (default value = "665")
     :type which: str
