@@ -7,6 +7,7 @@ import pandas as pd
 import urllib.request
 import os
 from tqdm.auto import tqdm
+from time import gmtime, strftime
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
@@ -18,16 +19,18 @@ def fetch_data_MEN():
     
     """
     
-    file = open('dataset.txt','wb')
+    file_name = 'dataset' + strftime("%H_%M_%S", gmtime()) + '.txt'
+    
+    file = open(file_name,'wb')
 
     with urllib.request.urlopen('https://www.dropbox.com/s/b9rv8s7l32ni274/EN-MEN-LEM.txt?dl=1') as response:
         file.write(response.read())
     
     file.close()
 
-    data = pd.read_csv('dataset.txt', header=None, sep=" ")
+    data = pd.read_csv(file_name, header=None, sep=" ")
     
-    os.remove('dataset.txt')
+    os.remove(file_name)
     
     # Remove last two chars from first two columns (-n, -a, -v)
     data = data.apply(lambda x: [y if isinstance(y, float) else y[0:-2] for y in x])
@@ -47,16 +50,18 @@ def fetch_data_WS353():
     
     """
     
-    file = open('dataset.txt','wb')
+    file_name = 'dataset' + strftime("%H_%M_%S", gmtime()) + '.txt'
+    
+    file = open(file_name,'wb')
 
     with urllib.request.urlopen('https://www.dropbox.com/s/eqal5qj97ajaycz/EN-WS353.txt?dl=1') as response:
         file.write(response.read())
 
     file.close()
     
-    data = pd.read_csv('dataset.txt', header=None, sep="\t")
+    data = pd.read_csv(file_name, header=None, sep="\t")
     
-    os.remove('dataset.txt')
+    os.remove(file_name)
 
     # Select the words pairs columns and the scores column
     X = data.values[1:, 0:2]
@@ -76,16 +81,18 @@ def fetch_data_SCWS():
     
     """
     
-    file = open('dataset.txt','wb')
+    file_name = 'dataset' + strftime("%H_%M_%S", gmtime()) + '.txt'
+    
+    file = open(file_name,'wb')
 
     with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SCWS1994_dataset.csv') as response:
         file.write(response.read())
     
     file.close()
 
-    data = pd.read_csv('dataset.txt', header=None, sep=";")
+    data = pd.read_csv(file_name, header=None, sep=";")
     
-    os.remove('dataset.txt')
+    os.remove(file_name)
 
     data = Bunch(X=data.values[:, 0:2].astype("object"), y=(data.values[:, 2:].astype(float) / 5.0).ravel())
 
@@ -104,7 +111,9 @@ def fetch_SIMLEX(which="665"):
     
     """
     
-    file = open('dataset.txt','wb')
+    file_name = 'dataset' + strftime("%H_%M_%S", gmtime()) + '.txt'
+    
+    file = open(file_name,'wb')
     
     if which=="665":
         with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SimLex665_dataset.csv') as response:
@@ -127,9 +136,9 @@ def fetch_SIMLEX(which="665"):
         
     file.close()
     
-    data = pd.read_csv('dataset.txt', header=None, sep=";")
+    data = pd.read_csv(file_name, header=None, sep=";")
     
-    os.remove('dataset.txt')
+    os.remove(file_name)
         
     data = Bunch(X=data.values[:, 0:2].astype("object"), y=data.values[:, 2].astype(float))
     
