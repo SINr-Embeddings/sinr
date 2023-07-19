@@ -115,18 +115,22 @@ def fetch_SIMLEX(which="665"):
     
     file = open(file_name,'wb')
     
+    # Nouns
     if which=="665":
         with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SimLex665_dataset.csv') as response:
             file.write(response.read())
-
+    
+    # Adjectives, nouns and verbs
     elif which=="999":
         with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SimLex999_dataset.csv') as response:
             file.write(response.read())
     
+    # Verbs
     elif which=="222":
         with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SimLex222_verbs_dataset.csv') as response:
             file.write(response.read())
-       
+    
+    # Adjectives
     elif which=="111":
         with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SimLex111_adjectives_dataset.csv') as response:
             file.write(response.read())
