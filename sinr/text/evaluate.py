@@ -91,6 +91,50 @@ def fetch_data_SCWS():
 
     return data
 
+def fetch_SIMLEX(which="665"):
+    """Fetch SIMLEX datasets for testing relatedness similarity
+    
+    :param which: dataset (default value = "665")
+    :type which: str
+    
+    :return: dictionary-like object. Keys of interest:
+             'X': matrix of 2 words per column,
+             'y': vector with scores
+    :rtype: sklearn.datasets.base.Bunch
+    
+    """
+    
+    file = open('dataset.txt','wb')
+    
+    if which=="665":
+        with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SimLex665_dataset.csv') as response:
+            file.write(response.read())
+
+    elif which=="999":
+        with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SimLex999_dataset.csv') as response:
+            file.write(response.read())
+    
+    elif which=="222":
+        with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SimLex222_verbs_dataset.csv') as response:
+            file.write(response.read())
+       
+    elif which=="111":
+        with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SimLex111_adjectives_dataset.csv') as response:
+            file.write(response.read())
+
+    else:
+        RuntimeError("Not recognised which parameter")
+        
+    file.close()
+    
+    data = pd.read_csv('dataset.txt', header=None, sep=";")
+    
+    os.remove('dataset.txt')
+        
+    data = Bunch(X=data.values[:, 0:2].astype("object"), y=data.values[:, 2].astype(float))
+    
+    return data
+
 def eval_similarity(sinr_vec, dataset, print_missing=True):
     """Evaluate similarity with Spearman correlation
     
