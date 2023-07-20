@@ -7,7 +7,7 @@ import pandas as pd
 import urllib.request
 import os
 from tqdm.auto import tqdm
-from time import time
+import time
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
