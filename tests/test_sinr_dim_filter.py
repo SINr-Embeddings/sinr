@@ -41,7 +41,7 @@ class TestSinr_embeddings(unittest.TestCase):
 
     def test_remove_communities_dim_nnz(self):
         
-        self.vec_rm.remove_communities_dim_nnz(3, 4)
+        self.vec_rm.remove_communities_dim_nnz(threshold_min = 3, threshold_max = 4)
         self.assertTrue((np.round(self.vec_rm.vectors.toarray(), 2) == np.round(np.array([[0.5, 0., 0., 0.5],
                                                                      [0., 0.25, 0.25, 0.25],
                                                                      [0.33333333, 0., 0.33333333, 0.33333333],
@@ -50,7 +50,7 @@ class TestSinr_embeddings(unittest.TestCase):
         self.assertTrue(self.vec_rm.communities_sets == [{1}, {2}, {3}, {4}])
         self.assertTrue(self.vec_rm.community_membership == [1, 2, 3, 4])
                         
-        self.vec_rm.remove_communities_dim_nnz(3, 3)
+        self.vec_rm.remove_communities_dim_nnz(threshold_min = 3, threshold_max = 3)
         self.assertTrue((np.round(self.vec_rm.vectors.toarray(), 2) == np.round(np.array([[0., 0.], 
                                                                       [0.25, 0.25],
                                                                       [0., 0.33333333],

@@ -1,16 +1,21 @@
 import pickle as pk
 
 from networkit import Graph, components, community, setNumberOfThreads, getCurrentNumberOfThreads, getMaxNumberOfThreads, Partition
-from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat
+from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat, mean, nanmax
 from sklearn.neighbors import NearestNeighbors
 from scipy import spatial
 from scipy.sparse import csr_matrix
 import sklearn.preprocessing as skp
 from tqdm.auto import tqdm
+from functools import partialmethod
+from math import ceil
+import time
+import os
 
 from . import strategy_loader
 from .logger import logger
 from .nfm import get_nfm_embeddings
+import sinr.text.evaluate as ev
 
 
 class SINr(object):
@@ -796,8 +801,8 @@ class SINrVectors(object):
         d = self.vectors.getcol(dim)
         return d.nnz
         
-    def remove_communities_dim_nnz(self, threshold_min, threshold_max):
-        """Remove dimensions (communities) which are the less activated ones and those which are the most activated ones.
+    def remove_communities_dim_nnz(self, threshold_min = None, threshold_max = None):
+        """Remove dimensions (communities) which are the less activated and those which are the most activated.
         
         :param threshold_min: minimal number of non zero values to have for a dimension to be kept
         :type threshold_min: int
@@ -806,32 +811,146 @@ class SINrVectors(object):
         
         """
         
-        dims = self.get_number_of_dimensions()
-        
-        ind_min = list()
-        ind_max = list()
-        
-        for dim in tqdm(range(dims)):
-            if self.dim_nnz_count(dim) < threshold_min:
-                ind_min.append(dim)
-            if self.dim_nnz_count(dim) > threshold_max:
-                ind_max.append(dim)
-        
-        # Remove dimensions from the matrix of embeddings
-        self.set_vectors(self.vectors[:,list(set(range(self.vectors.shape[1]))-set(ind_min + ind_max))])
-        
-        # Remove communities from communities sets
-        for i in tqdm(sorted(ind_max + ind_min, reverse = True)):
-            self.communities_sets.pop(i)
-        
-        # Update the communities members
-        self.community_membership = set()
+        if threshold_min != None or threshold_max != None:
+            dims = self.get_number_of_dimensions()
+            
+            ind_min = list()
+            ind_max = list()
 
-        for c in self.communities_sets:
-            self.community_membership = self.community_membership.union(c)
+            for dim in tqdm(range(dims)):
+                if threshold_min != None:
+                    if self.dim_nnz_count(dim) < threshold_min:
+                        ind_min.append(dim)
+                if threshold_max != None:
+                    if self.dim_nnz_count(dim) > threshold_max:
+                        ind_max.append(dim)
+
+            # Remove dimensions from the matrix of embeddings
+            self.set_vectors(self.vectors[:,list(set(range(self.vectors.shape[1]))-set(ind_min + ind_max))])
+
+            # Remove communities from communities sets
+            for i in tqdm(sorted(ind_max + ind_min, reverse = True)):
+                self.communities_sets.pop(i)
+
+            # Update the communities members
+            self.community_membership = set()
+
+            for c in self.communities_sets:
+                self.community_membership = self.community_membership.union(c)
+
+            self.community_membership = sorted(list(self.community_membership))
+    
+    def dim_nnz_thresholds(self, step = 100, diff_tol = 0.005):
+        """Give the minimal and the maximal number of non zero values to have for a dimension to be kept and not lower the model's similarity. Taking into account the datasets MEN, WS353, SCWS and SimLex-999.
         
-        self.community_membership = sorted(list(self.community_membership))
+        :param step: step to search thresholds (default value : 100)
+        :param: diff_tol: difference of similarity tolerated with the low threshold (default value : 0.005)
         
+        :return: thresholds (low, high)
+        :rtype: tuple of int
+        
+        """
+        
+        # Disable tqdm to clear output
+        tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
+        
+        # Copy of the sinrvectors to remove dimensions
+        name = self.name
+        name_tmp = 'vec_ref_' + str(round(time.time()*1000))
+        self.name = name_tmp
+        self.save()
+        self.name = name
+        
+        # Maximum of non zero values in dimensions
+        nnz_count = list()
+
+        for d in range(self.get_number_of_dimensions()):
+            nnz_count.append(self.dim_nnz_count(d))
+
+        max_nnz = max(nnz_count)
+        
+        print(f'Maximum of non zero values in dimensions : {max_nnz}')
+
+        # Mean similarity of vectors with all dimensions (MEN, WS353, SCWS, SimLex-999)
+        simlex999 = ev.fetch_SimLex(which='999')
+        men = ev.fetch_data_MEN()
+        ws353 = ev.fetch_data_WS353()
+        scws = ev.fetch_data_SCWS()
+
+        sim_all_dim = list()
+        sim_all_dim.append(ev.eval_similarity(self, simlex999, print_missing=False))
+        sim_all_dim.append(ev.eval_similarity(self, men, print_missing=False))
+        sim_all_dim.append(ev.eval_similarity(self, ws353, print_missing=False))
+        sim_all_dim.append(ev.eval_similarity(self, scws, print_missing=False))
+
+        sim_mean_all_dim = mean(sim_all_dim)
+        
+        print(f'Mean similarity of the model with all dimensions (MEN, WS353, SCWS, SimLex-999) : {sim_mean_all_dim}\n')
+
+        # Low threshold for the number of nnz per dimension
+        # Taking the maximal threshold (multiple of step) 
+        # for which the similarity is greater than the similarity - 0.01 of the vectors with all dimensions
+
+        sim = sim_mean_all_dim
+        seuil = 0
+
+        while(sim > sim_mean_all_dim - diff_tol and seuil + step <= max_nnz and sim != float('nan')):
+            seuil += step
+
+            vec_seuil = SINrVectors(name_tmp)
+            vec_seuil.load()
+            vec_seuil.remove_communities_dim_nnz(threshold_min = seuil)
+
+            sim_vec_seuil = list()
+
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, simlex999, print_missing=False))
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, men, print_missing=False))
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, ws353, print_missing=False))
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, scws, print_missing=False))
+            
+            sim = mean(sim_vec_seuil)
+            
+            print(str(seuil) + ' : ' + str(round(sim, 3)) + ' ', end='')
+
+        print('\n')
+        min_threshold = seuil - step
+        
+        print(f'Low threshold : {min_threshold}\n')
+
+        # High threshold for the number of nnz per dimension
+        # Taking the threshold (multiple of 10) for which the similarity is maximal
+
+        vec_seuil = SINrVectors(name_tmp)
+        vec_seuil.load()
+
+        sim = list()
+        seuils = [x for x in range(ceil(max_nnz / 1000) * 1000, 0, -step)]
+
+        for s in seuils:
+            vec_seuil.remove_communities_dim_nnz(threshold_max = s)
+
+            sim_vec_seuil = list()
+
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, simlex999, print_missing=False))
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, men, print_missing=False))
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, ws353, print_missing=False))
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, scws, print_missing=False))
+            
+            sim.append(mean(sim_vec_seuil))
+            print(str(s) + ' : ' + str(round(mean(sim_vec_seuil), 3)) + ' ', end='')
+
+        print('\n')
+        max_threshold = seuils[sim.index(nanmax(sim))]
+        
+        print(f'High threshold : {max_threshold}\nSimilarity with high threshold : {nanmax(sim)}\n')
+        
+        tqdm.__init__ = partialmethod(tqdm.__init__, disable=False)
+        
+        # Delete the copy file
+        os.remove(name_tmp + '.pk')
+
+        return min_threshold, max_threshold
+    
     def get_community_membership(self, obj):
         """Get the community index of a node or label.
 
