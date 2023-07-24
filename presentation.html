@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overview &mdash; SINr  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/tabs.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SINr Embeddings" href="modules.html" />
+    <link rel="prev" title="Welcome to SINr’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SINr
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage-example">Usage example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#publications">Publications</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">SINr Embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SINr</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Overview</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/presentation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h1>
+<p><img alt="languages" src="https://img.shields.io/github/languages/count/SINr-Embeddings/sinr" /> <img alt="downloads" src="https://img.shields.io/pypi/dm/sinr" /> <img alt="license" src="https://img.shields.io/pypi/l/sinr?color=green" /> <img alt="version" src="https://img.shields.io/pypi/v/sinr" /> <img alt="cpython" src="https://img.shields.io/pypi/implementation/sinr" /> <img alt="wheel" src="https://img.shields.io/pypi/wheel/sinr" /> <img alt="python" src="https://img.shields.io/pypi/pyversions/sinr" /> <img alt="docs" src="https://img.shields.io/website?url=https%3A%2F%2Fsinr-embeddings.github.io%2Fsinr%2F_build%2Fhtml%2Findex.html" /> <img alt="activity" src="https://img.shields.io/github/commit-activity/y/SINr-Embeddings/sinr" /> <img alt="contributors" src="https://img.shields.io/github/contributors/SINr-Embeddings/sinr" /> <img alt="quality" src="https://scrutinizer-ci.com/g/SINr-Embeddings/sinr/badges/quality-score.png?b=main" /> <img alt="build" src="https://scrutinizer-ci.com/g/SINr-Embeddings/sinr/badges/build.png?b=main" /></p>
+<p><em>SINr</em> is an open-source tool to efficiently compute graph and word
+embeddings. Its aim is to provide sparse interpretable vectors from a
+graph structure. The dimensions of the vector produced are related to
+the community structure detected in the graph. By leveraging the
+relative connection of vertices to communities, <em>SINr</em> builds an
+interpretable space. <em>SINr</em> is focused on providing tools to build and
+interpret the embeddings produced.</p>
+<p><em>SINr</em> is a Python module relying on
+<a class="reference external" href="https://networkit.github.io">Networkit</a> for the graph structure and
+community detection. <em>SINr</em> also provides efficient implementations to
+extract word co-occurrence graphs from large text corpora. One of the
+strength of <em>SINr</em> is its ability to work with text and produce
+interpretable word embeddings that are competitive with similar
+approaches. For more details on the performances of <em>SINr</em> on downstream
+evaluation tasks, please refer to the <a class="reference external" href="#publications">Publications</a>
+section.</p>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>As SINr relies on libraries implemented using C/C++, a modern C++ compiler is required.</p></li>
+<li><p>OpenMP (required for <a class="reference external" href="https://networkit.github.io">Networkit</a> and compiling <em>SINr</em>’s Cython</p></li>
+<li><p>Python 3.9</p></li>
+<li><p>Pip</p></li>
+<li><p>Cython</p></li>
+<li><p>Conda (recommended)</p></li>
+</ul>
+</section>
+<section id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h2>
+<p><strong>SINr</strong> can be installed through <code class="docutils literal notranslate"><span class="pre">pip</span></code> or from source using <code class="docutils literal notranslate"><span class="pre">poetry</span></code> directives.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-cGlw" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-cGlw" name="cGlw" role="tab" tabindex="0">pip</button><button aria-controls="panel-0-ZnJvbSBzb3VyY2U=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-ZnJvbSBzb3VyY2U=" name="ZnJvbSBzb3VyY2U=" role="tab" tabindex="-1">from source</button></div><div aria-labelledby="tab-0-cGlw" class="sphinx-tabs-panel code-tab group-tab" id="panel-0-cGlw" name="cGlw" role="tabpanel" tabindex="0"><div class="highlight-zsh notranslate"><div class="highlight"><pre><span></span><span class="c1">#Activate conda environment</span>
+conda<span class="w"> </span>activate<span class="w"> </span>sinr
+pip<span class="w"> </span>install<span class="w"> </span>sinr
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-ZnJvbSBzb3VyY2U=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-ZnJvbSBzb3VyY2U=" name="ZnJvbSBzb3VyY2U=" role="tabpanel" tabindex="0"><div class="highlight-zsh notranslate"><div class="highlight"><pre><span></span><span class="c1">#Activate conda environment</span>
+conda<span class="w"> </span>activate<span class="w"> </span>sinr
+git<span class="w"> </span>clone<span class="w"> </span>git@github.com:SINr-Embeddings/sinr.git
+<span class="nb">cd</span><span class="w"> </span>sinr
+pip<span class="w"> </span>install<span class="w"> </span>poetry<span class="w"> </span><span class="c1">#poetry solves dependencies and installs SINr</span>
+poetry<span class="w"> </span>install<span class="w"> </span><span class="c1">#Installs SINr based on the pyproject.toml file</span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="usage-example">
+<h2>Usage example<a class="headerlink" href="#usage-example" title="Permalink to this heading"></a></h2>
+<p>To get started using SINr to build graph and word embeddings, have a look at the
+<a class="reference external" href="https://github.com/SINr-Embeddings/sinr/tree/main/notebooks">notebook</a>
+directory.</p>
+<p>Here is a minimum working example of SINr :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">urllib</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">networkit</span> <span class="k">as</span> <span class="nn">nk</span>
+<span class="kn">import</span> <span class="nn">sinr.graph_embeddings</span> <span class="k">as</span> <span class="nn">ge</span>
+
+
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://snap.stanford.edu/data/wiki-Vote.txt.gz&quot;</span>
+<span class="n">graph_file</span> <span class="o">=</span> <span class="s2">&quot;wikipedia-votes.txt&quot;</span>
+<span class="c1"># Read a graph from SNAP</span>
+<span class="n">sock</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>  <span class="c1"># open URL</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">sock</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>  <span class="c1"># read into BytesIO &quot;file&quot;</span>
+<span class="n">sock</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_in</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">graph_file</span><span class="p">,</span> <span class="s2">&quot;wt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_out</span><span class="p">:</span>
+        <span class="n">f_out</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">f_in</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
+<span class="c1"># Initialize a networkit.Graph object from SNAP graph</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">readGraph</span><span class="p">(</span><span class="n">graph_file</span><span class="p">,</span> <span class="n">nk</span><span class="o">.</span><span class="n">Format</span><span class="o">.</span><span class="n">SNAP</span><span class="p">)</span>
+
+<span class="c1"># Build a SINr model and extract embeddings</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">SINr</span><span class="o">.</span><span class="n">load_from_graph</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">algo</span><span class="o">=</span><span class="n">nk</span><span class="o">.</span><span class="n">community</span><span class="o">.</span><span class="n">PLM</span><span class="p">(</span><span class="n">G</span><span class="p">))</span>
+<span class="n">embeddings</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_nr</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">embeddings</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading"></a></h2>
+<p>Pull requests are welcome. For major changes, please open an issue first to disccus the changes to be made.</p>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this heading"></a></h2>
+<p>Released under <a class="reference external" href="https://cecill.info/">CeCILL 2.1</a>, see <a class="reference external" href="https://github.com/SINr-Embeddings/sinr/blob/main/LICENSE">LICENSE</a> for more details.</p>
+</section>
+<section id="publications">
+<h2>Publications<a class="headerlink" href="#publications" title="Permalink to this heading"></a></h2>
+<p>SINr is currently maintained at the University of Le Mans. If you find SINr useful
+for your own research, please cite the appropriate papers from the list below.
+Publications can also be found on <a class="reference internal" href="publications.html#publications"><span class="std std-ref">Publications</span></a>.</p>
+<p><strong>Initial SINr paper, 2021</strong></p>
+<ul class="simple">
+<li><p>Thibault Prouteau, Victor Connes, Nicolas Dugué, Anthony Perez, Jean-Charles Lamirel, et al.. SINr: Fast Computing of Sparse Interpretable Node Representations is not a Sin!. Advances in Intelligent Data Analysis XIX, 19th International Symposium on Intelligent Data Analysis, IDA 2021, Apr 2021, Porto, Portugal. pp.325-337, ⟨<a class="reference external" href="https://dx.doi.org/10.1007/978-3-030-74251-5_26">10.1007/978-3-030-74251-5_26</a>⟩. <a class="reference external" href="https://hal.science/hal-03197434">⟨hal-03197434⟩</a></p></li>
+</ul>
+<p><strong>Interpretability of SINr embeddings, 2022</strong></p>
+<ul class="simple">
+<li><p>Thibault Prouteau, Nicolas Dugué, Nathalie Camelin, Sylvain Meignier. Are Embedding Spaces Interpretable? Results of an Intrusion Detection Evaluation on a Large French Corpus. LREC 2022, Jun 2022, Marseille, France. <a class="reference external" href="https://hal.science/hal-03770444">⟨hal-03770444⟩</a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to SINr’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral float-right" title="SINr Embeddings" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Thibault Prouteau, Nicolas Dugué, Simon Guillot.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
