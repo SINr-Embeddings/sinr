@@ -7,7 +7,7 @@ import pandas as pd
 import urllib.request
 import os
 from tqdm.auto import tqdm
-from time import gmtime, strftime
+import time
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
@@ -19,7 +19,7 @@ def fetch_data_MEN():
     
     """
     
-    file_name = 'dataset' + strftime("%H_%M_%S", gmtime()) + '.txt'
+    file_name = 'dataset' + str(round(time.time()*1000)) + '.txt'
     
     file = open(file_name,'wb')
 
@@ -50,7 +50,7 @@ def fetch_data_WS353():
     
     """
     
-    file_name = 'dataset' + strftime("%H_%M_%S", gmtime()) + '.txt'
+    file_name = 'dataset' + str(round(time.time()*1000)) + '.txt'
     
     file = open(file_name,'wb')
 
@@ -81,7 +81,7 @@ def fetch_data_SCWS():
     
     """
     
-    file_name = 'dataset' + strftime("%H_%M_%S", gmtime()) + '.txt'
+    file_name = 'dataset' + str(round(time.time()*1000)) + '.txt'
     
     file = open(file_name,'wb')
 
@@ -111,7 +111,7 @@ def fetch_SimLex(which="665"):
     
     """
     
-    file_name = 'dataset' + strftime("%H_%M_%S", gmtime()) + '.txt'
+    file_name = 'dataset' + str(round(time.time()*1000)) + '.txt'
     
     file = open(file_name,'wb')
     
