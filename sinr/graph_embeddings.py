@@ -615,7 +615,7 @@ class SINrVectors(object):
             i+=1
         file.close()
         
-        model = cls("bnc_sg_exceptions_gs", n_jobs=n_jobs, n_neighbors=n_neighbors)
+        model = cls(name, n_jobs=n_jobs, n_neighbors=n_neighbors)
         model.set_vocabulary(vocabulary)
         rows, cols, vals = zip(*vectors)
         matrix = csr_matrix((vals, (rows, cols)))
