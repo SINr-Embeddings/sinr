@@ -591,6 +591,37 @@ class SINrVectors(object):
         self.n_jobs = n_jobs
         self.n_neighbors = n_neighbors
         self.labels = False
+        
+    @classmethod
+    def load_from_w2v(cls, w2v_path, name, n_jobs=-1, n_neighbors=20):
+        """
+        Initializing a SINrVectors object using a file at the word2vec format
+        :param w2v_path: path of the file at word2vec format which contains vectors
+        :type w2v_path: str
+        :param name: name of the model, useful to save it
+        :type name: str
+        """
+        file = open(w2v_path)
+        i = 0
+        vocabulary= []
+        vectors = []
+        for line in file:
+            line = line.strip()
+            line = line.split(" ")
+            word = line[0].strip()
+            vector = [[i,col, float(x)] for col, x in enumerate(line[1:]) if x != 0]
+            vectors.extend(vector)
+            vocabulary.append(word)
+            i+=1
+        file.close()
+        
+        model = cls(name, n_jobs=n_jobs, n_neighbors=n_neighbors)
+        model.set_vocabulary(vocabulary)
+        rows, cols, vals = zip(*vectors)
+        matrix = csr_matrix((vals, (rows, cols)))
+        model.set_vectors(matrix)
+        
+        return model
 
     def get_communities_as_labels_sets(self):
         """Get partition of communities as a list of sets each containing the label associates to the node in the community.
