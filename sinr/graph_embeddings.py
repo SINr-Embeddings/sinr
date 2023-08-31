@@ -1087,6 +1087,24 @@ class SINrVectors(object):
         ind = argpartition(vector, topk)[topk:]
         ind = ind[argsort(vector[ind])[::-1]]
         return ind
+
+    def _get_bottomk(self, idx, topk=5, row=True):
+        """Returns indices of the `bottomk` values in the vector of id `idx`
+
+        :param idx: idx of the vector in which the bottomk values are searched
+        :type idx: int
+        :param topk: number of values to get (Default value = 5)
+        :type topk: int
+        :param row: if the vector is a row or a column (Default value = True)
+        :type row: int
+        :returns: the indices of the topk values in the vector
+        :rtype: list[int]
+
+        """
+        vector = self._get_vector(idx, row)
+        ind = argpartition(vector, topk)[:topk]
+        ind = ind[argsort(vector[ind])]
+        return ind
     
     def get_topk_dims(self, obj, topk=5):
         """Get `topk` dimensions for an object.
@@ -1102,6 +1120,7 @@ class SINrVectors(object):
         """
         index = self._get_index(obj)
         return self._get_topk(index, topk, True)
+
 
     def get_value_obj_dim(self, obj, dim):
         """Get the value of `obj` in dimension `dim`.
@@ -1269,6 +1288,50 @@ class SINrVectors(object):
 
         """
         return len(self.communities_sets)
+    
+    def get_vocabulary_size(self):
+        """
+        :returns: Number of words that constitute the vocabulary
+        :rtype: int
+        """
+        return self.vectors.shape[0]
+
+    def _prcnt_vocabulary(self, prct:int):
+        """
+        :param prct: percentage of the vocabulary required
+        :type prct: int
+        :returns: number of words required to deal with prct percents of the vocabulary
+        :rtype: int
+        """
+        return round(prct * self.get_vocabulary_size() / 100, 0)
+
+    def _get_union_topk(self, prct:int):
+        """
+        :param prct: percentage of the vocabulary among the top for each dimension
+        :type prct: int
+        :returns: list of the ids of words that are among the top prct of the dims, can be useful to pick intruders
+        :rtype: int list
+        """
+        nb =  self._prcnt_vocabulary(prct)
+        intruder_candidates = set()
+        for i in range(self.get_number_of_dimensions()):
+            intruder_candidates =  intruder_candidates.union(self.get_dimension_stereotypes_idx(i, topk = nb))
+        return intruder_candidates
+
+    class NoIntruderPickableException(Exception):
+        """Raised when no intruder could be found with the percentages provided"""
+        pass
+
+    def pick_intruder(self, dim, union=None, prctbot=50, prcttop=10):
+        bottoms = self._get_bottomk(dim, prct=prctbot)
+        if union is None:
+            union = self._get_union_topk(prct=prcttop)
+        intersection = union.intersection(bottoms)
+        if (intersection <= 0):
+            raise NoIntruderPickableException
+        alea = random.randint(0,len(intersection))
+        return intersection[alea]
+    
 
     def load(self):
         """Load a SINrVectors model."""
