@@ -1,16 +1,18 @@
 import pickle as pk
 
 from networkit import Graph, components, community, setNumberOfThreads, getCurrentNumberOfThreads, getMaxNumberOfThreads, Partition
-from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat, mean, nanmax
+from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat, mean, nanmax, int64
 from sklearn.neighbors import NearestNeighbors
 from scipy import spatial
 from scipy.sparse import csr_matrix
 import sklearn.preprocessing as skp
 from tqdm.auto import tqdm
+from random import randint
 from functools import partialmethod
 from math import ceil
 import time
 import os
+from itertools import combinations
 
 from . import strategy_loader
 from .logger import logger
@@ -563,6 +565,10 @@ class InterpretableDimension:
         return str(self.get_dict())
 
 
+class NoIntruderPickableException(Exception):
+        """Raised when no intruder could be found with the percentages provided"""
+        pass
+
 class SINrVectors(object):
     """After training word or graph embeddings using SINr object, use the ModelBuilder object to build `SINrVectors`.
     `SINrVectors` is the object to manipulate the model, explore the embedding space and its interpretability
@@ -615,7 +621,7 @@ class SINrVectors(object):
             i+=1
         file.close()
         
-        model = cls(name, n_jobs=n_jobs, n_neighbors=n_neighbors)
+        model = cls("bnc_sg_exceptions_gs", n_jobs=n_jobs, n_neighbors=n_neighbors)
         model.set_vocabulary(vocabulary)
         rows, cols, vals = zip(*vectors)
         matrix = csr_matrix((vals, (rows, cols)))
@@ -860,16 +866,17 @@ class SINrVectors(object):
             self.set_vectors(self.vectors[:,list(set(range(self.vectors.shape[1]))-set(ind_min + ind_max))])
 
             # Remove communities from communities sets
-            for i in tqdm(sorted(ind_max + ind_min, reverse = True)):
-                self.communities_sets.pop(i)
+            if self.communities_sets is not None:
+                for i in tqdm(sorted(ind_max + ind_min, reverse = True)):
+                    self.communities_sets.pop(i)
 
-            # Update the communities members
-            self.community_membership = set()
+                # Update the communities members
+                self.community_membership = set()
 
-            for c in self.communities_sets:
-                self.community_membership = self.community_membership.union(c)
+                for c in self.communities_sets:
+                    self.community_membership = self.community_membership.union(c)
 
-            self.community_membership = sorted(list(self.community_membership))
+                self.community_membership = sorted(list(self.community_membership))
     
     def dim_nnz_thresholds(self, step = 100, diff_tol = 0.005):
         """Give the minimal and the maximal number of non zero values to have for a dimension to be kept and not lower the model's similarity. Taking into account the datasets MEN, WS353, SCWS and SimLex-999.
@@ -1017,7 +1024,7 @@ class SINrVectors(object):
         :returns: the index of the object
 
         """
-        if type(obj) is int:
+        if type(obj) is int or type(obj) is int64:
             return obj
         index = self.vocab.index(obj) if self.labels else obj
         return index   
@@ -1062,12 +1069,14 @@ class SINrVectors(object):
         :return: cosine similarity between `obj1`and `obj2`
         :rtype: float
         """
+        return 1-self.cosine_dist(obj1, obj2)
+
+    def cosine_dist(self, obj1, obj2):
         id1 = self._get_index(obj1)
         id2 = self._get_index(obj2)
         vec1 = self._get_vector(id1)
         vec2 = self._get_vector(id2)
-        cos_dist = spatial.distance.cosine(vec1, vec2)
-        return 1-cos_dist
+        return spatial.distance.cosine(vec1, vec2)
         
     def _get_topk(self, idx, topk=5, row=True):
         """Returns indices of the `topk` values in the vector of id `idx`
@@ -1082,10 +1091,34 @@ class SINrVectors(object):
         :rtype: list[int]
 
         """
+        if topk <= 0:
+            topk = 1
         vector = self._get_vector(idx, row)
         topk = -topk
         ind = argpartition(vector, topk)[topk:]
         ind = ind[argsort(vector[ind])[::-1]]
+        return ind
+
+    def _get_bottomk(self, idx, topk=5, row=True):
+        """Returns indices of the `bottomk` values in the vector of id `idx`
+
+        :param idx: idx of the vector in which the bottomk values are searched
+        :type idx: int
+        :param topk: number of values to get (Default value = 5)
+        :type topk: int
+        :param row: if the vector is a row or a column (Default value = True)
+        :type row: int
+        :returns: the indices of the topk values in the vector
+        :rtype: list[int]
+
+        """
+        if topk <= 0:
+            topk = 1
+        #print("_get_bottomk, dim", idx)
+        #print("_get_bottomk, row", row)
+        vector = self._get_vector(idx, row)
+        ind = argpartition(vector, topk)[:topk]
+        ind = ind[argsort(vector[ind])]
         return ind
     
     def get_topk_dims(self, obj, topk=5):
@@ -1102,6 +1135,7 @@ class SINrVectors(object):
         """
         index = self._get_index(obj)
         return self._get_topk(index, topk, True)
+
 
     def get_value_obj_dim(self, obj, dim):
         """Get the value of `obj` in dimension `dim`.
@@ -1268,7 +1302,99 @@ class SINrVectors(object):
         :rtype: int
 
         """
-        return len(self.communities_sets)
+        return self.vectors.shape[1]
+    
+    def get_vocabulary_size(self):
+        """
+        :returns: Number of words that constitute the vocabulary
+        :rtype: int
+        """
+        return self.vectors.shape[0]
+
+    def _prcnt_vocabulary(self, prct:int):
+        """
+        :param prct: percentage of the vocabulary required
+        :type prct: int
+        :returns: number of words required to deal with prct percents of the vocabulary
+        :rtype: int
+        """
+        return (int)(round(prct * self.get_vocabulary_size() / 100, 0))
+
+    def get_union_topk(self, prct:int):
+        """
+        :param prct: percentage of the vocabulary among the top for each dimension
+        :type prct: int
+        :returns: list of the ids of words that are among the top prct of the dims, can be useful to pick intruders
+        :rtype: int list
+        """
+        nb =  self._prcnt_vocabulary(prct)
+        #print(nb)
+        intruder_candidates = set()
+        for i in range(self.get_number_of_dimensions()):
+            #print("nb", nb,", dim ", i,  ", topk for union", self._get_topk(i, topk = nb, row=False))
+            intruder_candidates =  intruder_candidates.union(self._get_topk(i, topk = nb, row=False))
+        return intruder_candidates
+
+    def pick_intruder(self, dim, union=None, prctbot=50, prcttop=10):
+        bottomk = self._prcnt_vocabulary(prctbot)
+        #print("pick_intruder, bottomk to pick",bottomk)
+        #print("pick_intruder, dim", dim)
+        bottoms = self._get_bottomk(dim, topk=bottomk, row=False)
+        #print("bottomk selected", bottoms)
+        if union is None:
+            union = self.get_union_topk(prct=prcttop)
+        intersection = union.intersection(bottoms)
+        #print("intersection",len(intersection))
+        if (len(intersection) <= 0):
+            raise NoIntruderPickableException
+        alea = randint(0,len(intersection)-1)
+        return list(intersection)[alea]
+
+    def dist_ratio(self, union=None, prctbot=50, prcttop=10, nbtopk=5, dist=True):
+        ratio = 0
+        if union == None:
+            union = self.get_union_topk(prct = prcttop)
+        nb_dims = self.get_number_of_dimensions()
+        for dim in range(nb_dims):
+            ratio += self.dist_ratio_dim(dim, union=union, prctbot=prctbot, prcttop=prcttop, nbtopk=nbtopk)
+        return ratio / nb_dims
+
+
+    def dist_ratio_dim(self, dim, union=None, prctbot=50, prcttop=10, nbtopk=5, dist=True):
+        intruder = self.pick_intruder(dim, union, prctbot, prcttop)
+        #print("intruder", intruder)
+        topks = self._get_topk(dim, topk = nbtopk, row=False)
+        intra = self.intra_sim(topks, dist)
+        inter = self.inter_sim(intruder, topks, dist)
+        if dist:
+            return inter / intra
+        else:
+            if inter == 0:
+                print("dimension",dim,"inter nulle", topks)
+                return 0
+            return intra / inter
+    
+    def intra_sim(self, topks, dist=True):
+        topks = [self._get_index(o) for o in topks]
+        k = 0
+        cosine = 0.0
+        for i,j in combinations(topks,2):
+            if dist:
+                cosine += self.cosine_dist(i,j)
+            else:
+                cosine += self.cosine_sim(i,j)
+            k += 1
+        return cosine / k
+    
+    def inter_sim(self, intruder, topk, dist=True):
+        cosine = 0.0
+        for o in topk:
+            if dist:
+                cosine += self.cosine_dist(intruder,o)
+            else:
+                cosine += self.cosine_sim(intruder,o)
+        return cosine / (float)(len(topk))
+
 
     def load(self):
         """Load a SINrVectors model."""
