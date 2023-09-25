@@ -1072,6 +1072,16 @@ class SINrVectors(object):
         return 1-self.cosine_dist(obj1, obj2)
 
     def cosine_dist(self, obj1, obj2):
+        """Return cosine distance between specified item of the model
+        
+        :param obj1: first object to get embedding
+        :type obj1: int or str
+        :param obj2: second object to get embedding
+        :type obj2: int or str
+        
+        :return: cosine distance between `obj1` and `obj2` 
+        :rtype: float
+        """
         id1 = self._get_index(obj1)
         id2 = self._get_index(obj2)
         vec1 = self._get_vector(id1)
@@ -1324,6 +1334,7 @@ class SINrVectors(object):
         """
         :param prct: percentage of the vocabulary among the top for each dimension
         :type prct: int
+        
         :returns: list of the ids of words that are among the top prct of the dims, can be useful to pick intruders
         :rtype: int list
         """
@@ -1336,21 +1347,55 @@ class SINrVectors(object):
         return intruder_candidates
 
     def pick_intruder(self, dim, union=None, prctbot=50, prcttop=10):
+        """Pick an intruder word for a dimension
+        
+        :param dim: the index of the dimension for which to return intruders
+        :type dim: int
+        :param union: ids of words that are among the top prct of at least one dimension (defaults to None)
+        :type union: int list
+        :param prctbot: bottom prctbot to pick (defaults to 50)
+        :type prctbot: int
+        :param prcttop: top prcttop to pick (defaults to 10)
+        :type prcttop: int
+        
+        :returns: ids of an intruder word from the dimension
+        :rtype: int
+        
+        """
+        
+        #we search intruders which are:
+        #- words from the bottom bottomk of the dimension dim (bottoms)
+        #- words which are in the top prcttop of a dimension of the sinrVector (union)
+        
         bottomk = self._prcnt_vocabulary(prctbot)
-        #print("pick_intruder, bottomk to pick",bottomk)
-        #print("pick_intruder, dim", dim)
         bottoms = self._get_bottomk(dim, topk=bottomk, row=False)
-        #print("bottomk selected", bottoms)
+        
         if union is None:
             union = self.get_union_topk(prct=prcttop)
+            
         intersection = union.intersection(bottoms)
-        #print("intersection",len(intersection))
+        
         if (len(intersection) <= 0):
             raise NoIntruderPickableException
+            
         alea = randint(0,len(intersection)-1)
+        
         return list(intersection)[alea]
 
     def dist_ratio(self, union=None, prctbot=50, prcttop=10, nbtopk=5, dist=True):
+        """DistRatio of the model
+        
+        :param union: ids of words that are among the top prct of at least one dimension (defaults to None)
+        :type union: int list
+        :param prctbot: bottom prctbot to pick (defaults to 50)
+        :type prctbot: int
+        :param prcttop: top prcttop to pick (defaults to 10)
+        :type prcttop: int
+        
+        :returns: DisRatio of the model
+        :rtype: float
+        
+        """
         ratio = 0
         if union == None:
             union = self.get_union_topk(prct = prcttop)
@@ -1361,6 +1406,25 @@ class SINrVectors(object):
 
 
     def dist_ratio_dim(self, dim, union=None, prctbot=50, prcttop=10, nbtopk=5, dist=True):
+        """DistRatio for one dimension of the model
+        
+        :param dim: the index of the dimension for which to get the DistRatio
+        :type dim: int
+        :param union: ids of words that are among the top prct of at least one dimension (defaults to None)
+        :type union: int list
+        :param prctbot: bottom prctbot to pick (defaults to 50)
+        :type prctbot: int
+        :param prcttop: top prcttop to pick (defaults to 10)
+        :type prcttop: int
+        :param nbtopk: number of top words to pick (defaults to 5)
+        :type nbtopk: int
+        :param dist: set to True (default) to use cosine distance and False to use cosine similarity
+        :type dist: boolean
+        
+        :returns: DistRatio for dimension `dim`
+        :rtype: float
+        
+        """
         intruder = self.pick_intruder(dim, union, prctbot, prcttop)
         #print("intruder", intruder)
         topks = self._get_topk(dim, topk = nbtopk, row=False)
@@ -1375,6 +1439,16 @@ class SINrVectors(object):
             return intra / inter
     
     def intra_sim(self, topks, dist=True):
+        """ Get the average cosine distance (or cosine similarity) between top words
+        
+        :param topks: number of top words to pick
+        :type topks: int
+        :param dist: set to True (default) to use cosine distance and False to use cosine similarity
+        :type dist: boolean
+        
+        :returns: average cosine distance (or cosine similarity) between top words
+        :rtype: float
+        """
         topks = [self._get_index(o) for o in topks]
         k = 0
         cosine = 0.0
@@ -1387,6 +1461,18 @@ class SINrVectors(object):
         return cosine / k
     
     def inter_sim(self, intruder, topk, dist=True):
+        """ Get the average cosine distance (or cosine similarity) between top words and the intruder word
+        
+        :param intruder: id of the intruder word
+        :type intruder: int
+        :param topk: number of top words to consider
+        :type topk: int
+        :param dist: set to True (default) to use cosine distance and False to use cosine similarity
+        :type dist: boolean
+        
+        :returns: average cosine distance (or cosine similarity) between top words and the intruder word
+        :rtype: float
+        """
         cosine = 0.0
         for o in topk:
             if dist:
