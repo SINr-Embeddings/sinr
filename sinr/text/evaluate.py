@@ -224,3 +224,62 @@ def similarity_MEN_WS353_SCWS(sinr_vec, print_missing=True):
     sim_SCWS = eval_similarity(sinr_vec, fetch_data_SCWS(), print_missing=print_missing)
 
     return {"MEN": sim_MEN, "WS353" : sim_WS353, "SCWS" : sim_SCWS}
+
+def dist_ratio(sinr_vec, union=None, prctbot=50, prcttop=10, nbtopk=5, dist=True):
+    """DistRatio of the model
+    
+    :param sinr_vec: SINrVectors object
+    :type sinr_vec: SINrVectors
+    :param union: ids of words that are among the top prct of at least one dimension (defaults to None)
+    :type union: int list
+    :param prctbot: bottom prctbot to pick (defaults to 50)
+    :type prctbot: int
+    :param prcttop: top prcttop to pick (defaults to 10)
+    :type prcttop: int
+        
+    :returns: DisRatio of the model
+    :rtype: float
+        
+    """
+    ratio = 0
+    if union == None:
+        union = sinr_vec.get_union_topk(prct = prcttop)
+    nb_dims = sinr_vec.get_number_of_dimensions()
+    for dim in tqdm(range(nb_dims)):
+        ratio += dist_ratio_dim(sinr_vec, dim, union=union, prctbot=prctbot, prcttop=prcttop, nbtopk=nbtopk)
+    return ratio / nb_dims
+
+
+def dist_ratio_dim(sinr_vec, dim, union=None, prctbot=50, prcttop=10, nbtopk=5, dist=True):
+    """DistRatio for one dimension of the model
+    
+    :param sinr_vec: SINrVectors object
+    :type sinr_vec: SINrVectors
+    :param dim: the index of the dimension for which to get the DistRatio
+    :type dim: int
+    :param union: ids of words that are among the top prct of at least one dimension (defaults to None)
+    :type union: int list
+    :param prctbot: bottom prctbot to pick (defaults to 50)
+    :type prctbot: int
+    :param prcttop: top prcttop to pick (defaults to 10)
+    :type prcttop: int
+    :param nbtopk: number of top words to pick (defaults to 5)
+    :type nbtopk: int
+    :param dist: set to True (default) to use cosine distance and False to use cosine similarity
+    :type dist: boolean
+        
+    :returns: DistRatio for dimension `dim`
+    :rtype: float
+        
+    """
+    intruder = sinr_vec.pick_intruder(dim, union, prctbot, prcttop)
+    topks = sinr_vec._get_topk(dim, topk = nbtopk, row=False)
+    intra = sinr_vec.intra_sim(topks, dist)
+    inter = sinr_vec.inter_sim(intruder, topks, dist)
+    if dist:
+        return inter / intra
+    else:
+        if inter == 0:
+            print("dimension",dim,"inter nulle", topks)
+            return 0
+        return intra / inter
