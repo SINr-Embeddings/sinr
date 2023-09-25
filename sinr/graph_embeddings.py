@@ -1,17 +1,23 @@
 import pickle as pk
 
 from networkit import Graph, components, community, setNumberOfThreads, getCurrentNumberOfThreads, getMaxNumberOfThreads, Partition
-from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat
+from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat, mean, nanmax, int64
 from sklearn.neighbors import NearestNeighbors
 from scipy import spatial
 from scipy.sparse import csr_matrix
 import sklearn.preprocessing as skp
-from math import log
+from tqdm.auto import tqdm
+from random import randint
+from functools import partialmethod
+from math import ceil, log
+import time
+import os
+from itertools import combinations
 
 from . import strategy_loader
 from .logger import logger
 from .nfm import get_nfm_embeddings
-from tqdm.auto import tqdm
+import sinr.text.evaluate as ev
 
 
 class SINr(object):
@@ -112,7 +118,7 @@ class SINr(object):
         logger.info("Detecting communities.")
         print(f"Gamma for louvain : {gamma}")
         if getMaxNumberOfThreads() == 1 and par!="none randomized":
-            logger.warning(f"""The current number of threads is set to {getMaxNumberOfThreads()} with parallelization strategy {par}. Nodes will not be randomized in Louvain. Consider using more threads by resetting the setNumberOfThreads parameter of networkit or use the 'none radomized' parallelization strategy.""")
+            logger.warning(f"""The current number of threads is set to {getMaxNumberOfThreads()} with parallelization strategy {par}. Nodes will not be randomized in Louvain. Consider using more threads by resetting the setNumberOfThreads parameter of networkit or use the 'none randomized' parallelization strategy.""")
         if algo is None:
             algo = community.PLM(self.cooc_graph, refine=False, gamma=gamma, turbo=True, recurse=False, par=par)
         communities = community.detectCommunities(self.cooc_graph, algo=algo, inspect=inspect)
@@ -573,6 +579,10 @@ class InterpretableDimension:
         return str(self.get_dict())
 
 
+class NoIntruderPickableException(Exception):
+        """Raised when no intruder could be found with the percentages provided"""
+        pass
+
 class SINrVectors(object):
     """After training word or graph embeddings using SINr object, use the ModelBuilder object to build `SINrVectors`.
     `SINrVectors` is the object to manipulate the model, explore the embedding space and its interpretability
@@ -601,6 +611,37 @@ class SINrVectors(object):
         self.n_jobs = n_jobs
         self.n_neighbors = n_neighbors
         self.labels = False
+        
+    @classmethod
+    def load_from_w2v(cls, w2v_path, name, n_jobs=-1, n_neighbors=20):
+        """
+        Initializing a SINrVectors object using a file at the word2vec format
+        :param w2v_path: path of the file at word2vec format which contains vectors
+        :type w2v_path: str
+        :param name: name of the model, useful to save it
+        :type name: str
+        """
+        file = open(w2v_path)
+        i = 0
+        vocabulary= []
+        vectors = []
+        for line in file:
+            line = line.strip()
+            line = line.split(" ")
+            word = line[0].strip()
+            vector = [[i,col, float(x)] for col, x in enumerate(line[1:]) if x != 0]
+            vectors.extend(vector)
+            vocabulary.append(word)
+            i+=1
+        file.close()
+        
+        model = cls("bnc_sg_exceptions_gs", n_jobs=n_jobs, n_neighbors=n_neighbors)
+        model.set_vocabulary(vocabulary)
+        rows, cols, vals = zip(*vectors)
+        matrix = csr_matrix((vals, (rows, cols)))
+        model.set_vectors(matrix)
+        
+        return model
 
     def get_communities_as_labels_sets(self):
         """Get partition of communities as a list of sets each containing the label associates to the node in the community.
@@ -798,7 +839,170 @@ class SINrVectors(object):
         """
         
         self.set_vectors(skp.binarize(self.vectors))
+        
+    def dim_nnz_count(self, dim):
+        """ Count the number of non zero values in a dimension.
+        :param dim: index of the dimension
+        :type dim: int
+        
+        :return: the number of non zero values in the dimension
+        :rtype: int
+        """
+        
+        d = self.vectors.getcol(dim)
+        return d.nnz
+        
+    def remove_communities_dim_nnz(self, threshold_min = None, threshold_max = None):
+        """Remove dimensions (communities) which are the less activated and those which are the most activated.
+        
+        :param threshold_min: minimal number of non zero values to have for a dimension to be kept
+        :type threshold_min: int
+        :param threshold_max: maximal number of non zero values to have for a dimension to be kept
+        :type threshold_max: int
+        
+        """
+        
+        if threshold_min != None or threshold_max != None:
+            dims = self.get_number_of_dimensions()
+            
+            ind_min = list()
+            ind_max = list()
 
+            for dim in tqdm(range(dims)):
+                if threshold_min != None:
+                    if self.dim_nnz_count(dim) < threshold_min:
+                        ind_min.append(dim)
+                if threshold_max != None:
+                    if self.dim_nnz_count(dim) > threshold_max:
+                        ind_max.append(dim)
+
+            # Remove dimensions from the matrix of embeddings
+            self.set_vectors(self.vectors[:,list(set(range(self.vectors.shape[1]))-set(ind_min + ind_max))])
+
+            # Remove communities from communities sets
+            if self.communities_sets is not None:
+                for i in tqdm(sorted(ind_max + ind_min, reverse = True)):
+                    self.communities_sets.pop(i)
+
+                # Update the communities members
+                self.community_membership = set()
+
+                for c in self.communities_sets:
+                    self.community_membership = self.community_membership.union(c)
+
+                self.community_membership = sorted(list(self.community_membership))
+    
+    def dim_nnz_thresholds(self, step = 100, diff_tol = 0.005):
+        """Give the minimal and the maximal number of non zero values to have for a dimension to be kept and not lower the model's similarity. Taking into account the datasets MEN, WS353, SCWS and SimLex-999.
+        
+        :param step: step to search thresholds (default value : 100)
+        :param: diff_tol: difference of similarity tolerated with the low threshold (default value : 0.005)
+        
+        :return: thresholds (low, high)
+        :rtype: tuple of int
+        
+        """
+        
+        # Disable tqdm to clear output
+        tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
+        
+        # Copy of the sinrvectors to remove dimensions
+        name = self.name
+        name_tmp = 'vec_ref_' + str(round(time.time()*1000))
+        self.name = name_tmp
+        self.save()
+        self.name = name
+        
+        # Maximum of non zero values in dimensions
+        nnz_count = list()
+
+        for d in range(self.get_number_of_dimensions()):
+            nnz_count.append(self.dim_nnz_count(d))
+
+        max_nnz = max(nnz_count)
+        
+        print(f'Maximum of non zero values in dimensions : {max_nnz}')
+
+        # Mean similarity of vectors with all dimensions (MEN, WS353, SCWS, SimLex-999)
+        simlex999 = ev.fetch_SimLex(which='999')
+        men = ev.fetch_data_MEN()
+        ws353 = ev.fetch_data_WS353()
+        scws = ev.fetch_data_SCWS()
+
+        sim_all_dim = list()
+        sim_all_dim.append(ev.eval_similarity(self, simlex999, print_missing=False))
+        sim_all_dim.append(ev.eval_similarity(self, men, print_missing=False))
+        sim_all_dim.append(ev.eval_similarity(self, ws353, print_missing=False))
+        sim_all_dim.append(ev.eval_similarity(self, scws, print_missing=False))
+
+        sim_mean_all_dim = mean(sim_all_dim)
+        
+        print(f'Mean similarity of the model with all dimensions (MEN, WS353, SCWS, SimLex-999) : {sim_mean_all_dim}\n')
+
+        # Low threshold for the number of nnz per dimension
+        # Taking the maximal threshold (multiple of step) 
+        # for which the similarity is greater than the similarity - 0.01 of the vectors with all dimensions
+
+        sim = sim_mean_all_dim
+        seuil = 0
+
+        while(sim > sim_mean_all_dim - diff_tol and seuil + step <= max_nnz and sim != float('nan')):
+            seuil += step
+
+            vec_seuil = SINrVectors(name_tmp)
+            vec_seuil.load()
+            vec_seuil.remove_communities_dim_nnz(threshold_min = seuil)
+
+            sim_vec_seuil = list()
+
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, simlex999, print_missing=False))
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, men, print_missing=False))
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, ws353, print_missing=False))
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, scws, print_missing=False))
+            
+            sim = mean(sim_vec_seuil)
+            
+            print(str(seuil) + ' : ' + str(round(sim, 3)) + ' ', end='')
+
+        print('\n')
+        min_threshold = seuil - step
+        
+        print(f'Low threshold : {min_threshold}\n')
+
+        # High threshold for the number of nnz per dimension
+        # Taking the threshold (multiple of 10) for which the similarity is maximal
+
+        vec_seuil = SINrVectors(name_tmp)
+        vec_seuil.load()
+
+        sim = list()
+        seuils = [x for x in range(ceil(max_nnz / 1000) * 1000, 0, -step)]
+
+        for s in seuils:
+            vec_seuil.remove_communities_dim_nnz(threshold_max = s)
+
+            sim_vec_seuil = list()
+
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, simlex999, print_missing=False))
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, men, print_missing=False))
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, ws353, print_missing=False))
+            sim_vec_seuil.append(ev.eval_similarity(vec_seuil, scws, print_missing=False))
+            
+            sim.append(mean(sim_vec_seuil))
+            print(str(s) + ' : ' + str(round(mean(sim_vec_seuil), 3)) + ' ', end='')
+
+        print('\n')
+        max_threshold = seuils[sim.index(nanmax(sim))]
+        
+        print(f'High threshold : {max_threshold}\nSimilarity with high threshold : {nanmax(sim)}\n')
+        
+        tqdm.__init__ = partialmethod(tqdm.__init__, disable=False)
+        
+        # Delete the copy file
+        os.remove(name_tmp + '.pk')
+
+        return min_threshold, max_threshold
+    
     def get_community_membership(self, obj):
         """Get the community index of a node or label.
 
@@ -834,11 +1038,11 @@ class SINrVectors(object):
         :returns: the index of the object
 
         """
-        if type(obj) is int:
+        if type(obj) is int or type(obj) is int64:
             return obj
         index = self.vocab.index(obj) if self.labels else obj
-        return index
-
+        return index   
+        
     def most_similar(self, obj):
         """Get the most similar objects of the one passed as a parameter using the cosine of their vectors.
 
@@ -879,12 +1083,14 @@ class SINrVectors(object):
         :return: cosine similarity between `obj1`and `obj2`
         :rtype: float
         """
+        return 1-self.cosine_dist(obj1, obj2)
+
+    def cosine_dist(self, obj1, obj2):
         id1 = self._get_index(obj1)
         id2 = self._get_index(obj2)
         vec1 = self._get_vector(id1)
         vec2 = self._get_vector(id2)
-        cos_dist = spatial.distance.cosine(vec1, vec2)
-        return 1-cos_dist
+        return spatial.distance.cosine(vec1, vec2)
         
     def _get_topk(self, idx, topk=5, row=True):
         """Returns indices of the `topk` values in the vector of id `idx`
@@ -899,10 +1105,34 @@ class SINrVectors(object):
         :rtype: list[int]
 
         """
+        if topk <= 0:
+            topk = 1
         vector = self._get_vector(idx, row)
         topk = -topk
         ind = argpartition(vector, topk)[topk:]
         ind = ind[argsort(vector[ind])[::-1]]
+        return ind
+
+    def _get_bottomk(self, idx, topk=5, row=True):
+        """Returns indices of the `bottomk` values in the vector of id `idx`
+
+        :param idx: idx of the vector in which the bottomk values are searched
+        :type idx: int
+        :param topk: number of values to get (Default value = 5)
+        :type topk: int
+        :param row: if the vector is a row or a column (Default value = True)
+        :type row: int
+        :returns: the indices of the topk values in the vector
+        :rtype: list[int]
+
+        """
+        if topk <= 0:
+            topk = 1
+        #print("_get_bottomk, dim", idx)
+        #print("_get_bottomk, row", row)
+        vector = self._get_vector(idx, row)
+        ind = argpartition(vector, topk)[:topk]
+        ind = ind[argsort(vector[ind])]
         return ind
     
     def get_topk_dims(self, obj, topk=5):
@@ -919,6 +1149,7 @@ class SINrVectors(object):
         """
         index = self._get_index(obj)
         return self._get_topk(index, topk, True)
+
 
     def get_value_obj_dim(self, obj, dim):
         """Get the value of `obj` in dimension `dim`.
@@ -1085,7 +1316,99 @@ class SINrVectors(object):
         :rtype: int
 
         """
-        return len(self.communities_sets)
+        return self.vectors.shape[1]
+    
+    def get_vocabulary_size(self):
+        """
+        :returns: Number of words that constitute the vocabulary
+        :rtype: int
+        """
+        return self.vectors.shape[0]
+
+    def _prcnt_vocabulary(self, prct:int):
+        """
+        :param prct: percentage of the vocabulary required
+        :type prct: int
+        :returns: number of words required to deal with prct percents of the vocabulary
+        :rtype: int
+        """
+        return (int)(round(prct * self.get_vocabulary_size() / 100, 0))
+
+    def get_union_topk(self, prct:int):
+        """
+        :param prct: percentage of the vocabulary among the top for each dimension
+        :type prct: int
+        :returns: list of the ids of words that are among the top prct of the dims, can be useful to pick intruders
+        :rtype: int list
+        """
+        nb =  self._prcnt_vocabulary(prct)
+        #print(nb)
+        intruder_candidates = set()
+        for i in range(self.get_number_of_dimensions()):
+            #print("nb", nb,", dim ", i,  ", topk for union", self._get_topk(i, topk = nb, row=False))
+            intruder_candidates =  intruder_candidates.union(self._get_topk(i, topk = nb, row=False))
+        return intruder_candidates
+
+    def pick_intruder(self, dim, union=None, prctbot=50, prcttop=10):
+        bottomk = self._prcnt_vocabulary(prctbot)
+        #print("pick_intruder, bottomk to pick",bottomk)
+        #print("pick_intruder, dim", dim)
+        bottoms = self._get_bottomk(dim, topk=bottomk, row=False)
+        #print("bottomk selected", bottoms)
+        if union is None:
+            union = self.get_union_topk(prct=prcttop)
+        intersection = union.intersection(bottoms)
+        #print("intersection",len(intersection))
+        if (len(intersection) <= 0):
+            raise NoIntruderPickableException
+        alea = randint(0,len(intersection)-1)
+        return list(intersection)[alea]
+
+    def dist_ratio(self, union=None, prctbot=50, prcttop=10, nbtopk=5, dist=True):
+        ratio = 0
+        if union == None:
+            union = self.get_union_topk(prct = prcttop)
+        nb_dims = self.get_number_of_dimensions()
+        for dim in range(nb_dims):
+            ratio += self.dist_ratio_dim(dim, union=union, prctbot=prctbot, prcttop=prcttop, nbtopk=nbtopk)
+        return ratio / nb_dims
+
+
+    def dist_ratio_dim(self, dim, union=None, prctbot=50, prcttop=10, nbtopk=5, dist=True):
+        intruder = self.pick_intruder(dim, union, prctbot, prcttop)
+        #print("intruder", intruder)
+        topks = self._get_topk(dim, topk = nbtopk, row=False)
+        intra = self.intra_sim(topks, dist)
+        inter = self.inter_sim(intruder, topks, dist)
+        if dist:
+            return inter / intra
+        else:
+            if inter == 0:
+                print("dimension",dim,"inter nulle", topks)
+                return 0
+            return intra / inter
+    
+    def intra_sim(self, topks, dist=True):
+        topks = [self._get_index(o) for o in topks]
+        k = 0
+        cosine = 0.0
+        for i,j in combinations(topks,2):
+            if dist:
+                cosine += self.cosine_dist(i,j)
+            else:
+                cosine += self.cosine_sim(i,j)
+            k += 1
+        return cosine / k
+    
+    def inter_sim(self, intruder, topk, dist=True):
+        cosine = 0.0
+        for o in topk:
+            if dist:
+                cosine += self.cosine_dist(intruder,o)
+            else:
+                cosine += self.cosine_sim(intruder,o)
+        return cosine / (float)(len(topk))
+
 
     def load(self):
         """Load a SINrVectors model."""

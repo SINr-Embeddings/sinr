@@ -7,6 +7,7 @@ import pandas as pd
 import urllib.request
 import os
 from tqdm.auto import tqdm
+import time
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
@@ -18,16 +19,18 @@ def fetch_data_MEN():
     
     """
     
-    file = open('dataset.txt','wb')
+    file_name = 'dataset' + str(round(time.time()*1000)) + '.txt'
+    
+    file = open(file_name,'wb')
 
     with urllib.request.urlopen('https://www.dropbox.com/s/b9rv8s7l32ni274/EN-MEN-LEM.txt?dl=1') as response:
         file.write(response.read())
     
     file.close()
 
-    data = pd.read_csv('dataset.txt', header=None, sep=" ")
+    data = pd.read_csv(file_name, header=None, sep=" ")
     
-    os.remove('dataset.txt')
+    os.remove(file_name)
     
     # Remove last two chars from first two columns (-n, -a, -v)
     data = data.apply(lambda x: [y if isinstance(y, float) else y[0:-2] for y in x])
@@ -47,16 +50,18 @@ def fetch_data_WS353():
     
     """
     
-    file = open('dataset.txt','wb')
+    file_name = 'dataset' + str(round(time.time()*1000)) + '.txt'
+    
+    file = open(file_name,'wb')
 
     with urllib.request.urlopen('https://www.dropbox.com/s/eqal5qj97ajaycz/EN-WS353.txt?dl=1') as response:
         file.write(response.read())
 
     file.close()
     
-    data = pd.read_csv('dataset.txt', header=None, sep="\t")
+    data = pd.read_csv(file_name, header=None, sep="\t")
     
-    os.remove('dataset.txt')
+    os.remove(file_name)
 
     # Select the words pairs columns and the scores column
     X = data.values[1:, 0:2]
@@ -76,37 +81,57 @@ def fetch_data_SCWS():
     
     """
     
-    file = open('dataset.txt','wb')
+    file_name = 'dataset' + str(round(time.time()*1000)) + '.txt'
+    
+    file = open(file_name,'wb')
 
     with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SCWS1994_dataset.csv') as response:
         file.write(response.read())
     
     file.close()
 
-    data = pd.read_csv('dataset.txt', header=None, sep=";")
+    data = pd.read_csv(file_name, header=None, sep=";")
     
-    os.remove('dataset.txt')
+    os.remove(file_name)
 
     data = Bunch(X=data.values[:, 0:2].astype("object"), y=(data.values[:, 2:].astype(float) / 5.0).ravel())
 
     return data
 
-def fetch_SIMLEX(which="665"):
+
+def fetch_SimLex(which="665"):
+    """Fetch SimLex datasets for testing relatedness similarity
     
-    file = open('data_sim/dataset.txt','wb')
+    :param which: dataset (default value = "665")
+    :type which: str
     
+    :return: dictionary-like object. Keys of interest:
+             'X': matrix of 2 words per column,
+             'y': vector with scores
+    :rtype: sklearn.datasets.base.Bunch
+    
+    """
+    
+    file_name = 'dataset' + str(round(time.time()*1000)) + '.txt'
+    
+    file = open(file_name,'wb')
+    
+    # Nouns
     if which=="665":
         with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SimLex665_dataset.csv') as response:
             file.write(response.read())
-
+    
+    # Adjectives, nouns and verbs
     elif which=="999":
         with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SimLex999_dataset.csv') as response:
             file.write(response.read())
     
+    # Verbs
     elif which=="222":
         with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SimLex222_verbs_dataset.csv') as response:
             file.write(response.read())
-       
+    
+    # Adjectives
     elif which=="111":
         with urllib.request.urlopen('https://raw.githubusercontent.com/jjlastra/HESML/master/HESML_Library/WN_Datasets/SimLex111_adjectives_dataset.csv') as response:
             file.write(response.read())
@@ -116,9 +141,9 @@ def fetch_SIMLEX(which="665"):
         
     file.close()
     
-    data = pd.read_csv('data_sim/dataset.txt', header=None, sep=";")
+    data = pd.read_csv(file_name, header=None, sep=";")
     
-    os.remove('data_sim/dataset.txt')
+    os.remove(file_name)
         
     data = Bunch(X=data.values[:, 0:2].astype("object"), y=data.values[:, 2].astype(float))
     
