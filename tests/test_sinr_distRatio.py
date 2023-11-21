@@ -34,9 +34,6 @@ class TestSinr_embeddings(unittest.TestCase):
         self.assertTrue((set(self.sinr_vec.get_union_topk(25)) == intruder_candidates))
         
     def test_pick_intruder(self):
-        # un intru d'une dimension doit:
-        # - être dans le bottom de la dimension
-        # - être dans l'union des topk
         res = set()
         for ii in range(20):
             res.add(self.sinr_vec.pick_intruder(0))
