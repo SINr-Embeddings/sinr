@@ -17,11 +17,15 @@ class TestSinr_embeddings(unittest.TestCase):
     def setUp(self):
         """Set up test fixtures, if any."""
         
-        sinr_vec = ge.SINrVectors.load_from_w2v("./w2v_for_distRatio.txt", "sinrvec")
+        file = open("w2v_for_distRatio.txt", "w")
+        file.write("a 0.2 0.7 0.0 0.0\nb 0.5 0.1 0.0 0.0\nc 0.7 0.5 0.0 0.0\nd 0.9 0.4 0.0 0.0\ne 0.8 0.0 0.1 0.0\nf 0.6 0.0 0.2 0.0\ng 0.4 0.0 0.3 0.0\nh 0.3 0.0 0.4 0.0\ni 0.0 0.9 0.3 0.0\nj 0.0 0.8 0.2 0.0\nk 0.0 0.3 0.5 0.0\nl 0.0 0.2 0.1 0.0\nm 0.0 0.4 0.0 0.9\nn 0.0 0.2 0.0 0.4\no 0.0 0.6 0.0 0.4\np 0.0 0.1 0.0 0.3\nq 0.0 0.0 0.9 0.5\nr 0.0 0.0 0.8 0.6\ns 0.0 0.0 0.7 0.7\nt 0.0 0.0 0.6 0.8")
+        file.close()
+        sinr_vec = ge.SINrVectors.load_from_w2v("w2v_for_distRatio.txt", "sinrvec")
         self.sinr_vec = sinr_vec
         
     def tearDown(self):
         """Tear down test fixtures, if any."""
+        os.remove("w2v_for_distRatio.txt")
     
     def test_get_topk(self):
         self.assertTrue(set(self.sinr_vec._get_topk(0, row=False)) == set({3, 4, 2, 5, 1}))
