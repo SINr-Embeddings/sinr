@@ -698,7 +698,7 @@ class SINrVectors(object):
         """
         index = self._get_index(obj)
         vector = self._get_vector(index, row=True)
-        dict_in_dim = InterpretableDimension(dim_index,"descriptors").with_value(vector[dim_index]).get_dict()
+        dict_in_dim = InterpretableDimension(dim_index,"descriptors").with_value().get_dict()
         value = dict_in_dim["value"]
         return value
      
