@@ -195,7 +195,7 @@ def eval_similarity(sinr_vec, dataset, print_missing=True):
             else:
                 vec2 = vec_mean
                 if dataset.X[i][1] not in missing_words:
-                    missing_words.append(dataset.X[i][0])
+                    missing_words.append(dataset.X[i][1])
         else:
             vec2 = sinr_vec._get_vector(sinr_vec._get_index(dataset.X[i][1]))
         
