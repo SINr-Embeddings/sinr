@@ -1,7 +1,7 @@
 import pickle as pk
 
 from networkit import Graph, components, community, setNumberOfThreads, getCurrentNumberOfThreads, getMaxNumberOfThreads, Partition
-from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat, mean, nanmax, int64, shape
+from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat, mean, nanmax, int64, shape, delete
 from sklearn.neighbors import NearestNeighbors
 from scipy import spatial
 from scipy.sparse import csr_matrix
@@ -851,30 +851,29 @@ class SINrVectors(object):
         if threshold_min != None or threshold_max != None:
             dims = self.get_number_of_dimensions()
             
-            ind_min = list()
-            ind_max = list()
+            indexes = list()
 
             for dim in tqdm(range(dims)):
                 if threshold_min != None:
                     if self.dim_nnz_count(dim) < threshold_min:
-                        ind_min.append(dim)
+                        indexes.append(dim)
                 if threshold_max != None:
                     if self.dim_nnz_count(dim) > threshold_max:
-                        ind_max.append(dim)
+                        indexes.append(dim)
 
             # Remove dimensions from the matrix of embeddings
-            self.set_vectors(self.vectors[:,list(set(range(self.vectors.shape[1]))-set(ind_min + ind_max))])
+            self.set_vectors(csr_matrix(delete(self.vectors.toarray(), indexes, axis=1)))
 
             # Remove communities from communities sets
-            if self.communities_sets is not None:
-                for i in tqdm(sorted(ind_max + ind_min, reverse = True)):
-                    self.communities_sets.pop(i)
+            self.communities_sets = delete(self.communities_sets, indexes, axis=0)
 
             # Update of the community membership for each word of the vocabulary
             self.community_membership = list()
             for w in range(shape(self.vocab)[0]):
                 found = 0
+                #print(type(self.communities_sets))
                 for i, com in enumerate(self.communities_sets):
+                    #print(com)
                     if w in com:
                         self.community_membership.append(i)
                         found = 1
