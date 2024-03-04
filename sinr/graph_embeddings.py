@@ -1,7 +1,7 @@
 import pickle as pk
 
 from networkit import Graph, components, community, setNumberOfThreads, getCurrentNumberOfThreads, getMaxNumberOfThreads, Partition
-from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat, mean, nanmax, int64
+from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat, mean, nanmax, int64, shape
 from sklearn.neighbors import NearestNeighbors
 from scipy import spatial
 from scipy.sparse import csr_matrix
@@ -870,13 +870,16 @@ class SINrVectors(object):
                 for i in tqdm(sorted(ind_max + ind_min, reverse = True)):
                     self.communities_sets.pop(i)
 
-                # Update the communities members
-                self.community_membership = set()
-
-                for c in self.communities_sets:
-                    self.community_membership = self.community_membership.union(c)
-
-                self.community_membership = sorted(list(self.community_membership))
+            # Update of the community membership for each word of the vocabulary
+            self.community_membership = list()
+            for w in range(shape(self.vocab)[0]):
+                found = 0
+                for i, com in enumerate(self.communities_sets):
+                    if w in com:
+                        self.community_membership.append(i)
+                        found = 1
+                if not found:
+                    self.community_membership.append(-1)
     
     def dim_nnz_thresholds(self, step = 100, diff_tol = 0.005):
         """Give the minimal and the maximal number of non zero values to have for a dimension to be kept and not lower the model's similarity. Taking into account the datasets MEN, WS353, SCWS and SimLex-999.
