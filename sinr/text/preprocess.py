@@ -35,9 +35,11 @@ class Corpus:
 
 class VRTMaker:
     """ """
-    def _get_model(self):
+    def _get_model(self, spacy_size='lg'):
         """Load a SpaCy model.
-
+        
+        :param spacy_size: Size indicator 'sm', 'md' or 'lg' (default)
+        :type spacy_size: str
 
         :returns: A spacy.Language object with the loaded pipeline.
 
@@ -45,9 +47,9 @@ class VRTMaker:
 
         """
         if self.corpus.language == "fr":
-            return spacy.load("fr_core_news_lg")
+            return spacy.load("fr_core_news_" + spacy_size)
         elif self.corpus.language == "en":
-            return spacy.load("en_core_web_lg")
+            return spacy.load("en_core_web_" + spacy_size)
 
     def _create_output(self, output_path):
         """Create the output file for the processed data.
@@ -64,7 +66,7 @@ class VRTMaker:
         corpus_output.touch()
         return corpus_output
 
-    def __init__(self, corpus: Corpus, output_path, n_jobs=1):
+    def __init__(self, corpus: Corpus, output_path, n_jobs=1, spacy_size='lg'):
         """Initialize a VRTMaker object to build VRT preprocessed corpus files.
 
         :param corpus: The corpus object to preprocess.
@@ -73,12 +75,15 @@ class VRTMaker:
         :type output_path: str
         :param n_jobs: Number of jobs for preprocessing steps, defaults to 1
         :type n_jobs: int, optional
+        :param spacy_size: Size indicator to load SpaCy model (default 'lg')
+        :type spacy_size: str
         """
         self.corpus = corpus
         self.corpus_output = self._create_output(output_path)
-        self.model = self._get_model()
+        self.model = self._get_model(spacy_size=spacy_size)
         self._with_ner_merging()
         self.n_jobs = n_jobs
+        
 
     def _open(self):
         """Open the output file.
@@ -96,19 +101,32 @@ class VRTMaker:
         """Merge named entities."""
         self.model.add_pipe("merge_entities", after="ner")  # Merge Named-Entities
 
-    def do_txt_to_vrt(self):
-        """Build VRT format file and write to output filepath."""
+    def do_txt_to_vrt(self, separator='sentence'):
+        """Build VRT format file and write to output filepath.
+        
+        :param separator: If a preprocessing by sentences (defaults value) or by personnalized documents is needed (separator tag)
+        :type separator: str
+        
+        """
         corpus_opened = self._open()
         id_corpus = str(uuid.uuid4())  # Generate a random corpus id
         corpus_opened.write(
             f'<text id="{id_corpus}" filename="{Path(self.corpus.input_path).as_posix()}" register="{self.corpus.register}" language="{self.corpus.language}">\n')  # Write corpus identifier
+            
         input_file = Path(self.corpus.input_path).open("r")
-        input_txt = input_file.read().splitlines()  # Read INPUT_FILE
+        if separator=='sentence':
+            input_txt = input_file.read().splitlines()  # Read INPUT_FILE
+        else:
+            input_txt = input_file.read().split(separator)
         logger.info(str(len(input_txt)) + "lines to preprocess")
         input_file.close()
+        
         for doc in tqdm(self.model.pipe(input_txt, n_process=self.n_jobs), total=len(input_txt)):
+            if separator != 'sentence':
+                corpus_opened.write("<s>\n")  # Write a document start
             for sent in doc.sents:  # Sentence border detection
-                corpus_opened.write("<s>\n")  # Write a sentence start
+                if separator == 'sentence':
+                    corpus_opened.write("<s>\n")  # Write a sentence start
                 for token in sent:  # For each token
                     if token.ent_type_ == '':  # If current token is not a Named-Entity
                         ent_type = None
@@ -133,7 +151,10 @@ class VRTMaker:
                                          str(token.is_digit),
                                          str(token.like_num)])
                     corpus_opened.write(f'{content}\n')  # Write the token info
-                corpus_opened.write("</s>\n")
+                if separator == 'sentence':
+                    corpus_opened.write("</s>\n") # Write a sentence's end
+            if separator != 'sentence':
+                corpus_opened.write("</s>\n")  # Write a document's end
         corpus_opened.close()
         logger.info(f"VRT-style file written in {self.corpus_output.absolute()}")
 
@@ -153,7 +174,7 @@ def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=F
     :param exclude_en: list (Default value = [])
     :param lower_words:  (Default value = True)
     :param min_length_word:  (Default value = 3)
-    :returns: text (list(list(str))): A list of sentences containing words
+    :returns: text (list(list(str))): A list of documents containing words
 
     """
     corpus_file = open_corpus(corpus_path)
@@ -161,7 +182,7 @@ def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=F
     out = []
     pattern = re.compile(r"<text[^<>]*\"\>{1}")
     stop_words, number, punct, alpha = str(stop_words), str(number), str(punct), str(alpha)
-    sentence = []
+    document = []
     
     if en != "chunking" and en != "tagging" and en != "deleting" :
         logger.info(f"No correct option for en was provided: {en} is not valid. en option was thus set to chunking")
@@ -177,10 +198,10 @@ def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=F
         
     for line in tqdm(text, total=len(text)):
         if line.startswith("<s>"):
-            sentence = []
+            document = []
         elif line.startswith("</s>"):
-            if len(sentence) > 2:
-                out.append(sentence)
+            if len(document) > 2:
+                out.append(document)
         elif len(pattern.findall(line)) > 0:
             pass
         else:
@@ -199,7 +220,7 @@ def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=F
                 if not lemmatize:
                     lemma_ = token_
                 if token_ in exceptions : 
-                    sentence.append(token_)
+                    document.append(token_)
                 else :
                     if stop_words == is_stop and is_punct == punct and is_digit == number and like_num == number and not pos in exclude_pos and not ent_type in exclude_en and (alpha == is_alpha or ent_type != "None"):
                         if exclude_en and ent_iob != "None":
@@ -207,13 +228,13 @@ def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=F
                         else:
                             if ent_type != "None" and len(lemma_) > 1:
                                 if en == "chunking" :
-                                    sentence.append(token_)
+                                    document.append(token_)
                                 elif en == "tagging" :
-                                    sentence.append(ent_type)  
+                                    document.append(ent_type)  
                                 elif en == "deleting" :
                                     pass
                             elif len(lemma) > min_length_word:
-                                sentence.append(lemma_)
+                                document.append(lemma_)
                     else:
                         pass
             else:
