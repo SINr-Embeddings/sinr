@@ -55,7 +55,7 @@ class TestSinr_embeddings(unittest.TestCase):
         vrt_maker = ppcs.VRTMaker(ppcs.Corpus(ppcs.Corpus.REGISTER_WEB,
                                   ppcs.Corpus.LANGUAGE_EN,
                                   self.txt_path),
-                                  ".", n_jobs=8)
+                                  ".", n_jobs=8, spacy_size='sm')
         vrt_maker.do_txt_to_vrt(separator=self.doc_separator)
         docs = ppcs.extract_text(self.vrt_path, lemmatize=True, min_freq=1)
         self.assertTrue(len(docs) == self.n_doc)
@@ -65,7 +65,7 @@ class TestSinr_embeddings(unittest.TestCase):
         vrt_maker = ppcs.VRTMaker(ppcs.Corpus(ppcs.Corpus.REGISTER_WEB,
                                   ppcs.Corpus.LANGUAGE_EN,
                                   self.txt_path),
-                                  ".", n_jobs=8)
+                                  ".", n_jobs=8, spacy_size='sm')
         vrt_maker.do_txt_to_vrt()
         sentences = ppcs.extract_text(self.vrt_path, lemmatize=True, min_freq=1)
         self.assertTrue(len(sentences) == self.n_sent)
@@ -75,7 +75,7 @@ class TestSinr_embeddings(unittest.TestCase):
         vrt_maker = ppcs.VRTMaker(ppcs.Corpus(ppcs.Corpus.REGISTER_WEB,
                                   ppcs.Corpus.LANGUAGE_EN,
                                   self.txt_path),
-                                  ".", n_jobs=8)
+                                  ".", n_jobs=8, spacy_size='sm')
         vrt_maker.do_txt_to_vrt()
         sentences = ppcs.extract_text(self.vrt_path, min_freq=1)
         

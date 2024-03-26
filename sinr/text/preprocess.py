@@ -35,9 +35,11 @@ class Corpus:
 
 class VRTMaker:
     """ """
-    def _get_model(self):
+    def _get_model(self, spacy_size='lg'):
         """Load a SpaCy model.
-
+        
+        :param spacy_size: Size indicator 'sm', 'md' or 'lg' (default)
+        :type spacy_size: str
 
         :returns: A spacy.Language object with the loaded pipeline.
 
@@ -45,9 +47,9 @@ class VRTMaker:
 
         """
         if self.corpus.language == "fr":
-            return spacy.load("fr_core_news_lg")
+            return spacy.load("fr_core_news_" + spacy_size)
         elif self.corpus.language == "en":
-            return spacy.load("en_core_web_lg")
+            return spacy.load("en_core_web_" + spacy_size)
 
     def _create_output(self, output_path):
         """Create the output file for the processed data.
@@ -64,7 +66,7 @@ class VRTMaker:
         corpus_output.touch()
         return corpus_output
 
-    def __init__(self, corpus: Corpus, output_path, n_jobs=1):
+    def __init__(self, corpus: Corpus, output_path, n_jobs=1, spacy_size='lg'):
         """Initialize a VRTMaker object to build VRT preprocessed corpus files.
 
         :param corpus: The corpus object to preprocess.
@@ -73,12 +75,15 @@ class VRTMaker:
         :type output_path: str
         :param n_jobs: Number of jobs for preprocessing steps, defaults to 1
         :type n_jobs: int, optional
+        :param spacy_size: Size indicator to load SpaCy model (default 'lg')
+        :type spacy_size: str
         """
         self.corpus = corpus
         self.corpus_output = self._create_output(output_path)
-        self.model = self._get_model()
+        self.model = self._get_model(spacy_size=spacy_size)
         self._with_ner_merging()
         self.n_jobs = n_jobs
+        
 
     def _open(self):
         """Open the output file.
