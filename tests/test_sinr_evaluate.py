@@ -7,7 +7,7 @@ import pytest
 import unittest
 
 import sinr.graph_embeddings as ge
-from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS
+from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer
 import urllib.request
 import os
 
@@ -30,6 +30,13 @@ class TestSinr_embeddings(unittest.TestCase):
         vectors = ge.SINrVectors('oanc')
         vectors.load()
         self.vectors = vectors
+        
+        # datas for classification 
+        X_train = [['goodbye', 'please', 'love'],[],['no', 'yes', 'friend', 'family', 'happy'],['a', 'the'],['beautiful','small','a']]
+        y_train = [0,0,1,0,1]
+        
+        self.X_train = X_train
+        self.y_train = y_train
 
     def tearDown(self):
         """Tear down test fixtures, if any."""
@@ -43,6 +50,10 @@ class TestSinr_embeddings(unittest.TestCase):
         self.assertGreater(round(res["MEN"],2), 0.38)
         self.assertGreater(round(res["WS353"],2), 0.40)
         self.assertGreater(round(res["SCWS"],2), 0.38)
+    
+    def test_vectorize(self):
+        X, y = vectorizer(self.vectors, self.X_train, y=self.y_train)
+        self.assertTrue(len(X) == len(y))
 
 if __name__ == '__main__':
     unittest.main()

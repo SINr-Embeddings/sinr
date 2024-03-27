@@ -283,3 +283,37 @@ def dist_ratio_dim(sinr_vec, dim, union=None, prctbot=50, prcttop=10, nbtopk=5, 
             print("dimension",dim,"inter nulle", topks)
             return 0
         return intra / inter
+
+def vectorizer(sinr_vec, X, y=[]):
+    """Vectorize preprocessed documents to sinr embeddings
+    
+    :param sinr_vec: SINrVectors object
+    :type sinr_vec: SINrVectors
+    :param X: preprocessed documents
+    :type X: text (list(list(str))): A list of documents containing words
+    :param y: documents labels
+    :type y: numpy.ndarray
+    """
+    
+    if len(y) > 0 and len(X) != len(y):
+        raise ValueError("X and y must be the same size")
+    
+    indexes = set()
+    vectors = list()
+    
+    # Doc to embedding
+    for i, doc in enumerate(X):
+        doc_vec = [sinr_vec._get_vector(sinr_vec._get_index(token)) for token in doc if token in sinr_vec.vocab]
+        if len(doc_vec) == 0:
+            indexes.add(i)
+        else:
+            vectors.append(np.mean(doc_vec, axis=0))
+        
+    # Delete labels of:
+    #- empty documents
+    #- documents with only unknown vocabulary
+    if len(y) > 0:
+        y = np.delete(y, list(indexes))
+        y = list(map(int,y))
+          
+    return vectors, y
