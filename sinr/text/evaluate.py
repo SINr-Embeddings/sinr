@@ -3,11 +3,13 @@ from numpy.linalg import norm
 import scipy
 from scipy import stats
 from sklearn.datasets._base import Bunch
+import sklearn.metrics as metrics
 import pandas as pd
 import urllib.request
 import os
 from tqdm.auto import tqdm
 import time
+import xgboost as xgb
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
@@ -293,6 +295,8 @@ def vectorizer(sinr_vec, X, y=[]):
     :type X: text (list(list(str))): A list of documents containing words
     :param y: documents labels
     :type y: numpy.ndarray
+    
+    :returns: list of vectors
     """
     
     if len(y) > 0 and len(X) != len(y):
@@ -317,3 +321,38 @@ def vectorizer(sinr_vec, X, y=[]):
         y = list(map(int,y))
           
     return vectors, y
+
+def clf_fit(X_train, y_train, clf=xgb.XGBClassifier()):
+    """Fit a classification model according to the given training data.
+    :param X_train: training data
+    :type X_train: list of vectors
+    :param y_train: labels
+    :type y_train: numpy.ndarray
+    :param clf: classifier
+    :type clf: classifier (ex.: xgboost.XGBClassifier, sklearn.svm.SVC)
+    
+    :returns: Fitted classifier
+    :rtype: classifier
+    """
+    clf.fit(X_train, y_train)
+    return clf
+
+def clf_score(clf, X_test, y_test, scoring='accuracy', params={}):
+    """Evaluate classification on given test data.
+    :param clf: classifier
+    :type clf: classifier (ex.: xgboost.XGBClassifier, sklearn.svm.SVC)
+    :param X_test: test data
+    :type X_test: list of vectors
+    :param y_test: labels
+    :type y_test: numpy.ndarray
+    :param scoring: scikit-learn scorer object, default='accuracy'
+    :type scoring: str
+    :param params: parameters for the scorer object
+    :type params: dictionary
+    
+    :returns: Score
+    :rtype: float
+    """
+    score = getattr(metrics, scoring+'_score')
+    y_pred = clf.predict(X_test)
+    return score(y_test, y_pred, **params)
