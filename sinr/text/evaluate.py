@@ -3,11 +3,13 @@ from numpy.linalg import norm
 import scipy
 from scipy import stats
 from sklearn.datasets._base import Bunch
+import sklearn.metrics as metrics
 import pandas as pd
 import urllib.request
 import os
 from tqdm.auto import tqdm
 import time
+import xgboost as xgb
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
@@ -283,3 +285,110 @@ def dist_ratio_dim(sinr_vec, dim, union=None, prctbot=50, prcttop=10, nbtopk=5, 
             print("dimension",dim,"inter nulle", topks)
             return 0
         return intra / inter
+
+def vectorizer(sinr_vec, X, y=[]):
+    """Vectorize preprocessed documents to sinr embeddings
+    
+    :param sinr_vec: SINrVectors object
+    :type sinr_vec: SINrVectors
+    :param X: preprocessed documents
+    :type X: text (list(list(str))): A list of documents containing words
+    :param y: documents labels
+    :type y: numpy.ndarray
+    
+    :returns: list of vectors
+    """
+    
+    if len(y) > 0 and len(X) != len(y):
+        raise ValueError("X and y must be the same size")
+    
+    indexes = set()
+    vectors = list()
+    
+    # Doc to embedding
+    for i, doc in enumerate(X):
+        doc_vec = [sinr_vec._get_vector(sinr_vec._get_index(token)) for token in doc if token in sinr_vec.vocab]
+        if len(doc_vec) == 0:
+            indexes.add(i)
+        else:
+            vectors.append(np.mean(doc_vec, axis=0))
+        
+    # Delete labels of:
+    #- empty documents
+    #- documents with only unknown vocabulary
+    if len(y) > 0:
+        y = np.delete(y, list(indexes))
+        y = list(map(int,y))
+          
+    return vectors, y
+
+def clf_fit(X_train, y_train, clf=xgb.XGBClassifier()):
+    """Fit a classification model according to the given training data.
+    :param X_train: training data
+    :type X_train: list of vectors
+    :param y_train: labels
+    :type y_train: numpy.ndarray
+    :param clf: classifier
+    :type clf: classifier (ex.: xgboost.XGBClassifier, sklearn.svm.SVC)
+    
+    :returns: Fitted classifier
+    :rtype: classifier
+    """
+    clf.fit(X_train, y_train)
+    return clf
+
+def clf_score(clf, X_test, y_test, scoring='accuracy', params={}):
+    """Evaluate classification on given test data.
+    :param clf: classifier
+    :type clf: classifier (ex.: xgboost.XGBClassifier, sklearn.svm.SVC)
+    :param X_test: test data
+    :type X_test: list of vectors
+    :param y_test: labels
+    :type y_test: numpy.ndarray
+    :param scoring: scikit-learn scorer object, default='accuracy'
+    :type scoring: str
+    :param params: parameters for the scorer object
+    :type params: dictionary
+    
+    :returns: Score
+    :rtype: float
+    """
+    score = getattr(metrics, scoring+'_score')
+    y_pred = clf.predict(X_test)
+    return score(y_test, y_pred, **params)
+
+def clf_xgb_interpretability(sinr_vec, xgb, interpreter,topk_dim=10, topk=5, importance_type='gain'):
+    """Interpretability of main dimensions used by the xgboost classifier
+    :param sinr_vec: SINrVectors object from which datas were vectorized
+    :type sinr_vec: SINrVectors
+    :param xgb: fitted xgboost classifier
+    :type xgb: xgboost.XGBClassifier
+    :param interpreter: whether stereotypes or descriptors are requested
+    :type interpreter: str
+    :param topk_dim: Number of features requested among the main features used by the classifier (Default value = 10)
+    :type topk_dim: int
+    :param topk: `topk` value to consider on each dimension (Default value = 5)
+    :type topk: int
+    :param importance_type: ‘weight’: the number of times a feature is used to split the data across all trees,
+                            ‘gain’: the average gain across all splits the feature is used in,
+                            ‘cover’: the average coverage across all splits the feature is used in,
+                            ‘total_gain’: the total gain across all splits the feature is used in
+                            ‘total_cover’: the total coverage across all splits the feature is used in
+    :type importance_type: str
+    
+    :returns: Interpreters of dimensions, importance of dimensions
+    :rtype: list of set of object, list of tuple
+
+    """
+    
+    features = xgb.get_booster().get_score(importance_type=importance_type)
+    features = dict(sorted(features.items(), key=lambda x: x[1], reverse=True))
+    features_index = [int(f[1:]) for f in list(features.keys())[:topk_dim]]
+    features_importance = list(features.items())[:topk_dim]
+    
+    if interpreter=='descriptors':
+        dim = [sinr_vec.get_dimension_descriptors_idx(index, topk=topk) for index in features_index]
+    elif interpreter=='stereotypes':
+        dim = [sinr_vec.get_dimension_stereotypes_idx(index, topk=topk) for index in features_index]
+    
+    return dim, features_importance

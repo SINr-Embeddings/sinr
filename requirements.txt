@@ -11,3 +11,4 @@ setuptools==66.0.0
 spacy==3.5.3
 tqdm==4.65.0
 tabulate==0.9.0
+xgboost==2.0.3

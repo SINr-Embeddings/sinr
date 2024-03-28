@@ -11,6 +11,7 @@ import os
 from sklearn.datasets import fetch_20newsgroups
 
 
+
 class TestSinr_embeddings(unittest.TestCase):
     """Tests for `graph_embeddings` package."""
 
@@ -19,6 +20,8 @@ class TestSinr_embeddings(unittest.TestCase):
         
         txt_path = './ppcs_test.txt'
         vrt_path = './ppcs_test.vrt'
+        txt_empty_docs_path = './ppcs_test_empty_docs.txt'
+        vrt_empty_docs_path = './ppcs_test_empty_docs.vrt'
         doc_separator = '##D'
         s0 = doc_separator + " At 10 a.m, in the heart of New York City, John Smith walked briskly towards the Empire State Building. "
         text = ( s0 +
@@ -38,8 +41,13 @@ class TestSinr_embeddings(unittest.TestCase):
         with open(txt_path, 'w+') as file:
             file.write(text)
         file.close()
+        with open(txt_empty_docs_path, 'w+') as file:
+            file.write(doc_separator + ' ' + doc_separator + ' ' + doc_separator + ' ' + doc_separator + ' ')
+        file.close()
         self.txt_path = txt_path
         self.vrt_path = vrt_path
+        self.txt_empty_docs_path = './ppcs_test_empty_docs.txt'
+        self.vrt_empty_docs_path = './ppcs_test_empty_docs.vrt'
         self.n_doc = 4
         self.n_sent = 10
         self.doc_separator = doc_separator
@@ -48,7 +56,11 @@ class TestSinr_embeddings(unittest.TestCase):
     def tearDown(self):
         """Tear down test fixtures, if any."""
         os.remove(self.txt_path)
-        os.remove(self.vrt_path)
+        os.remove(self.txt_empty_docs_path)
+        if os.path.isfile(self.vrt_path):
+            os.remove(self.vrt_path)
+        else:
+            os.remove(self.vrt_empty_docs_path)
     
     def test_doc_separator(self):
         """Testing if the preprocessed datas have the right number of documents"""
@@ -98,6 +110,16 @@ class TestSinr_embeddings(unittest.TestCase):
                             ok.append(token.text.lower() == s[ind])
                             
         self.assertTrue(False not in ok)
+        
+    def test_preprocessing_empty_docs(self):
+        """Testing min_length_doc = -1 : documents of all sizes are kept"""
+        vrt_maker = ppcs.VRTMaker(ppcs.Corpus(ppcs.Corpus.REGISTER_WEB,
+                                  ppcs.Corpus.LANGUAGE_EN,
+                                  self.txt_empty_docs_path),
+                                  ".", n_jobs=8, spacy_size='sm')
+        vrt_maker.do_txt_to_vrt(separator=self.doc_separator)
+        docs = ppcs.extract_text(self.vrt_empty_docs_path, min_freq=1, min_length_doc=-1)
+        self.assertTrue(len(docs) == self.n_doc)
             
         
 if __name__ == '__main__':
