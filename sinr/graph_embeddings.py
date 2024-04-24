@@ -1235,7 +1235,7 @@ class SINrVectors(object):
     def get_dimension_stereotypes(self, obj, topk=5):
         """Get the words with the highest values on dimension obj.
 
-        :param obj: id of a dimension, or label of a word (then turned into the id of its community)
+        :param obj: id of a word, or label of a word (then turned into the id of its community)
         :type obj: int or str
         :param topk: topk value to consider on the dimension (Default value = 5)
         :type topk: int
@@ -1243,7 +1243,10 @@ class SINrVectors(object):
 
         """
         index = self._get_index(obj)
-        return self.get_dimension_stereotypes_idx(self.get_community_membership(index), topk)
+        if self.community_membership[index] != -1:
+            return self.get_dimension_stereotypes_idx(self.get_community_membership(index), topk)
+        else:
+            raise DimensionFilteredException("'"+self.vocab[index] + "' (id "+str(index)+') is member of a community which got removed by filtering.')
 
     def get_dimension_stereotypes_idx(self, idx, topk=5):
         """Get the indices of the words with the highest values on dimension obj.
@@ -1469,3 +1472,7 @@ class SINrVectors(object):
         f = open(self.name + "_light.pk", 'wb')
         pk.dump(data,f)
         f.close()
+
+class DimensionFilteredException(Exception):
+    """Exception raised when trying to access a dimension removed by filtering. """
+    pass
