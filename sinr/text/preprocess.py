@@ -158,7 +158,7 @@ class VRTMaker:
         corpus_opened.close()
         logger.info(f"VRT-style file written in {self.corpus_output.absolute()}")
 
-def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False, exclude_pos=[], en="chunking", min_freq=50, alpha=True, exclude_en=[], min_length_word=3, min_length_doc=2):
+def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False, exclude_pos=[], en="chunking", min_freq=50, alpha=True, exclude_en=[], min_length_word=3, min_length_doc=2, dict_filt=[]):
     """Extracts the text from a VRT corpus file.
 
     :param corpus_path: str
@@ -176,6 +176,8 @@ def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=F
     :param min_length_word:  (Default value = 3)
     :param min_length_doc: The minimal number of token for a document (or sentence) to be kept (Default value = 2)
     :type min_length_doc: int
+    :param dict_filt: List of words to keep only specific vocabulary
+    :type dict_filt: list
     :returns: text (list(list(str))): A list of documents containing words
 
     """
@@ -236,7 +238,11 @@ def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=F
                                 elif en == "deleting" :
                                     pass
                             elif len(lemma) > min_length_word:
-                                document.append(lemma_)
+                                if len(dict_filt) > 0:
+                                    if lemma_ in dict_filt:
+                                        document.append(lemma_)
+                                else:
+                                    document.append(lemma_)
                     else:
                         pass
             else:
