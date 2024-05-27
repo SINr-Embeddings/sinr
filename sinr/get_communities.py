@@ -65,7 +65,7 @@ if __name__=="__main__":
         
     sinr_2 = ge.SINr.load_from_cooc_pkl(path_to_matrix_2)
     # Evaluating the similarity for the small corpus using communities learned on the big one
-    '''sinr_2.transfert_communities_labels(sinr_vectors_1.get_communities_as_labels_sets())
+    sinr_2.transfert_communities_labels(sinr_vectors_1.get_communities_as_labels_sets())
     sinr_2.extract_embeddings()
     sinr_vectors_transferred = ge.InterpretableWordsModelBuilder(sinr_2, corpus_2_name, n_jobs=40, n_neighbors=4).build()
 
@@ -87,24 +87,23 @@ if __name__=="__main__":
     # Evaluating the similarity for the small corpus using communities learned on itself
     sinr_vectors_2.sparsify(100)
     similarity = ev.similarity_MEN_WS353_SCWS(sinr_vectors_2)
-    print(f"{corpus_2_name}: {similarity}")'''
+    print(f"{corpus_2_name}: {similarity}")
 
     # Giving the precomputed communities as a seed to label propagation to see if this helps
-    initial_partition = sinr_2.get_communities()
+    '''initial_partition = sinr_2.get_communities()
     print(len([i for i in initial_partition.subsetSizes() if i==1]), initial_partition.numberOfSubsets())
 
     cooc_nx_graph = networkit.nxadapter.nk2nx(sinr_2.get_cooc_graph())
     igraph_graph = ig.Graph()
-    ig.add_vertices(igraph_graph, len(cooc_nx_graph.nodes))
-    ig.add_edges(igraph_graph, list(cooc_nx_graph.edges), {[e[2]['weight'] for e in cooc_nx_graph.edges(data=True)]})
-
-    '''networkx_graph = networkit.nxadapter.nk2nx(sinr_2.get_cooc_graph())
-    igraph_graph = ig.Weighted_Adjacency(ig.Graph.from_networkx(networkx_graph)
-    partition = la.find_partition(igraph_graph, la.ModularityVertexPartition)#, initial_membership=initial_partition.getVector())
-
-    algo = community.PLP(sinr_2.get_cooc_graph(), baseClustering=initial_partition)
-    refined_communities = community.detectCommunities(sinr_2.get_cooc_graph(), algo=algo, inspect=True)
-    refined_communities.compact(useTurbo=True)  # Consecutive communities from 0 to number of communities - 1
+    ig.Graph.add_vertices(igraph_graph, len(cooc_nx_graph.nodes))
+    ig.Graph.add_edges(igraph_graph, list(cooc_nx_graph.edges), {"weight": [e[2]['weight'] for e in cooc_nx_graph.edges(data=True)]})
+    partition = ig.Graph.community_leiden(igraph_graph, objective_function="CPM", weights="weight", initial_membership=initial_partition.getVector())#.membership
+    refined_communities = networkit.structures.Partition(sinr_2.size_of_voc())
+    refined_communities.allToSingletons()
+    for node,community in enumerate(partition):
+        for n in community:
+            refined_communities.moveToSubset(node,n)
+    print(len([i for i in refined_communities.subsetSizes() if i==1]), refined_communities.numberOfSubsets())
 
     sinr_2_refined = ge.SINr.load_from_cooc_pkl(path_to_matrix_2)
     sinr_2_refined.extract_embeddings(refined_communities)
