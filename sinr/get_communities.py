@@ -38,20 +38,9 @@ if __name__=="__main__":
     corpus_1_name, path_to_matrix_1 = parse_path(corpus_1)
     corpus_2_name, path_to_matrix_2 = parse_path(corpus_2)
 
-    '''corpus_2 = sys.argv[2]
-    path_to_corpus_2 = "/".join(corpus_2.split("/")[:-1])+"/"
-    corpus_2_name = (corpus_2.split("/")[-1]).split(".")[0]
-    path_to_matrix_2 = path_to_corpus_2+corpus_2_name+"_matrix.pk"'''
-    
     # Creating the cooccurrence matrix if not existing
     create_cooc_matrix(path_to_matrix_1, corpus_1)
     create_cooc_matrix(path_to_matrix_2, corpus_2)
-    '''if not isfile(path_to_matrix_2):
-        c = Cooccurrence()
-        sentences = extract_text(corpus_2, lemmatize=True, lower_words=True, number=False,punct=False, en='chunking', min_freq=20, alpha=True, min_length_word=3)
-        c.fit(sentences, window=100)
-        c.matrix = pmi_filter(c.matrix)
-        c.save(path_to_matrix_2)'''
 
     # Saving the embeddings for the sake of performance
     if not isfile(corpus_1_name+".pk"):
@@ -59,6 +48,8 @@ if __name__=="__main__":
         communities = sinr_1.detect_communities(gamma=50)
         sinr_1.extract_embeddings()
         sinr_vectors_1 = ge.InterpretableWordsModelBuilder(sinr_1, corpus_1_name, n_jobs=40, n_neighbors=4).build()
+        initial_partition = sinr_1.get_communities()
+        print(len([i for i in initial_partition.subsetSizes() if i==1]), initial_partition.numberOfSubsets())
         sinr_vectors_1.save()
     else:
         sinr_1 = ge.SINr.load_from_cooc_pkl(path_to_matrix_1)
@@ -74,7 +65,7 @@ if __name__=="__main__":
         
     sinr_2 = ge.SINr.load_from_cooc_pkl(path_to_matrix_2)
     # Evaluating the similarity for the small corpus using communities learned on the big one
-    sinr_2.transfert_communities_labels(sinr_vectors_1.get_communities_as_labels_sets())
+    '''sinr_2.transfert_communities_labels(sinr_vectors_1.get_communities_as_labels_sets())
     sinr_2.extract_embeddings()
     sinr_vectors_transferred = ge.InterpretableWordsModelBuilder(sinr_2, corpus_2_name, n_jobs=40, n_neighbors=4).build()
 
@@ -82,7 +73,7 @@ if __name__=="__main__":
     similarity = ev.similarity_MEN_WS353_SCWS(sinr_vectors_transferred)
     print(f"{corpus_2_name} transferred: {similarity}")
 
-    '''if not isfile(corpus_2_name+".pk"):
+    if not isfile(corpus_2_name+".pk"):
         sinr_2 = ge.SINr.load_from_cooc_pkl(path_to_matrix_2)
         communities = sinr_2.detect_communities(gamma=50)
         sinr_2.extract_embeddings()
@@ -101,6 +92,11 @@ if __name__=="__main__":
     # Giving the precomputed communities as a seed to label propagation to see if this helps
     initial_partition = sinr_2.get_communities()
     print(len([i for i in initial_partition.subsetSizes() if i==1]), initial_partition.numberOfSubsets())
+
+    cooc_nx_graph = networkit.nxadapter.nk2nx(sinr_2.get_cooc_graph())
+    igraph_graph = ig.Graph()
+    ig.add_vertices(igraph_graph, len(cooc_nx_graph.nodes))
+    ig.add_edges(igraph_graph, list(cooc_nx_graph.edges), {[e[2]['weight'] for e in cooc_nx_graph.edges(data=True)]})
 
     '''networkx_graph = networkit.nxadapter.nk2nx(sinr_2.get_cooc_graph())
     igraph_graph = ig.Weighted_Adjacency(ig.Graph.from_networkx(networkx_graph)
