@@ -143,23 +143,33 @@ class SINr(object):
 
         """
         self.communities = Partition(self.size_of_voc())
-        self.communities.allToSingletons()
-        for com in community_labels:
+        transferred = [False]*self.size_of_voc()
+        #self.communities.allToSingletons()
+        for index_com,com in enumerate(community_labels):
             new_com = []
             # Check if labels in communities passed as parameters are in the graph at hand, if so -> transfer the community
             for word in com:
                 if word in self.wrd_to_idx:
                     new_com.append(self.wrd_to_idx[word])
+                    transferred[self.wrd_to_idx[word]]=True
             # Transferring the community to the graph at hand
-            if len(new_com) > 1:
+            if len(new_com) > 0:
+                for idx in range(len(new_com)):
+                    self.communities.addToSubset(index_com, new_com[idx])
+            '''if(len(new_com) > 1:
                 subset_id = self.communities.subsetOf(new_com[0])
-                for idx in range(1, len(new_com)):
-                    self.communities.moveToSubset(subset_id, new_com[idx])
-        # Compating the community ids
-        self.communities.compact()
+                for idx in range(1,len(new_com)):
+                    self.communities.moveToSubset(subset_id, new_com[idx])'''
+
+        for r in range(self.size_of_voc()):
+            if not transferred[r]:
+                index_com += 1
+                self.communities.addToSubset(index_com, r)
         if refine:
             self._refine_transfered_communities()
 
+        # Compacting the community ids
+        self.communities.compact()
 
     def extract_embeddings(self, communities=None):
         """Extract the embeddings based on the graph and the partition in communities previously detected.
