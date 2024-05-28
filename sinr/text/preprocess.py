@@ -250,7 +250,7 @@ def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=F
     if min_freq > 1:
         counts = Counter([word for sent in out for word in sent])
         accepted_tokens = {word for word, count in counts.items() if count >= min_freq}
-        out = [[word for word in sent if word in accepted_tokens] for sent in out]
+        out = [[word for word in sent if word in accepted_tokens or word in exceptions] for sent in out]
         # line = corpus.readline().rstrip()
         # x+=1
     return out
