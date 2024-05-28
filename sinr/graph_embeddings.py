@@ -161,6 +161,7 @@ class SINr(object):
                 for idx in range(1,len(new_com)):
                     self.communities.moveToSubset(subset_id, new_com[idx])'''
 
+        print(f"Number of vertices not found in original communities is {len([e for e in transferred if transferred[e]==False])}")
         for r in range(self.size_of_voc()):
             if not transferred[r]:
                 index_com += 1
