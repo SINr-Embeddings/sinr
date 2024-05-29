@@ -14,6 +14,13 @@ min_frequences = {
         "OANC_raw": 20
         }
 
+gamma = { 
+        "BNC": 80,
+        "OANC_raw": 50,
+        "oanc_extracted": 50,
+        "acl_extracted": 50
+        }
+
 def diff_voc(voc_1, voc_2):
     """Compute the set of words that are in voc_2 but not in voc_1
 
@@ -48,6 +55,19 @@ def parse_path(path):
     path_to_matrix = path_to_corpus+corpus_name+"_matrix.pk"
     return corpus_name, path_to_matrix
 
+def create_cooc_matrix_from_sentences(sentences,path_to_matrix,corpus_name):
+    """ Utility function computing the cooccurrence matrix from the corpus, if not done yet.
+
+    :param matrix: Path to the file containing the cooccurrence matrix
+    :param corpus: Path to the file containing the corpus (.VRT)
+
+    """
+    if not isfile(path_to_matrix):
+        c = Cooccurrence()
+        c.fit(sentences, window=100)
+        c.matrix = pmi_filter(c.matrix)
+        c.save(path_to_matrix)
+
 def create_cooc_matrix(matrix,corpus,corpus_name,min_frequences):
     """ Utility function computing the cooccurrence matrix from the corpus, if not done yet.
 
@@ -64,23 +84,26 @@ def create_cooc_matrix(matrix,corpus,corpus_name,min_frequences):
 
 # TODO --- split into compute_communities and compute_vectors for better modularity 
 # (also change the name of path_to_matrix, maybe not adapted)
-def compute_communities_and_vectors(path_to_matrix, corpus_name, extension):
+def compute_communities_and_vectors(path_to_matrix, corpus_name, extension, gamma, logger=None):
     """Returns SINr and SINrVectors objects created from the cooccurrence matrix given as argument
 
     :param path_to_matrix: Path to the pickle file containing the cooccurrence matrix
     """
     if not isfile(corpus_name+extension):
-        # TODO -- passer le logger en argument
         #logger.info(f"Computing communities and embeddings for {corpus_name}")
         sinr = ge.SINr.load_from_cooc_pkl(path_to_matrix)
-        communities = sinr.detect_communities(gamma=50)
+        communities = sinr.detect_communities(gamma=gamma)
         sinr.extract_embeddings()
         sinr_vectors = ge.InterpretableWordsModelBuilder(sinr, corpus_name, n_jobs=40, n_neighbors=4).build()
         sinr_vectors.save()
         initial_partition = sinr.get_communities()
-        #logger.info(f"{corpus_name} has {len([i for i in initial_partition.subsetSizes() if i==1])} singleton communities for {initial_partition.numberOfSubsets()} communities")
+        if logger is not None:
+            sizes = initial_partition.subsetSizes()
+            logger.warning(f"{corpus_name} has {len(sizes)} communities of maximum size {max(sizes)} and of average size {sum(sizes)/len(sizes)}")
+
     else:
-        #logger.warning(f"Loading communities and embeddings of {corpus_name} for the sake of performance: SHOULD BE COMPUTED AT ANY RUN")
+        if logger is not None:
+            logger.debug(f"Loading communities and embeddings of {corpus_name} for the sake of performance: SHOULD BE COMPUTED AT ANY RUN")
         sinr = ge.SINr.load_from_cooc_pkl(path_to_matrix)
         sinr_vectors = ge.SINrVectors(corpus_name)
         sinr_vectors.load()
@@ -92,7 +115,7 @@ def compute_similarity(sinr_vectors, corpus_name):
     similarity = ev.similarity_MEN_WS353_SCWS(sinr_vectors)
     return f"{corpus_name}: {similarity}"
 
-def refine(graph, communities, algorithm):
+def refine(graph, communities, algorithm, gamma=50):
     def _leiden():
         from cdlib import algorithms, NodeClustering
         networkx_graph = networkit.nxadapter.nk2nx(graph)
@@ -118,7 +141,7 @@ def refine(graph, communities, algorithm):
             list_of_communities[community].append(index)
 
         nc = NodeClustering(list_of_communities, networkx_graph, algorithm)
-        coms = algorithms.louvain(networkx_graph, weight='weight', resolution=25, partition=nc)
+        coms = algorithms.louvain(networkx_graph, weight='weight', resolution=gamma, partition=nc)
 
         # Compute a map node<->list of communities
         community_map = NodeClustering.to_node_community_map(coms)
@@ -139,11 +162,14 @@ def refine(graph, communities, algorithm):
 
 if __name__=="__main__":
 
+    import logging
     if (len(sys.argv)!=3):
         logger.error(f"Usage: {sys.argv[0]} path_to_big_corpus path_to_small_corpus")
         exit(1)
 
-    import logging
+    def _log_communities(logger, communities, corpus):
+        sizes = communities.subsetSizes()
+        logger.warning(f"{corpus} has {len(sizes)} communities of maximum size {max(sizes)} and of average size {sum(sizes)/len(sizes)}")
 
     logger = logging.getLogger(__name__)
     logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stderr, encoding='utf-8', level=logging.INFO)
@@ -156,28 +182,42 @@ if __name__=="__main__":
     # Creating the cooccurrence matrix if not existing
     logger.info(f"Loading cooccurrence matrices for {corpus_1_name} and {corpus_2_name}")
     create_cooc_matrix(path_to_matrix_1, corpus_1, corpus_1_name, min_frequences)
+    #with open(corpus_2, "rb") as f:
+    #    create_cooc_matrix_from_sentences(pickle.load(f), path_to_matrix_2, corpus_2_name)
     create_cooc_matrix(path_to_matrix_2, corpus_2, corpus_2_name, min_frequences)
 
     # Saving the embeddings for the sake of performance
-    sinr_1, sinr_vectors_1 = compute_communities_and_vectors(path_to_matrix_1, corpus_1_name, ".pk")
-    sinr_2, sinr_vectors_2 = compute_communities_and_vectors(path_to_matrix_2, corpus_2_name, ".pk")
-
-    # Evaluating the similarity for the small corpus using communities learned on itself
-    #logger.info(f"Evaluating similarity for {corpus_2_name}")
-    #logger.info(compute_similarity(sinr_vectors_2,corpus_2_name))
+    sinr_1, sinr_vectors_1 = compute_communities_and_vectors(path_to_matrix_1, corpus_1_name, ".pk", gamma[corpus_1_name])
+    sinr_2, sinr_vectors_2 = compute_communities_and_vectors(path_to_matrix_2, corpus_2_name, ".pk", gamma[corpus_2_name])
+    
+    #_log_communities(logger, sinr_2.get_communities(), corpus_2_name)
+    #logger.warning(compute_similarity(sinr_vectors_2, corpus_2_name))
 
     # Evaluating the similarity for the small corpus using communities learned on the big one
     corpus_transferred = corpus_2_name+"_transferred"
     sinr_transferred = ge.SINr.load_from_cooc_pkl(path_to_matrix_2)
-    sinr_transferred.transfert_communities_labels(sinr_vectors_1.get_communities_as_labels_sets())
+    sinr_transferred.ponderate_graph(sinr_1)
+
+    corpus_ponderated = corpus_2_name+"_ponderated"
+    ponderated_communities = sinr_transferred.detect_communities(gamma=50)
     sinr_transferred.extract_embeddings()
+    sinr_vectors_ponderated = ge.InterpretableWordsModelBuilder(sinr_transferred, corpus_2_name, n_jobs=40, n_neighbors=4).build()
+
+    ponderated_communities = sinr_transferred.get_communities()
+    logger.info(f"{corpus_ponderated} has {len([i for i in ponderated_communities.subsetSizes() if i==1])} singleton communities for {ponderated_communities.numberOfSubsets()} communities")
+   
+    _log_communities(logger,ponderated_communities,corpus_ponderated)
+    #logger.warning(f"Evaluating similarity for {corpus_refined}")
+    logger.warning(compute_similarity(sinr_vectors_ponderated,corpus_ponderated))
+
+    sinr_transferred.transfert_communities_labels(sinr_vectors_1.get_communities_as_labels_sets())
+    '''sinr_transferred.extract_embeddings()
     sinr_vectors_transferred = ge.InterpretableWordsModelBuilder(sinr_transferred, corpus_transferred, n_jobs=40, n_neighbors=4).build()
     transferred_communities = sinr_transferred.get_communities()
-    logger.info(f"{corpus_transferred} has {len([i for i in transferred_communities.subsetSizes() if i==1])} singleton communities for {transferred_communities.numberOfSubsets()} communities")
-
-    #logger.info(f"Evaluating similarity for {corpus_transferred}")
-    #logger.info(compute_similarity(sinr_vectors_transferred, corpus_transferred))
-
+    
+    _log_communities(logger, transferred_communities, corpus_transferred)
+    logger.warning(compute_similarity(sinr_vectors_transferred, corpus_transferred))'''
+    
     # Giving the precomputed communities as a seed to label propagation to see if this helps
     corpus_refined = corpus_2_name+"_transferred_refined"
     initial_partition = sinr_transferred.get_communities()
@@ -187,6 +227,7 @@ if __name__=="__main__":
     sinr_refined = ge.SINr.load_from_cooc_pkl(path_to_matrix_2)
     sinr_refined.extract_embeddings(refined_communities)
     sinr_vectors_refined = ge.InterpretableWordsModelBuilder(sinr_refined, corpus_refined, n_jobs=40, n_neighbors=4).build()
-
-    logger.info(f"Evaluating similarity for {corpus_refined}")
-    logger.info(compute_similarity(sinr_vectors_refined,corpus_refined))
+        
+    _log_communities(logger,refined_communities,corpus_refined)
+    #logger.warning(f"Evaluating similarity for {corpus_refined}")
+    logger.warning(compute_similarity(sinr_vectors_refined,corpus_refined))
