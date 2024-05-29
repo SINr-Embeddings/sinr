@@ -8,10 +8,6 @@ import networkit
 import sinr.text.evaluate as ev
 import sinr.graph_embeddings as ge
 import sys, pickle
-import logging
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stderr, encoding='utf-8', level=logging.INFO)
 
 min_frequences = { 
         "BNC": 50,
@@ -74,16 +70,17 @@ def compute_communities_and_vectors(path_to_matrix, corpus_name, extension):
     :param path_to_matrix: Path to the pickle file containing the cooccurrence matrix
     """
     if not isfile(corpus_name+extension):
-        logger.info(f"Computing communities and embeddings for {corpus_name}")
+        # TODO -- passer le logger en argument
+        #logger.info(f"Computing communities and embeddings for {corpus_name}")
         sinr = ge.SINr.load_from_cooc_pkl(path_to_matrix)
         communities = sinr.detect_communities(gamma=50)
         sinr.extract_embeddings()
         sinr_vectors = ge.InterpretableWordsModelBuilder(sinr, corpus_name, n_jobs=40, n_neighbors=4).build()
         sinr_vectors.save()
         initial_partition = sinr.get_communities()
-        logger.info(f"{corpus_name} has {len([i for i in initial_partition.subsetSizes() if i==1])} singleton communities for {initial_partition.numberOfSubsets()} communities")
+        #logger.info(f"{corpus_name} has {len([i for i in initial_partition.subsetSizes() if i==1])} singleton communities for {initial_partition.numberOfSubsets()} communities")
     else:
-        logger.warning(f"Loading communities and embeddings of {corpus_name} for the sake of performance: SHOULD BE COMPUTED AT ANY RUN")
+        #logger.warning(f"Loading communities and embeddings of {corpus_name} for the sake of performance: SHOULD BE COMPUTED AT ANY RUN")
         sinr = ge.SINr.load_from_cooc_pkl(path_to_matrix)
         sinr_vectors = ge.SINrVectors(corpus_name)
         sinr_vectors.load()
@@ -146,6 +143,10 @@ if __name__=="__main__":
         logger.error(f"Usage: {sys.argv[0]} path_to_big_corpus path_to_small_corpus")
         exit(1)
 
+    import logging
+
+    logger = logging.getLogger(__name__)
+    logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stderr, encoding='utf-8', level=logging.INFO)
     corpus_1, corpus_2 = sys.argv[1], sys.argv[2]
 
     # Generating corpus name and path to matrix
