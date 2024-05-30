@@ -44,12 +44,12 @@ class SINr(object):
 
         
         """
-        #logger.info("Building Graph.")
+        logger.info("Building Graph.")
 
         word_to_idx, matrix = strategy_loader.load_pkl_text(cooc_matrix_path)
         graph = get_graph_from_matrix(matrix)
         out_of_LgCC = get_lgcc(graph)
-        #logger.info("Finished building graph.")
+        logger.info("Finished building graph.")
         return cls(graph, out_of_LgCC, word_to_idx)
 
     @classmethod
@@ -64,11 +64,11 @@ class SINr(object):
 
         
         """
-        #logger.info("Building Graph.")
+        logger.info("Building Graph.")
         word_to_idx, matrix = strategy_loader.load_adj_mat(matrix_object, labels)
         graph = get_graph_from_matrix(matrix)
         out_of_LgCC = get_lgcc(graph)
-        #logger.info("Finished building graph.")
+        logger.info("Finished building graph.")
         return cls(graph, out_of_LgCC, word_to_idx)
 
     @classmethod
@@ -88,7 +88,7 @@ class SINr(object):
             word_to_idx[u] = idx
             idx += 1
         out_of_LgCC = get_lgcc(graph)
-        #logger.info("Finished building graph.")
+        logger.info("Finished building graph.")
         return cls(graph, out_of_LgCC, word_to_idx)
 
     def run(self, algo=None):
@@ -115,39 +115,52 @@ class SINr(object):
 
         
         """
-        #logger.info("Detecting communities.")
+        logger.info("Detecting communities.")
         print(f"Gamma for louvain : {gamma}")
-        #if getMaxNumberOfThreads() == 1 and par!="none randomized":
-            #logger.warning(f"""The current number of threads is set to {getMaxNumberOfThreads()} with parallelization strategy {par}. Nodes will not be randomized in Louvain. Consider using more threads by resetting the setNumberOfThreads parameter of networkit or use the 'none randomized' parallelization strategy.""")
+        if getMaxNumberOfThreads() == 1 and par!="none randomized":
+            logger.warning(f"""The current number of threads is set to {getMaxNumberOfThreads()} with parallelization strategy {par}. Nodes will not be randomized in Louvain. Consider using more threads by resetting the setNumberOfThreads parameter of networkit or use the 'none randomized' parallelization strategy.""")
         if algo is None:
             algo = community.PLM(self.cooc_graph, refine=False, gamma=gamma, turbo=True, recurse=False, par=par)
         communities = community.detectCommunities(self.cooc_graph, algo=algo, inspect=inspect)
         communities.compact(useTurbo=True)  # Consecutive communities from 0 to number of communities - 1
         self.communities = communities
-        #logger.info("Finished detecting communities.")
+        logger.info("Finished detecting communities.")
         return communities
 
     def size_of_voc(self):
         """Returns the size of the vocabulary."""
         return len(self.idx_to_wrd)
 
-    def ponderate_graph(self, sinr_base):
+    def ponderate_graph(self, sinr_base, strategy=1):
         """Change the current graph's edge weights based on those in another graph.
 
         :param sinr_base: a sinr object for the other graph
         :typev sinr_base: sinr object
+
+        :param strategy: an integer representing a strategy to use (modifiyng existent edges, all edges, non-existent ones, …)
+        :typev strategy: int
         """
         base_graph = sinr_base.get_cooc_graph()
         ponderator = self.cooc_graph.numberOfNodes()/base_graph.numberOfNodes()
-        #ponderator = self.cooc_graph.totalEdgeWeight()/base_graph.totalEdgeWeight()
         changes = 0
-        for edge in self.cooc_graph.iterEdges():
-            u = self.idx_to_wrd[edge[0]]
-            v = self.idx_to_wrd[edge[1]]
-            if u in sinr_base.wrd_to_idx and v in sinr_base.wrd_to_idx and base_graph.hasEdge(sinr_base.wrd_to_idx[u], sinr_base.wrd_to_idx[v]):
-                self.cooc_graph.setWeight(edge[0], edge[1], base_graph.weight(sinr_base.wrd_to_idx[u], sinr_base.wrd_to_idx[v])*ponderator)
+        original_edges = self.cooc_graph.numberOfEdges()
+        # We parse edges of the larger graph and change the weight of the corresponding edge in the current graph 
+        # (if it exists) using different strategies. We preserve the maximum value if the edge is present in both graphs
+        for edge in base_graph.iterEdges():
+            u = sinr_base.idx_to_wrd[edge[0]]
+            v = sinr_base.idx_to_wrd[edge[1]]
+            condition = {
+                    1: u in self.wrd_to_idx and v in self.wrd_to_idx and self.cooc_graph.hasEdge(self.wrd_to_idx[u], self.wrd_to_idx[v]),
+                    2: u in self.wrd_to_idx and v in self.wrd_to_idx, 
+                    3: u in self.wrd_to_idx and v in self.wrd_to_idx and not (self.cooc_graph.hasEdge(self.wrd_to_idx[u], self.wrd_to_idx[v]))
+            }
+            if condition[strategy]:
+                # setWeight inserts an edge if it does not exist and weight(u,v) returns 0 if (u,v) does not exist
+                self.cooc_graph.setWeight(\
+                        self.wrd_to_idx[u], self.wrd_to_idx[v], \
+                        max(self.cooc_graph.weight(self.wrd_to_idx[u], self.wrd_to_idx[v]), base_graph.weight(edge[0], edge[1])*ponderator))
                 changes += 1
-        print(f"Changed {changes/self.cooc_graph.numberOfEdges()*100} percent of edges with ponderator {ponderator}")
+        print(f"Changed {changes} edges over {original_edges} with ponderator {ponderator}")
 
     def transfert_communities_labels(self, community_labels, refine=False, graph_name=None):
         import sys
@@ -161,14 +174,13 @@ class SINr(object):
         that are in the graph at hand, these communities are transferred.
 
         """
-        print(f"{graph_name}: {len(self.wrd_to_idx)}\t{self.size_of_voc()}\t{len(community_labels)}\t{sum([len(comm) for comm in community_labels])}", file=sys.stderr)
         self.communities = Partition(self.size_of_voc())
+        # Array keeping track of the vertices that are transferred from community_labels
         transferred = [False for _ in range(self.size_of_voc())]
         index_com = 0
-        #self.communities.allToSingletons()
         for com in community_labels:
             new_com = []
-            # Check if labels in communities passed as parameters are in the graph at hand, if so -> transfer the community
+            # If the word of _com_ occurs in the current graph, we add it to a new community
             for word in com:
                 if word in self.wrd_to_idx:
                     new_com.append(self.wrd_to_idx[word])
@@ -178,12 +190,8 @@ class SINr(object):
                 for idx in range(len(new_com)):
                     self.communities.addToSubset(index_com, new_com[idx])
                 index_com += 1
-            '''if(len(new_com) > 1:
-                subset_id = self.communities.subsetOf(new_com[0])
-                for idx in range(1,len(new_com)):
-                    self.communities.moveToSubset(subset_id, new_com[idx])'''
 
-        #logger.info(f"{graph_name}: Number of vertices not found in original communities is {len([e for e in transferred if e==False])} for a vocabulary of {self.size_of_voc()}")
+        # The remaining vertices are added to a singleton community
         for r in range(self.size_of_voc()):
             if not transferred[r]:
                 self.communities.addToSubset(index_com, r)
@@ -191,7 +199,8 @@ class SINr(object):
         if refine:
             self._refine_transfered_communities()
 
-        # Compacting the community ids
+        # Compacting the community ids 
+        # TODO -- they seem compacted already but commenting this line results in a segmentation fault
         self.communities.compact()
 
     def extract_embeddings(self, communities=None):
@@ -202,18 +211,18 @@ class SINr(object):
 
         
         """
-        #logger.info("Extracting embeddings.")
+        logger.info("Extracting embeddings.")
 
         if communities is not None:
             self.communities = communities
 
-        #logger.info("Applying NFM.")
+        logger.info("Applying NFM.")
         np, nr, nfm = get_nfm_embeddings(self.cooc_graph, self.communities.getVector(), self.n_jobs)
         self.np = np
         self.nr = nr
         self.nfm = nfm
-        #logger.info("NFM successfully applied.")
-        #logger.info("Finished extracting embeddings.")
+        logger.info("NFM successfully applied.")
+        logger.info("Finished extracting embeddings.")
 
     def __init__(self, graph, lgcc, wrd_to_idx, n_jobs=-1):
         """Should not be used ! Some factory methods below starting with "load_" should be used instead.
