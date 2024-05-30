@@ -1,0 +1,216 @@
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling1 has 3169 communities of maximum size 31 and of average size 3.0413379615020513
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling1: {'MEN': 0.39816838310162417, 'WS353': 0.48423939243187686, 'SCWS': 0.42743787344593515}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling1_ponderated has 2856 communities of maximum size 44 and of average size 3.3746498599439776
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling1_ponderated: {'MEN': 0.4826160498410078, 'WS353': 0.5552011223035136, 'SCWS': 0.46922475518158374}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling1_transferred has 6683 communities of maximum size 61 and of average size 1.4421666916055664
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling1_transferred: {'MEN': 0.44391346991818137, 'WS353': 0.5246318298972801, 'SCWS': 0.45959589744131807}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling1_transferred_refined has 2697 communities of maximum size 82 and of average size 3.5736002966258806
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling1_transferred_refined: {'MEN': 0.40632159043318417, 'WS353': 0.49008215377107145, 'SCWS': 0.4283308024312895}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling06 has 3633 communities of maximum size 48 and of average size 4.858794384805946
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling06: {'MEN': 0.4809696606641398, 'WS353': 0.4452102215395734, 'SCWS': 0.40059604606077764}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling06_ponderated has 2686 communities of maximum size 101 and of average size 6.5718540580789275
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling06_ponderated: {'MEN': 0.6180422211272019, 'WS353': 0.5257801815569145, 'SCWS': 0.4803119291808379}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling06_transferred has 10912 communities of maximum size 75 and of average size 1.6176686217008798
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling06_transferred: {'MEN': 0.5720780068166641, 'WS353': 0.4922770405085062, 'SCWS': 0.47410454020301}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling06_transferred_refined has 2031 communities of maximum size 163 and of average size 8.691285081240768
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling06_transferred_refined: {'MEN': 0.5196614283794742, 'WS353': 0.4780578506536023, 'SCWS': 0.42024970695981273}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling1 has 2684 communities of maximum size 18 and of average size 2.256333830104322
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling1: {'MEN': 0.26555016975326456, 'WS353': 0.46419797941379426, 'SCWS': 0.39588556417200393}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling1_ponderated has 2690 communities of maximum size 19 and of average size 2.2513011152416356
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling1_ponderated: {'MEN': 0.3183710378646247, 'WS353': 0.5094542156906544, 'SCWS': 0.41720001898320674}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling1_transferred has 4599 communities of maximum size 38 and of average size 1.3168080017395085
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling1_transferred: {'MEN': 0.282303950924564, 'WS353': 0.4864015146886215, 'SCWS': 0.4158953889625828}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling1_transferred_refined has 2635 communities of maximum size 45 and of average size 2.298292220113852
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling1_transferred_refined: {'MEN': 0.2666666453865182, 'WS353': 0.4665933770314216, 'SCWS': 0.3894669807020251}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling06 has 3051 communities of maximum size 32 and of average size 3.1589642740085218
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling06: {'MEN': 0.37700746193237905, 'WS353': 0.46973459042776966, 'SCWS': 0.4153287842963364}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling06_ponderated has 2460 communities of maximum size 50 and of average size 3.9178861788617887
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling06_ponderated: {'MEN': 0.47791361643316704, 'WS353': 0.5200198228560177, 'SCWS': 0.4631448288239631}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling06_transferred has 6683 communities of maximum size 61 and of average size 1.4421666916055664
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling06_transferred: {'MEN': 0.4325700585829067, 'WS353': 0.48755478743921055, 'SCWS': 0.4590422814115078}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling06_transferred_refined has 2277 communities of maximum size 74 and of average size 4.23276240667545
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling06_transferred_refined: {'MEN': 0.39092817122471285, 'WS353': 0.46345086548710185, 'SCWS': 0.4178855507672068}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling08 has 3783 communities of maximum size 71 and of average size 4.680412371134021
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling08: {'MEN': 0.5086091641890869, 'WS353': 0.4771980178712632, 'SCWS': 0.4414186483585699}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling08_ponderated has 2866 communities of maximum size 130 and of average size 6.17794836008374
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling08_ponderated: {'MEN': 0.6350483505256117, 'WS353': 0.5834218221013091, 'SCWS': 0.501661721115245}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling08_transferred has 10945 communities of maximum size 75 and of average size 1.61772498857926
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling08_transferred: {'MEN': 0.5861081567326459, 'WS353': 0.5577103411081832, 'SCWS': 0.49894209600035555}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling08_transferred_refined has 2299 communities of maximum size 152 and of average size 7.7016093953892995
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling08_transferred_refined: {'MEN': 0.5395942208762357, 'WS353': 0.5102026341105019, 'SCWS': 0.45314616218010756}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling06 has 3589 communities of maximum size 47 and of average size 4.893285037614935
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling06: {'MEN': 0.46812398775616704, 'WS353': 0.4046213967774044, 'SCWS': 0.39033123359434585}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling06_ponderated has 2675 communities of maximum size 125 and of average size 6.565233644859813
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling06_ponderated: {'MEN': 0.5953621260662916, 'WS353': 0.4796751178590894, 'SCWS': 0.4496429024895297}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling06_transferred has 10868 communities of maximum size 75 and of average size 1.6159366948840632
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling06_transferred: {'MEN': 0.5643424843025223, 'WS353': 0.4566749978194852, 'SCWS': 0.4436124171354899}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling06_transferred_refined has 1972 communities of maximum size 155 and of average size 8.905679513184584
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling06_transferred_refined: {'MEN': 0.5017509088629034, 'WS353': 0.4387518692594344, 'SCWS': 0.39327674692231956}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling08 has 2573 communities of maximum size 17 and of average size 2.297706956859697
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling08: {'MEN': 0.24269134772243847, 'WS353': 0.3974177011215282, 'SCWS': 0.3414404192490908}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling08_ponderated has 2470 communities of maximum size 19 and of average size 2.3935222672064778
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling08_ponderated: {'MEN': 0.300037323411918, 'WS353': 0.4047045536033599, 'SCWS': 0.38665287220084}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling08_transferred has 4501 communities of maximum size 38 and of average size 1.3134858920239947
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling08_transferred: {'MEN': 0.27253281829610654, 'WS353': 0.3844658129871762, 'SCWS': 0.3899337489887338}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling08_transferred_refined has 2427 communities of maximum size 47 and of average size 2.4359291306139266
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling08_transferred_refined: {'MEN': 0.25516684538569107, 'WS353': 0.3854899532073682, 'SCWS': 0.35053884371614896}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling1 has 3733 communities of maximum size 46 and of average size 4.704527189927672
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling1: {'MEN': 0.5071024643725652, 'WS353': 0.4751445768494878, 'SCWS': 0.4070661954843373}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling1_ponderated has 3000 communities of maximum size 76 and of average size 5.854
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling1_ponderated: {'MEN': 0.6192495244598059, 'WS353': 0.5442830013884961, 'SCWS': 0.46289547356658434}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling1_transferred has 10868 communities of maximum size 75 and of average size 1.6159366948840632
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling1_transferred: {'MEN': 0.59269875172962, 'WS353': 0.5039991008521459, 'SCWS': 0.46120323182133943}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling1_transferred_refined has 2421 communities of maximum size 155 and of average size 7.2540272614622054
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling1_transferred_refined: {'MEN': 0.5326101190329853, 'WS353': 0.47553585226698525, 'SCWS': 0.4152749940381477}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling08 has 3028 communities of maximum size 39 and of average size 3.1354029062087188
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling08: {'MEN': 0.3654150997823389, 'WS353': 0.3982453729348173, 'SCWS': 0.38988147846833765}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling08_ponderated has 2606 communities of maximum size 35 and of average size 3.6431312356101304
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling08_ponderated: {'MEN': 0.4598936225878883, 'WS353': 0.464535164677403, 'SCWS': 0.42580211516921657}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling08_transferred has 6589 communities of maximum size 61 and of average size 1.440886325694339
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling08_transferred: {'MEN': 0.4328163222752571, 'WS353': 0.439504605484657, 'SCWS': 0.4216108342313662}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling08_transferred_refined has 2410 communities of maximum size 82 and of average size 3.9394190871369297
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling08_transferred_refined: {'MEN': 0.38503368887928013, 'WS353': 0.41952475175743126, 'SCWS': 0.38138658374065376}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling1 has 3841 communities of maximum size 53 and of average size 4.609737047643843
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling1: {'MEN': 0.5221616227371622, 'WS353': 0.5094613956843252, 'SCWS': 0.4496464904727807}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling1_ponderated has 3036 communities of maximum size 109 and of average size 5.83201581027668
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling1_ponderated: {'MEN': 0.6411249024551094, 'WS353': 0.6086621226949864, 'SCWS': 0.5065182445340592}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling1_transferred has 10945 communities of maximum size 75 and of average size 1.61772498857926
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling1_transferred: {'MEN': 0.5992502212109942, 'WS353': 0.572431195955944, 'SCWS': 0.49994508928301346}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling1_transferred_refined has 2512 communities of maximum size 158 and of average size 7.048566878980892
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling1_transferred_refined: {'MEN': 0.5537652480474181, 'WS353': 0.5250773277838311, 'SCWS': 0.45806310891644975}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling1 has 3146 communities of maximum size 32 and of average size 3.0464081373172283
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling1: {'MEN': 0.39968895019847683, 'WS353': 0.4381807436640516, 'SCWS': 0.39641056049912765}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling1_ponderated has 2808 communities of maximum size 30 and of average size 3.4131054131054133
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling1_ponderated: {'MEN': 0.48022041423504835, 'WS353': 0.519252797913143, 'SCWS': 0.4489730760832243}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling1_transferred has 6646 communities of maximum size 61 and of average size 1.44207041829672
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling1_transferred: {'MEN': 0.44529707016481274, 'WS353': 0.4897956553139643, 'SCWS': 0.44585742551322216}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling1_transferred_refined has 2651 communities of maximum size 80 and of average size 3.6152395322519806
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling1_transferred_refined: {'MEN': 0.40892927677278973, 'WS353': 0.46109264099795017, 'SCWS': 0.3969813120678471}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling08 has 3126 communities of maximum size 31 and of average size 3.0831733845169547
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling08: {'MEN': 0.3806421341208647, 'WS353': 0.46311475609110614, 'SCWS': 0.4133526751900719}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling08_ponderated has 2677 communities of maximum size 32 and of average size 3.6002988419872994
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling08_ponderated: {'MEN': 0.47762917083558604, 'WS353': 0.5429616469765013, 'SCWS': 0.46376756278018433}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling08_transferred has 6683 communities of maximum size 61 and of average size 1.4421666916055664
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling08_transferred: {'MEN': 0.4374451927061853, 'WS353': 0.5102400516439267, 'SCWS': 0.45826113820507974}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling08_transferred_refined has 2517 communities of maximum size 74 and of average size 3.8291617004370284
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling08_transferred_refined: {'MEN': 0.4076915675417918, 'WS353': 0.48063112957509874, 'SCWS': 0.424157305202065}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling08 has 3735 communities of maximum size 56 and of average size 4.726104417670682
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling08: {'MEN': 0.49232437054630035, 'WS353': 0.45358662687047896, 'SCWS': 0.41448059661800285}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling08_ponderated has 2862 communities of maximum size 110 and of average size 6.167714884696017
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling08_ponderated: {'MEN': 0.6262175249446866, 'WS353': 0.5549576734660726, 'SCWS': 0.48941272876813974}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling08_transferred has 10912 communities of maximum size 75 and of average size 1.6176686217008798
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling08_transferred: {'MEN': 0.5862645656508833, 'WS353': 0.5283483349388578, 'SCWS': 0.4814550281556058}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling08_transferred_refined has 2258 communities of maximum size 146 and of average size 7.817537643932684
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling08_transferred_refined: {'MEN': 0.5351869958018052, 'WS353': 0.4938406177530415, 'SCWS': 0.4222582735642266}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling1 has 2615 communities of maximum size 18 and of average size 2.2608030592734227
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling1: {'MEN': 0.2475361317900777, 'WS353': 0.41425073553591746, 'SCWS': 0.36008067980832165}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling1_ponderated has 2612 communities of maximum size 19 and of average size 2.2633996937212864
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling1_ponderated: {'MEN': 0.30296633381664584, 'WS353': 0.40822703934804566, 'SCWS': 0.3746019625644971}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling1_transferred has 4501 communities of maximum size 38 and of average size 1.3134858920239947
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling1_transferred: {'MEN': 0.27604938022555486, 'WS353': 0.39229918281576287, 'SCWS': 0.3618639372491751}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling1_transferred_refined has 2550 communities of maximum size 40 and of average size 2.3184313725490195
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling1_transferred_refined: {'MEN': 0.25607495961086213, 'WS353': 0.402120806216892, 'SCWS': 0.3697575043434555}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling1 has 2645 communities of maximum size 18 and of average size 2.2691871455576558
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling1: {'MEN': 0.26365610776791126, 'WS353': 0.4428017484185715, 'SCWS': 0.3600060851134983}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling1_ponderated has 2676 communities of maximum size 16 and of average size 2.2428998505231688
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling1_ponderated: {'MEN': 0.3144261917660883, 'WS353': 0.465254948069423, 'SCWS': 0.40591124364329484}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling1_transferred has 4559 communities of maximum size 38 and of average size 1.316516779995613
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling1_transferred: {'MEN': 0.2850252581460328, 'WS353': 0.4536986489769291, 'SCWS': 0.4021886860744899}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling1_transferred_refined has 2611 communities of maximum size 43 and of average size 2.2987361164304865
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling1_transferred_refined: {'MEN': 0.2607270327516887, 'WS353': 0.4391062095247874, 'SCWS': 0.38189617496921907}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling08 has 3091 communities of maximum size 32 and of average size 3.1006146878033
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling08: {'MEN': 0.3892080338836887, 'WS353': 0.4238426915535568, 'SCWS': 0.3882166965683393}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling08_ponderated has 2679 communities of maximum size 51 and of average size 3.5774542739828292
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling08_ponderated: {'MEN': 0.4811635116624776, 'WS353': 0.4971840798828065, 'SCWS': 0.4479056716871407}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling08_transferred has 6646 communities of maximum size 61 and of average size 1.44207041829672
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling08_transferred: {'MEN': 0.443523789660716, 'WS353': 0.47127806513030385, 'SCWS': 0.4450796926356248}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling08_transferred_refined has 2483 communities of maximum size 74 and of average size 3.859846959323399
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling08_transferred_refined: {'MEN': 0.40633796424357477, 'WS353': 0.45485753299785986, 'SCWS': 0.3950517740684617}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling08 has 2626 communities of maximum size 14 and of average size 2.2856054836252855
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling08: {'MEN': 0.2598979034671539, 'WS353': 0.43004187668343286, 'SCWS': 0.3572610152928308}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling08_ponderated has 2534 communities of maximum size 17 and of average size 2.3685872138910815
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling08_ponderated: {'MEN': 0.3161829010498503, 'WS353': 0.4880849912821728, 'SCWS': 0.39866050920345786}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling08_transferred has 4559 communities of maximum size 38 and of average size 1.316516779995613
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling08_transferred: {'MEN': 0.28076355042815887, 'WS353': 0.45675462452027454, 'SCWS': 0.4157631242779716}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling08_transferred_refined has 2475 communities of maximum size 43 and of average size 2.425050505050505
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling08_transferred_refined: {'MEN': 0.26129447370789377, 'WS353': 0.4412326790809449, 'SCWS': 0.3587530703207075}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling1 has 3083 communities of maximum size 31 and of average size 3.079468050600065
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling1: {'MEN': 0.3828694931110239, 'WS353': 0.42042504317370166, 'SCWS': 0.3827939771943778}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling1_ponderated has 2783 communities of maximum size 32 and of average size 3.411426518145886
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling1_ponderated: {'MEN': 0.46735814109575785, 'WS353': 0.46881362834550644, 'SCWS': 0.42244731707211003}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling1_transferred has 6589 communities of maximum size 61 and of average size 1.440886325694339
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling1_transferred: {'MEN': 0.43543580198570464, 'WS353': 0.4464154311244348, 'SCWS': 0.42844748032329977}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling1_transferred_refined has 2592 communities of maximum size 79 and of average size 3.6628086419753085
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling1_transferred_refined: {'MEN': 0.3957290501132819, 'WS353': 0.4265618046435131, 'SCWS': 0.38607809118717096}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling06 has 2972 communities of maximum size 30 and of average size 3.1944818304172276
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling06: {'MEN': 0.36059497643989796, 'WS353': 0.3836554102063362, 'SCWS': 0.37307648176121205}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling06_ponderated has 2384 communities of maximum size 53 and of average size 3.9823825503355703
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling06_ponderated: {'MEN': 0.46315537907790316, 'WS353': 0.4434811402918326, 'SCWS': 0.4107111783532656}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling06_transferred has 6589 communities of maximum size 61 and of average size 1.440886325694339
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling06_transferred: {'MEN': 0.4309914481620841, 'WS353': 0.41740235940448434, 'SCWS': 0.4255664945706939}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling06_transferred_refined has 2182 communities of maximum size 89 and of average size 4.351054078826764
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling06_transferred_refined: {'MEN': 0.37888346238607407, 'WS353': 0.40100819783944874, 'SCWS': 0.3698127972873564}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling1 has 3811 communities of maximum size 61 and of average size 4.631855156127001
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling1: {'MEN': 0.5228554611519566, 'WS353': 0.48113084078537216, 'SCWS': 0.42283079506885757}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling1_ponderated has 3028 communities of maximum size 103 and of average size 5.8295904887714665
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling1_ponderated: {'MEN': 0.641514132828601, 'WS353': 0.58952322680979, 'SCWS': 0.4895702577468541}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling1_transferred has 10912 communities of maximum size 75 and of average size 1.6176686217008798
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling1_transferred: {'MEN': 0.5990679877233155, 'WS353': 0.5486469731147279, 'SCWS': 0.4832646416845697}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling1_transferred_refined has 2477 communities of maximum size 150 and of average size 7.12636253532499
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling1_transferred_refined: {'MEN': 0.5495830964931675, 'WS353': 0.5239487732867999, 'SCWS': 0.42617197093543513}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling08 has 2676 communities of maximum size 21 and of average size 2.2630792227204783
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling08: {'MEN': 0.25603579877266114, 'WS353': 0.46042481892953613, 'SCWS': 0.39677625605298206}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling08_ponderated has 2571 communities of maximum size 18 and of average size 2.3555036950602877
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling08_ponderated: {'MEN': 0.317246973925346, 'WS353': 0.500124272528135, 'SCWS': 0.4261479367345347}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling08_transferred has 4599 communities of maximum size 38 and of average size 1.3168080017395085
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling08_transferred: {'MEN': 0.2821394262137692, 'WS353': 0.48089728383034913, 'SCWS': 0.4226767279606573}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling08_transferred_refined has 2501 communities of maximum size 42 and of average size 2.4214314274290283
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling08_transferred_refined: {'MEN': 0.26141726734217385, 'WS353': 0.44886758008342065, 'SCWS': 0.3972705117655268}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling06 has 2579 communities of maximum size 18 and of average size 2.3272586273749516
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling06: {'MEN': 0.24987118520512291, 'WS353': 0.4269560852311817, 'SCWS': 0.3704018636808619}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling06_ponderated has 2350 communities of maximum size 30 and of average size 2.5540425531914894
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling06_ponderated: {'MEN': 0.3154518513442595, 'WS353': 0.4770814526069598, 'SCWS': 0.4007140114357936}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling06_transferred has 4559 communities of maximum size 38 and of average size 1.316516779995613
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling06_transferred: {'MEN': 0.28860019498588735, 'WS353': 0.4654107382002619, 'SCWS': 0.4054230755079373}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling06_transferred_refined has 2269 communities of maximum size 46 and of average size 2.645218157778757
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling06_transferred_refined: {'MEN': 0.2554803389948713, 'WS353': 0.4329014850220018, 'SCWS': 0.3735200102612353}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling06 has 3027 communities of maximum size 43 and of average size 3.1661711265279155
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling06: {'MEN': 0.37271482475304746, 'WS353': 0.4252298295825778, 'SCWS': 0.38733392491832197}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling06_ponderated has 2434 communities of maximum size 49 and of average size 3.9375513557929334
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling06_ponderated: {'MEN': 0.4811335253875222, 'WS353': 0.489484487437881, 'SCWS': 0.44929508030232773}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling06_transferred has 6646 communities of maximum size 61 and of average size 1.44207041829672
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling06_transferred: {'MEN': 0.44348104443708974, 'WS353': 0.463164341135027, 'SCWS': 0.4503523056938017}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling06_transferred_refined has 2229 communities of maximum size 81 and of average size 4.299685957828623
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling06_transferred_refined: {'MEN': 0.3972474236535116, 'WS353': 0.4449499970957545, 'SCWS': 0.3965017716034022}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling06 has 2511 communities of maximum size 17 and of average size 2.354440461967344
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling06: {'MEN': 0.24102172638398583, 'WS353': 0.39296070618431367, 'SCWS': 0.34708354908123124}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling06_ponderated has 2283 communities of maximum size 19 and of average size 2.589575120455541
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling06_ponderated: {'MEN': 0.2949808832824533, 'WS353': 0.40291916019011437, 'SCWS': 0.38191936683314415}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling06_transferred has 4501 communities of maximum size 38 and of average size 1.3134858920239947
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling06_transferred: {'MEN': 0.2716083957647986, 'WS353': 0.3872233654409846, 'SCWS': 0.3666665570853998}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling06_transferred_refined has 2203 communities of maximum size 54 and of average size 2.6836132546527462
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling06_transferred_refined: {'MEN': 0.2564461696840249, 'WS353': 0.3819572356102095, 'SCWS': 0.3351880971807339}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling08 has 3650 communities of maximum size 39 and of average size 4.811506849315069
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling08: {'MEN': 0.4924186377656255, 'WS353': 0.45535332288485214, 'SCWS': 0.39460225159449847}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling08_ponderated has 2840 communities of maximum size 135 and of average size 6.183802816901409
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling08_ponderated: {'MEN': 0.6167252133842418, 'WS353': 0.5278643152813908, 'SCWS': 0.4577309093712806}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling08_transferred has 10868 communities of maximum size 75 and of average size 1.6159366948840632
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling08_transferred: {'MEN': 0.5832072335746871, 'WS353': 0.5043802953581502, 'SCWS': 0.4587351565222793}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling08_transferred_refined has 2222 communities of maximum size 157 and of average size 7.903690369036903
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling08_transferred_refined: {'MEN': 0.5210718839078671, 'WS353': 0.4648925022282435, 'SCWS': 0.41151156099258446}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling06 has 2620 communities of maximum size 13 and of average size 2.311450381679389
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling06: {'MEN': 0.24198689785969207, 'WS353': 0.4530982579588558, 'SCWS': 0.38844154830562283}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling06_ponderated has 2380 communities of maximum size 21 and of average size 2.5445378151260503
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling06_ponderated: {'MEN': 0.32359194801838936, 'WS353': 0.5077826210205858, 'SCWS': 0.421517907328757}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling06_transferred has 4599 communities of maximum size 38 and of average size 1.3168080017395085
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling06_transferred: {'MEN': 0.28000978329033066, 'WS353': 0.48536396376153307, 'SCWS': 0.40563207243020205}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling06_transferred_refined has 2308 communities of maximum size 43 and of average size 2.6239168110918545
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling06_transferred_refined: {'MEN': 0.2618460187651573, 'WS353': 0.44852831401875703, 'SCWS': 0.39630337006882643}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling06 has 3676 communities of maximum size 50 and of average size 4.816648531011969
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling06: {'MEN': 0.4813511076369348, 'WS353': 0.46899759894633714, 'SCWS': 0.439675940144828}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling06_ponderated has 2676 communities of maximum size 102 and of average size 6.616591928251121
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling06_ponderated: {'MEN': 0.6082811608656227, 'WS353': 0.5677386410978456, 'SCWS': 0.49892841474241406}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling06_transferred has 10945 communities of maximum size 75 and of average size 1.61772498857926
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling06_transferred: {'MEN': 0.5675329580279467, 'WS353': 0.5415599219016409, 'SCWS': 0.4854531612888266}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling06_transferred_refined has 2054 communities of maximum size 161 and of average size 8.620253164556962
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling06_transferred_refined: {'MEN': 0.5187826347490686, 'WS353': 0.47964254142263424, 'SCWS': 0.4393192932343329}
