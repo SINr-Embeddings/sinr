@@ -1,0 +1,10 @@
+=============== ohsumed_extracted ===============
+original louvain:  {'MEN': '   0.1012', 'WS353': '      nan', 'SCWS': '      nan'}
+=============== adding existing edges ===============
+Found 364363 common edges over 3053094 with ponderator 0.272030925621018
+Max actually changed 73817 over 364363 possibilities with ponderator 0.272030925621018
+louvain with weigths transferred:  {'MEN': '   0.1905', 'WS353': '      nan', 'SCWS': '      nan'}
+Found 364363 common edges over 3053094 with ponderator 0.272030925621018
+Max actually changed 73817 over 364363 possibilities with ponderator 0.272030925621018
+communities and weights transferred:  {'MEN': '   0.1407', 'WS353': '      nan', 'SCWS': '      nan'}
+
