@@ -55,7 +55,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.NoCommunityDetectedException"><code class="docutils literal notranslate"><span class="pre">NoCommunityDetectedException</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.NoEmbeddingExtractedException"><code class="docutils literal notranslate"><span class="pre">NoEmbeddingExtractedException</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.NoInterpretabilityException"><code class="docutils literal notranslate"><span class="pre">NoInterpretabilityException</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.NoIntruderPickableException"><code class="docutils literal notranslate"><span class="pre">NoIntruderPickableException</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.NoVocabularyException"><code class="docutils literal notranslate"><span class="pre">NoVocabularyException</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.OnlyGraphModelBuilder"><code class="docutils literal notranslate"><span class="pre">OnlyGraphModelBuilder</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr"><code class="docutils literal notranslate"><span class="pre">SINr</span></code></a></li>
@@ -356,13 +355,6 @@ The <cite>ModelBuilder</cite> will make use of the <cite>SINr</cite> object to b
 </dd></dl>
 
 <dl class="py exception">
-<dt class="sig sig-object py" id="sinr.graph_embeddings.NoIntruderPickableException">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">NoIntruderPickableException</span></span><a class="headerlink" href="#sinr.graph_embeddings.NoIntruderPickableException" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
-<p>Raised when no intruder could be found with the percentages provided</p>
-</dd></dl>
-
-<dl class="py exception">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.NoVocabularyException">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">NoVocabularyException</span></span><a class="headerlink" href="#sinr.graph_embeddings.NoVocabularyException" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
@@ -576,26 +568,6 @@ Co-occurrence matrices should for instance be generated using sinr.text.cooccurr
 <dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.binarize">
 <span class="sig-name descname"><span class="pre">binarize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.binarize" title="Permalink to this definition"></a></dt>
 <dd><p>Binarize the vectors</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.cosine_dist">
-<span class="sig-name descname"><span class="pre">cosine_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.cosine_dist" title="Permalink to this definition"></a></dt>
-<dd><p>Return cosine distance between specified item of the model</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>obj1</strong> (<em>int</em><em> or </em><em>str</em>) – first object to get embedding</p></li>
-<li><p><strong>obj2</strong> (<em>int</em><em> or </em><em>str</em>) – second object to get embedding</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>cosine distance between <cite>obj1</cite> and <cite>obj2</cite></p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -916,22 +888,6 @@ Co-occurrence matrices should for instance be generated using sinr.text.cooccurr
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_union_topk">
-<span class="sig-name descname"><span class="pre">get_union_topk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_union_topk" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>prct</strong> (<em>int</em>) – percentage of the vocabulary among the top for each dimension</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>list of the ids of words that are among the top prct of the dims, can be useful to pick intruders</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_value_dim_per_word">
 <span class="sig-name descname"><span class="pre">get_value_dim_per_word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim_index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_value_dim_per_word" title="Permalink to this definition"></a></dt>
 <dd><p>Get the value of a dimension for a word.</p>
@@ -968,60 +924,6 @@ Co-occurrence matrices should for instance be generated using sinr.text.cooccurr
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_vocabulary_size">
-<span class="sig-name descname"><span class="pre">get_vocabulary_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_vocabulary_size" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Number of words that constitute the vocabulary</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.inter_sim">
-<span class="sig-name descname"><span class="pre">inter_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intruder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.inter_sim" title="Permalink to this definition"></a></dt>
-<dd><p>Get the average cosine distance (or cosine similarity) between top words and the intruder word</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>intruder</strong> (<em>int</em>) – id of the intruder word</p></li>
-<li><p><strong>topk</strong> (<em>int</em>) – number of top words to consider</p></li>
-<li><p><strong>dist</strong> (<em>boolean</em>) – set to True (default) to use cosine distance and False to use cosine similarity</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>average cosine distance (or cosine similarity) between top words and the intruder word</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.intra_sim">
-<span class="sig-name descname"><span class="pre">intra_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.intra_sim" title="Permalink to this definition"></a></dt>
-<dd><p>Get the average cosine distance (or cosine similarity) between top words</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>topks</strong> (<em>int</em>) – number of top words to pick</p></li>
-<li><p><strong>dist</strong> (<em>boolean</em>) – set to True (default) to use cosine distance and False to use cosine similarity</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>average cosine distance (or cosine similarity) between top words</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.labels">
 <span class="sig-name descname"><span class="pre">labels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.labels" title="Permalink to this definition"></a></dt>
@@ -1038,16 +940,6 @@ Co-occurrence matrices should for instance be generated using sinr.text.cooccurr
 <dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.load">
 <span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.load" title="Permalink to this definition"></a></dt>
 <dd><p>Load a SINrVectors model.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.load_from_w2v">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_w2v</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">w2v_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.load_from_w2v" title="Permalink to this definition"></a></dt>
-<dd><p>Initializing a SINrVectors object using a file at the word2vec format
-:param w2v_path: path of the file at word2vec format which contains vectors
-:type w2v_path: str
-:param name: name of the model, useful to save it
-:type name: str</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1068,28 +960,6 @@ Co-occurrence matrices should for instance be generated using sinr.text.cooccurr
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>percentage of non-zero values in the embedding matrix</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.pick_intruder">
-<span class="sig-name descname"><span class="pre">pick_intruder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">union</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prctbot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prcttop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.pick_intruder" title="Permalink to this definition"></a></dt>
-<dd><p>Pick an intruder word for a dimension</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dim</strong> (<em>int</em>) – the index of the dimension for which to return intruders</p></li>
-<li><p><strong>union</strong> (<em>int list</em>) – ids of words that are among the top prct of at least one dimension (defaults to None)</p></li>
-<li><p><strong>prctbot</strong> (<em>int</em>) – bottom prctbot to pick (defaults to 50)</p></li>
-<li><p><strong>prcttop</strong> (<em>int</em>) – top prcttop to pick (defaults to 10)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>ids of an intruder word from the dimension</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
