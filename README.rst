@@ -87,7 +87,7 @@ Here is a minimum working example of *SINr*
        c.matrix = pmi_filter(c.matrix)
        c.save("my_cooc_matrix.pk")
 
-       # Train SINr embedding
+       # Train SINr model
        model = ge.SINr.load_from_cooc_pkl("my_cooc_matrix.pk")
        commu = model.detect_communities(gamma=10)
        model.extract_embeddings(commu)
@@ -113,6 +113,82 @@ Here is a minimum working example of *SINr*
        print("\nWords similar to 'apple' :")
        print(sinr_vec.most_similar('apple'))
 
+       # Load an existing SinrVectors object
+       sinr_vec = ge.SINrVectors('my_sinr_vectors')
+       sinr_vec.load()
+
+Documentation
+=============
+
+The documentation for *SINr* is `available
+online <https://sinr-embeddings.github.io/sinr/index.html>`__.
+
+Contributing
+============
+
+Pull requests are welcome. For major changes, please open an issue first
+to disccus the changes to be made.
+
+License
+=======
+
+Released under `CeCILL 2.1 <https://cecill.info/>`__, see `LICENSE <./LICENSE>`__ for more details.
+
+Publications
+============
+
+*SINr* is currently maintained at the *University of Le Mans*. If you
+find *SINr* useful for your own research, please cite the appropriate
+papers from the list below. Publications can also be found on
+`publications page in the
+documentation <https://sinr-embeddings.github.io/sinr/_build/html/publications.html>`__.
+
+**Initial SINr paper, 2021**
+
+-  Thibault Prouteau, Victor Connes, Nicolas Dugué, Anthony Perez,
+   Jean-Charles Lamirel, et al.. SINr: Fast Computing of Sparse
+   Interpretable Node Representations is not a Sin!. Advances in
+   Intelligent Data Analysis XIX, 19th International Symposium on
+   Intelligent Data Analysis, IDA 2021, Apr 2021, Porto, Portugal.
+   pp.325-337,
+   ⟨\ `10.1007/978-3-030-74251-5_26 <https://dx.doi.org/10.1007/978-3-030-74251-5_26>`__\ ⟩.
+   `⟨hal-03197434⟩ <https://hal.science/hal-03197434>`__
+
+**Interpretability of SINr embedding**
+
+-  Thibault Prouteau, Nicolas Dugué, Nathalie Camelin, Sylvain Meignier.
+   Are Embedding Spaces Interpretable? Results of an Intrusion Detection
+   Evaluation on a Large French Corpus. LREC 2022, Jun 2022, Marseille,
+   France. `⟨hal-03770444⟩ <https://hal.science/hal-03770444>`__
+
+**Sparsity of SINr embedding**
+
+-  Simon Guillot, Thibault Prouteau, Nicolas Dugué.
+   Sparser is better: one step closer to word embedding interpretability.
+   IWCS 2023, Nancy, France.
+   `⟨hal-04321407⟩ <https://hal.science/hal-04321407>`__
+
+**Filtering dimensions of SINr embedding**
+
+-  Anna Béranger, Nicolas Dugué, Simon Guillot, Thibault Prouteau.
+   Filtering communities in word co-occurrence networks to foster the
+   emergence of meaning. Complex Networks 2023, Menton, France.
+   `⟨hal-04398742⟩ <https://hal.science/hal-04398742>`__
+
+   
+   
+.. |languages| image:: https://img.shields.io/github/languages/count/SINr-Embeddings/sinr
+.. |downloads| image:: https://img.shields.io/pypi/dm/sinr
+.. |license| image:: https://img.shields.io/pypi/l/sinr?color=green
+.. |version| image:: https://img.shields.io/pypi/v/sinr
+.. |cpython| image:: https://img.shields.io/pypi/implementation/sinr
+.. |wheel| image:: https://img.shields.io/pypi/wheel/sinr
+.. |python| image:: https://img.shields.io/pypi/pyversions/sinr
+.. |docs| image:: https://img.shields.io/website?url=https%3A%2F%2Fsinr-embeddings.github.io%2Fsinr%2F_build%2Fhtml%2Findex.html
+.. |activity| image:: https://img.shields.io/github/commit-activity/y/SINr-Embeddings/sinr
+.. |contributors| image:: https://img.shields.io/github/contributors/SINr-Embeddings/sinr
+.. |quality| image:: https://scrutinizer-ci.com/g/SINr-Embeddings/sinr/badges/quality-score.png?b=main
+.. |build| image:: https://scrutinizer-ci.com/g/SINr-Embeddings/sinr/badges/build.png?b=main
        # Load an existing SinrVectors object
        sinr_vec = ge.SINrVectors('my_sinr_vectors')
        sinr_vec.load()
