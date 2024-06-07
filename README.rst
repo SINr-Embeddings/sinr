@@ -189,6 +189,3 @@ documentation <https://sinr-embeddings.github.io/sinr/_build/html/publications.h
 .. |contributors| image:: https://img.shields.io/github/contributors/SINr-Embeddings/sinr
 .. |quality| image:: https://scrutinizer-ci.com/g/SINr-Embeddings/sinr/badges/quality-score.png?b=main
 .. |build| image:: https://scrutinizer-ci.com/g/SINr-Embeddings/sinr/badges/build.png?b=main
-       # Load an existing SinrVectors object
-       sinr_vec = ge.SINrVectors('my_sinr_vectors')
-       sinr_vec.load()
