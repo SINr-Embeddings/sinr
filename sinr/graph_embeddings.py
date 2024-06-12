@@ -579,7 +579,7 @@ class SINrVectors(object):
     def __init__(self, name, n_jobs=-1, n_neighbors=20):
         """
         Initializing `SINr` vectors objets
-        :param name: name of the model, useful to save it
+        :param name: name of the model
         :type name: str
         :param n_jobs: number of jobs to use (k-nearest neighbors to obtain most similar words or nodes), defaluts to -1
         :type n_jobs: int
@@ -898,7 +898,7 @@ class SINrVectors(object):
         name = self.name
         name_tmp = 'vec_ref_' + str(round(time.time()*1000))
         self.name = name_tmp
-        self.save()
+        self.save(name_tmp + '.pk')
         self.name = name
         
         # Maximum of non zero values in dimensions
@@ -1431,16 +1431,32 @@ class SINrVectors(object):
         return cosine / (float)(len(topk))
 
 
-    def load(self):
-        """Load a SINrVectors model."""
-        f = open(self.name + ".pk", 'rb')
+    def load(self, path=None):
+        """Load a SINrVectors model.
+        
+        :param path: Path of the pickle file of the model.
+        :type path: string
+        
+        """
+        if path != None:
+            f = open(path, 'rb')
+        else:
+            f = open(self.name + '.pk', 'rb')
         tmp_dict = pk.load(f)
         f.close()
         self.__dict__.update(tmp_dict)
 
-    def save(self):
-        """Save a SINrVectors model."""
-        f = open(self.name + ".pk", 'wb')
+    def save(self, path=None):
+        """Save a SINrVectors model.
+        
+        :param path: Path of the pickle file of the model.
+        :type path: string
+        
+        """
+        if path != None:
+            f = open(path, 'rb')
+        else:
+            f = open(self.name + '.pk', 'wb')
         pk.dump(self.__dict__, f, 2)
         f.close()
 

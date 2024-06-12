@@ -20,6 +20,7 @@ class TestSinr_embeddings(unittest.TestCase):
         
         txt_path = './ppcs_test.txt'
         vrt_path = './ppcs_test.vrt'
+        except_path = './except.txt'
         txt_empty_docs_path = './ppcs_test_empty_docs.txt'
         vrt_empty_docs_path = './ppcs_test_empty_docs.vrt'
         doc_separator = '##D'
@@ -44,8 +45,12 @@ class TestSinr_embeddings(unittest.TestCase):
         with open(txt_empty_docs_path, 'w+') as file:
             file.write(doc_separator + ' ' + doc_separator + ' ' + doc_separator + ' ' + doc_separator + ' ')
         file.close()
+        with open(except_path, 'w+') as file:
+            file.write('at\nin')
+        file.close()
         self.txt_path = txt_path
         self.vrt_path = vrt_path
+        self.except_path = except_path
         self.txt_empty_docs_path = './ppcs_test_empty_docs.txt'
         self.vrt_empty_docs_path = './ppcs_test_empty_docs.vrt'
         self.n_doc = 4
@@ -56,6 +61,7 @@ class TestSinr_embeddings(unittest.TestCase):
     def tearDown(self):
         """Tear down test fixtures, if any."""
         os.remove(self.txt_path)
+        os.remove(self.except_path)
         os.remove(self.txt_empty_docs_path)
         if os.path.isfile(self.vrt_path):
             os.remove(self.vrt_path)
@@ -120,6 +126,17 @@ class TestSinr_embeddings(unittest.TestCase):
         vrt_maker.do_txt_to_vrt(separator=self.doc_separator)
         docs = ppcs.extract_text(self.vrt_empty_docs_path, min_freq=1, min_length_doc=-1)
         self.assertTrue(len(docs) == self.n_doc)
+    
+    def test_exceptions_list(self):
+        """Testing the preprocessing with an exceptions list"""
+        vrt_maker = ppcs.VRTMaker(ppcs.Corpus(ppcs.Corpus.REGISTER_WEB,
+                                  ppcs.Corpus.LANGUAGE_EN,
+                                  self.txt_path),
+                                  ".", n_jobs=8, spacy_size='sm')
+        vrt_maker.do_txt_to_vrt()
+        sentences = ppcs.extract_text(self.vrt_path, min_freq=1, exceptions_path=self.except_path)
+        
+        self.assertTrue('at' in sentences[0] and 'in' in sentences[0])
             
         
 if __name__ == '__main__':
