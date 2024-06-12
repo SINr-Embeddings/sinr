@@ -27,7 +27,7 @@ class TestSinr_embeddings(unittest.TestCase):
             
         file.close()
         
-        vectors = ge.SINrVectors('oanc')
+        vectors = ge.SINrVectors('oanc.pk')
         vectors.load()
         self.vectors = vectors
         

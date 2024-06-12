@@ -196,7 +196,7 @@ def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=F
         exceptions_file = open_corpus(exceptions_path)
         exceptions = exceptions_file.read().splitlines()
         if lower_words:
-            exceptions = [w.lower() for w in exceptions]
+            exceptions = set([w.lower() for w in exceptions])
     else : 
         exceptions = []
         
