@@ -1431,26 +1431,32 @@ class SINrVectors(object):
         return cosine / (float)(len(topk))
 
 
-    def load(self, file):
+    def load(self, path=None):
         """Load a SINrVectors model.
         
         :param path: Path of the pickle file of the model.
         :type path: string
         
         """
-        f = open(file, 'rb')
+        if path != None:
+            f = open(path, 'rb')
+        else:
+            f = open(self.name + '.pk', 'rb')
         tmp_dict = pk.load(f)
         f.close()
         self.__dict__.update(tmp_dict)
 
-    def save(self, file):
+    def save(self, path=None):
         """Save a SINrVectors model.
         
         :param path: Path of the pickle file of the model.
         :type path: string
         
         """
-        f = open(file, 'wb')
+        if path != None:
+            f = open(path, 'rb')
+        else:
+            f = open(self.name + '.pk', 'wb')
         pk.dump(self.__dict__, f, 2)
         f.close()
 
