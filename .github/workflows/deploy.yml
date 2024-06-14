@@ -25,7 +25,8 @@ jobs:
 
       - name: Publish
         run: |
-          poetry publish -u ${{ secrets.PYPI_UNAME }} -p ${{ secrets.PYPI_PWD }}
+          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+          poetry publish
       - name: Upload binaries to release
         uses: softprops/action-gh-release@v1
         if: ${{startsWith(github.ref, 'refs/tags/') }}
