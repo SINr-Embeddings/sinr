@@ -786,7 +786,7 @@ class SINrVectors(object):
         if not self.vectors.has_sorted_indices:
             self.vectors.sort_indices()
     
-        for i_row in range(m_shape[0]):  
+        for i_row in tqdm(range(m_shape[0]), desc="vectors to sparsify"):  
     
             if(i_row == 0):
                 # datas/indices of the first line
