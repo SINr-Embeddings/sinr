@@ -1,7 +1,7 @@
 import pickle as pk
 
 from networkit import Graph, components, community, setNumberOfThreads, getCurrentNumberOfThreads, getMaxNumberOfThreads, Partition
-from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat, mean, nanmax, int64, shape, delete
+from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat, mean, nanmax, int64, shape, delete, nanmean
 from sklearn.neighbors import NearestNeighbors
 from scipy import spatial
 from scipy.sparse import csr_matrix
@@ -786,7 +786,7 @@ class SINrVectors(object):
         if not self.vectors.has_sorted_indices:
             self.vectors.sort_indices()
     
-        for i_row in range(m_shape[0]):  
+        for i_row in tqdm(range(m_shape[0]), desc="vectors to sparsify"):  
     
             if(i_row == 0):
                 # datas/indices of the first line
@@ -837,6 +837,18 @@ class SINrVectors(object):
         
         d = self.vectors.getcol(dim)
         return d.nnz
+    
+    def obj_nnz_count(self, obj):
+        """ Count the number of non zero values in a word vector.
+        :param obj: word
+        :type obj: string
+        
+        :return: the number of non zero values in the word vector
+        :rtype: int
+        """
+        
+        vec = self.vectors.getrow(self.vocab.index(obj))
+        return vec.nnz
         
     def remove_communities_dim_nnz(self, threshold_min = None, threshold_max = None):
         """Remove dimensions (communities) which are the less activated and those which are the most activated.
@@ -908,7 +920,9 @@ class SINrVectors(object):
             nnz_count.append(self.dim_nnz_count(d))
 
         max_nnz = max(nnz_count)
+        min_nnz = min(nnz_count)
         
+        print(f'Minimum of non zero values in dimensions : {min_nnz}')
         print(f'Maximum of non zero values in dimensions : {max_nnz}')
 
         # Mean similarity of vectors with all dimensions (MEN, WS353, SCWS, SimLex-999)
@@ -938,8 +952,15 @@ class SINrVectors(object):
             seuil += step
 
             vec_seuil = SINrVectors(name_tmp)
-            vec_seuil.load()
+            vec_seuil.load(name_tmp + '.pk')
             vec_seuil.remove_communities_dim_nnz(threshold_min = seuil)
+            
+            # if a word is no longer represented by the dimensions, we stop the filtering
+            word_nnz_count = list()
+            for word in vec_seuil.vocab:
+                word_nnz_count.append(vec_seuil.obj_nnz_count(word))
+            if min(word_nnz_count) == 0:
+                break
 
             sim_vec_seuil = list()
 
@@ -948,9 +969,9 @@ class SINrVectors(object):
             sim_vec_seuil.append(ev.eval_similarity(vec_seuil, ws353, print_missing=False))
             sim_vec_seuil.append(ev.eval_similarity(vec_seuil, scws, print_missing=False))
             
-            sim = mean(sim_vec_seuil)
+            sim = nanmean(sim_vec_seuil)
             
-            print(str(seuil) + ' : ' + str(round(sim, 3)) + ' ', end='')
+            print(str(seuil) + ' : ' + str(round(sim, 4)) + ' ', end='')
 
         print('\n')
         min_threshold = seuil - step
@@ -961,13 +982,20 @@ class SINrVectors(object):
         # Taking the threshold (multiple of 10) for which the similarity is maximal
 
         vec_seuil = SINrVectors(name_tmp)
-        vec_seuil.load()
+        vec_seuil.load(name_tmp + '.pk')
 
         sim = list()
-        seuils = [x for x in range(ceil(max_nnz / 1000) * 1000, 0, -step)]
+        seuils = [x for x in range(ceil(max_nnz / step) * step, 0, -step)]
 
         for s in seuils:
             vec_seuil.remove_communities_dim_nnz(threshold_max = s)
+            
+            # if a word is no longer represented the dimensions, we stop the filtering
+            word_nnz_count = list()
+            for word in vec_seuil.vocab:
+                word_nnz_count.append(vec_seuil.obj_nnz_count(word))
+            if min(word_nnz_count) == 0:
+                break
 
             sim_vec_seuil = list()
 
@@ -976,10 +1004,11 @@ class SINrVectors(object):
             sim_vec_seuil.append(ev.eval_similarity(vec_seuil, ws353, print_missing=False))
             sim_vec_seuil.append(ev.eval_similarity(vec_seuil, scws, print_missing=False))
             
-            sim.append(mean(sim_vec_seuil))
-            print(str(s) + ' : ' + str(round(mean(sim_vec_seuil), 3)) + ' ', end='')
+            sim.append(nanmean(sim_vec_seuil))
+            print(str(s) + ' : ' + str(round(nanmean(sim_vec_seuil), 4)) + ' ', end='')
 
         print('\n')
+        
         max_threshold = seuils[sim.index(nanmax(sim))]
         
         print(f'High threshold : {max_threshold}\nSimilarity with high threshold : {nanmax(sim)}\n')
@@ -1454,7 +1483,7 @@ class SINrVectors(object):
         
         """
         if path != None:
-            f = open(path, 'rb')
+            f = open(path, 'wb')
         else:
             f = open(self.name + '.pk', 'wb')
         pk.dump(self.__dict__, f, 2)
