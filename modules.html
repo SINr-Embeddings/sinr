@@ -85,6 +85,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="sinr.html">SINr Core</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sinr.html#module-sinr.graph_embeddings">Graph Embeddings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.DimensionFilteredException"><code class="docutils literal notranslate"><span class="pre">DimensionFilteredException</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.InterpretableDimension"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.InterpretableDimension.add_interpreter"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.add_interpreter()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.InterpretableDimension.get_dict"><code class="docutils literal notranslate"><span class="pre">InterpretableDimension.get_dict()</span></code></a></li>
@@ -115,6 +116,7 @@
 <li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.NoCommunityDetectedException"><code class="docutils literal notranslate"><span class="pre">NoCommunityDetectedException</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.NoEmbeddingExtractedException"><code class="docutils literal notranslate"><span class="pre">NoEmbeddingExtractedException</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.NoInterpretabilityException"><code class="docutils literal notranslate"><span class="pre">NoInterpretabilityException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.NoIntruderPickableException"><code class="docutils literal notranslate"><span class="pre">NoIntruderPickableException</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.NoVocabularyException"><code class="docutils literal notranslate"><span class="pre">NoVocabularyException</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.OnlyGraphModelBuilder"><code class="docutils literal notranslate"><span class="pre">OnlyGraphModelBuilder</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.OnlyGraphModelBuilder.build"><code class="docutils literal notranslate"><span class="pre">OnlyGraphModelBuilder.build()</span></code></a></li>
@@ -141,6 +143,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors"><code class="docutils literal notranslate"><span class="pre">SINrVectors</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.binarize"><code class="docutils literal notranslate"><span class="pre">SINrVectors.binarize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.cosine_dist"><code class="docutils literal notranslate"><span class="pre">SINrVectors.cosine_dist()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.cosine_sim"><code class="docutils literal notranslate"><span class="pre">SINrVectors.cosine_sim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.dim_nnz_count"><code class="docutils literal notranslate"><span class="pre">SINrVectors.dim_nnz_count()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.dim_nnz_thresholds"><code class="docutils literal notranslate"><span class="pre">SINrVectors.dim_nnz_thresholds()</span></code></a></li>
@@ -160,13 +163,20 @@
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.get_obj_stereotypes"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_obj_stereotypes()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.get_obj_stereotypes_and_descriptors"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_obj_stereotypes_and_descriptors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.get_topk_dims"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_topk_dims()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.get_union_topk"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_union_topk()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.get_value_dim_per_word"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_value_dim_per_word()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.get_value_obj_dim"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_value_obj_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.get_vocabulary_size"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_vocabulary_size()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.inter_sim"><code class="docutils literal notranslate"><span class="pre">SINrVectors.inter_sim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.intra_sim"><code class="docutils literal notranslate"><span class="pre">SINrVectors.intra_sim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.labels"><code class="docutils literal notranslate"><span class="pre">SINrVectors.labels</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.light_model_save"><code class="docutils literal notranslate"><span class="pre">SINrVectors.light_model_save()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.load"><code class="docutils literal notranslate"><span class="pre">SINrVectors.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.load_from_w2v"><code class="docutils literal notranslate"><span class="pre">SINrVectors.load_from_w2v()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.most_similar"><code class="docutils literal notranslate"><span class="pre">SINrVectors.most_similar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.obj_nnz_count"><code class="docutils literal notranslate"><span class="pre">SINrVectors.obj_nnz_count()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.pct_nnz"><code class="docutils literal notranslate"><span class="pre">SINrVectors.pct_nnz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.pick_intruder"><code class="docutils literal notranslate"><span class="pre">SINrVectors.pick_intruder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.remove_communities_dim_nnz"><code class="docutils literal notranslate"><span class="pre">SINrVectors.remove_communities_dim_nnz()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.save"><code class="docutils literal notranslate"><span class="pre">SINrVectors.save()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.set_communities"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_communities()</span></code></a></li>
