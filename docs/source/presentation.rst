@@ -176,8 +176,5 @@ Publications can also be found on :ref:`Publications`.
 .. |cpython| image:: https://img.shields.io/pypi/implementation/sinr
 .. |wheel| image:: https://img.shields.io/pypi/wheel/sinr
 .. |python| image:: https://img.shields.io/pypi/pyversions/sinr
-.. |docs| image:: https://img.shields.io/website?url=https%3A%2F%2Fsinr-embeddings.github.io%2Fsinr%2F_build%2Fhtml%2Findex.html
 .. |activity| image:: https://img.shields.io/github/commit-activity/y/SINr-Embeddings/sinr
 .. |contributors| image:: https://img.shields.io/github/contributors/SINr-Embeddings/sinr
-.. |quality| image:: https://scrutinizer-ci.com/g/SINr-Embeddings/sinr/badges/quality-score.png?b=main
-.. |build| image:: https://scrutinizer-ci.com/g/SINr-Embeddings/sinr/badges/build.png?b=main
