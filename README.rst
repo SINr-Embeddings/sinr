@@ -1,7 +1,7 @@
 =====
 SINr
 =====
-|languages| |downloads| |license| |version| |cpython| |wheel| |python| |docs| |activity| |contributors| |quality| |build|
+|languages| |downloads| |license| |version| |cpython| |wheel| |python| |activity| |contributors|
 
 *SINr* is an open-source tool to efficiently compute graph and word
 embeddings. Its aim is to provide sparse interpretable vectors from a
