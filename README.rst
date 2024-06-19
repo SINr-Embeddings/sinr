@@ -133,7 +133,7 @@ to disccus the changes to be made.
 License
 =======
 
-Released under `CeCILL 2.1 <https://cecill.info/>`__, see `LICENSE <https://github.com/SINr-Embeddings/sinr/blob/main/LICENSEE>`__ for more details.
+Released under `CeCILL 2.1 <https://cecill.info/>`__, see `LICENSE <https://github.com/SINr-Embeddings/sinr/blob/main/LICENSE>`__ for more details.
 
 Publications
 ============
