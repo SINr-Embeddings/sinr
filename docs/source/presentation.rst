@@ -38,24 +38,12 @@ Requirements
 Install
 -------
 
-**SINr** can be installed through ``pip`` or from source using ``poetry`` directives.
+**SINr** can be installed through ``pip``.
 
-..  tabs::
+.. code:: bash
 
-    ..  code-tab:: zsh pip
-
-        #Activate conda environment
-        conda activate sinr
-        pip install sinr
-
-    ..  code-tab:: zsh from source
-
-        #Activate conda environment
-        conda activate sinr
-        git clone git@github.com:SINr-Embeddings/sinr.git
-        cd sinr
-        pip install poetry #poetry solves dependencies and installs SINr
-        poetry install #Installs SINr based on the pyproject.toml file
+   conda activate sinr # activate conda environment
+   pip install sinr
 
 
 Usage example
@@ -69,30 +57,66 @@ Here is a minimum working example of SINr :
 
 .. code:: python
 
-    import urllib
-    import io
-    import gzip
-    import networkit as nk
-    import sinr.graph_embeddings as ge
+       import nltk # For textual resources
 
+       import sinr.text.preprocess as ppcs
+       from sinr.text.cooccurrence import Cooccurrence
+       from sinr.text.pmi import pmi_filter
+       import sinr.graph_embeddings as ge
+       import sinr.text.evaluate as ev
 
-    url = "https://snap.stanford.edu/data/wiki-Vote.txt.gz"
-    graph_file = "wikipedia-votes.txt"
-    # Read a graph from SNAP
-    sock = urllib.request.urlopen(url)  # open URL
-    s = io.BytesIO(sock.read())  # read into BytesIO "file"
-    sock.close()
-    with gzip.open(s, "rt") as f_in:
-        with open(graph_file, "wt") as f_out:
-            f_out.writelines(f_in.readlines())
-    # Initialize a networkit.Graph object from SNAP graph
-    G = nk.readGraph(graph_file, nk.Format.SNAP)
+       # Get a textual corpus
+       # For example, texts from the Project Gutenberg electronic text archive,
+       # hosted at http://www.gutenberg.org/
+       nltk.download('gutenberg')
+       gutenberg = nltk.corpus.gutenberg # contains 25,000 free electronic books
+       file = open("my_corpus.txt", "w")
+       file.write(gutenberg.raw())
+       file.close()
 
-    # Build a SINr model and extract embeddings
-    model = ge.SINr.load_from_graph(G)
-    model.run(algo=nk.community.PLM(G))
-    embeddings = model.get_nr()
-    print(embeddings)
+       # Preprocess corpus
+       vrt_maker = ppcs.VRTMaker(ppcs.Corpus(ppcs.Corpus.REGISTER_WEB,
+                                             ppcs.Corpus.LANGUAGE_EN,
+                                             "my_corpus.txt"),
+                                             ".", n_jobs=8)
+       vrt_maker.do_txt_to_vrt()
+       sentences = ppcs.extract_text("my_corpus.vrt", min_freq=20)
+
+       # Construct cooccurrence matrix
+       c = Cooccurrence()
+       c.fit(sentences, window=5)
+       c.matrix = pmi_filter(c.matrix)
+       c.save("my_cooc_matrix.pk")
+
+       # Train SINr model
+       model = ge.SINr.load_from_cooc_pkl("my_cooc_matrix.pk")
+       commu = model.detect_communities(gamma=10)
+       model.extract_embeddings(commu)
+
+       # Construct SINrVectors to manipulate the model
+       sinr_vec = ge.InterpretableWordsModelBuilder(model,
+                                                    'my_sinr_vectors',
+                                                    n_jobs=8,
+                                                    n_neighbors=25).build()
+       sinr_vec.save()
+
+       # Sparsify vectors for better interpretability and performances
+       sinr_vec.sparsify(100)
+
+       # Evaluate the model with the similarity task
+       print('\nResults of the similarity evaluation :')
+       print(ev.similarity_MEN_WS353_SCWS(sinr_vec))
+
+       # Explore word vectors and dimensions of the model
+       print("\nDimensions activated by the word 'apple' :")
+       print(sinr_vec.get_obj_stereotypes('apple', topk_dim=5, topk_val=3))
+
+       print("\nWords similar to 'apple' :")
+       print(sinr_vec.most_similar('apple'))
+
+       # Load an existing SinrVectors object
+       sinr_vec = ge.SINrVectors('my_sinr_vectors')
+       sinr_vec.load()
 
 
 Contributing
@@ -115,13 +139,35 @@ Publications can also be found on :ref:`Publications`.
 
 **Initial SINr paper, 2021**
 
+-  Thibault Prouteau, Victor Connes, Nicolas Dugué, Anthony Perez,
+   Jean-Charles Lamirel, et al.. SINr: Fast Computing of Sparse
+   Interpretable Node Representations is not a Sin!. Advances in
+   Intelligent Data Analysis XIX, 19th International Symposium on
+   Intelligent Data Analysis, IDA 2021, Apr 2021, Porto, Portugal.
+   pp.325-337,
+   ⟨\ `10.1007/978-3-030-74251-5_26 <https://dx.doi.org/10.1007/978-3-030-74251-5_26>`__\ ⟩.
+   `⟨hal-03197434⟩ <https://hal.science/hal-03197434>`__
 
+**Interpretability of SINr embedding**
 
-- Thibault Prouteau, Victor Connes, Nicolas Dugué, Anthony Perez, Jean-Charles Lamirel, et al.. SINr: Fast Computing of Sparse Interpretable Node Representations is not a Sin!. Advances in Intelligent Data Analysis XIX, 19th International Symposium on Intelligent Data Analysis, IDA 2021, Apr 2021, Porto, Portugal. pp.325-337, ⟨`10.1007/978-3-030-74251-5_26 <https://dx.doi.org/10.1007/978-3-030-74251-5_26>`_⟩. `⟨hal-03197434⟩ <https://hal.science/hal-03197434>`_
+-  Thibault Prouteau, Nicolas Dugué, Nathalie Camelin, Sylvain Meignier.
+   Are Embedding Spaces Interpretable? Results of an Intrusion Detection
+   Evaluation on a Large French Corpus. LREC 2022, Jun 2022, Marseille,
+   France. `⟨hal-03770444⟩ <https://hal.science/hal-03770444>`__
 
-**Interpretability of SINr embeddings, 2022**
+**Sparsity of SINr embedding**
 
-- Thibault Prouteau, Nicolas Dugué, Nathalie Camelin, Sylvain Meignier. Are Embedding Spaces Interpretable? Results of an Intrusion Detection Evaluation on a Large French Corpus. LREC 2022, Jun 2022, Marseille, France. `⟨hal-03770444⟩ <https://hal.science/hal-03770444>`_
+-  Simon Guillot, Thibault Prouteau, Nicolas Dugué.
+   Sparser is better: one step closer to word embedding interpretability.
+   IWCS 2023, Nancy, France.
+   `⟨hal-04321407⟩ <https://hal.science/hal-04321407>`__
+
+**Filtering dimensions of SINr embedding**
+
+-  Anna Béranger, Nicolas Dugué, Simon Guillot, Thibault Prouteau.
+   Filtering communities in word co-occurrence networks to foster the
+   emergence of meaning. Complex Networks 2023, Menton, France.
+   `⟨hal-04398742⟩ <https://hal.science/hal-04398742>`__
 
 .. |languages| image:: https://img.shields.io/github/languages/count/SINr-Embeddings/sinr
 .. |downloads| image:: https://img.shields.io/pypi/dm/sinr

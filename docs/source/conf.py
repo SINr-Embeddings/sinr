@@ -7,8 +7,8 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'SINr'
-copyright = '2023, Thibault Prouteau, Nicolas Dugué, Simon Guillot'
-author = 'Thibault Prouteau, Nicolas Dugué, Simon Guillot'
+copyright = '2023, Thibault Prouteau, Nicolas Dugué, Simon Guillot, Anna Béranger'
+author = 'Thibault Prouteau, Nicolas Dugué, Simon Guillot, Anna Béranger'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

@@ -33,6 +33,14 @@ Preprocess Text
    :members:
    :undoc-members:
    :show-inheritance:
+   
+Evaluate
+---------------------------
+
+.. automodule:: sinr.text.evaluate
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Module contents
 ---------------
