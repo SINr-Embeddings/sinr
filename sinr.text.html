@@ -69,6 +69,21 @@
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.preprocess.open_corpus"><code class="docutils literal notranslate"><span class="pre">open_corpus()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sinr.text.evaluate">Evaluate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.clf_fit"><code class="docutils literal notranslate"><span class="pre">clf_fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.clf_score"><code class="docutils literal notranslate"><span class="pre">clf_score()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.clf_xgb_interpretability"><code class="docutils literal notranslate"><span class="pre">clf_xgb_interpretability()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.dist_ratio"><code class="docutils literal notranslate"><span class="pre">dist_ratio()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.dist_ratio_dim"><code class="docutils literal notranslate"><span class="pre">dist_ratio_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.eval_similarity"><code class="docutils literal notranslate"><span class="pre">eval_similarity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.fetch_SimLex"><code class="docutils literal notranslate"><span class="pre">fetch_SimLex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.fetch_data_MEN"><code class="docutils literal notranslate"><span class="pre">fetch_data_MEN()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.fetch_data_SCWS"><code class="docutils literal notranslate"><span class="pre">fetch_data_SCWS()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.fetch_data_WS353"><code class="docutils literal notranslate"><span class="pre">fetch_data_WS353()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.similarity_MEN_WS353_SCWS"><code class="docutils literal notranslate"><span class="pre">similarity_MEN_WS353_SCWS()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.vectorizer"><code class="docutils literal notranslate"><span class="pre">vectorizer()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-sinr.text">Module contents</a></li>
 </ul>
 </li>
@@ -351,6 +366,260 @@ the PMI is lower than a thershold min_pmi.</p>
 </dd></dl>
 
 </section>
+<section id="module-sinr.text.evaluate">
+<span id="evaluate"></span><h2>Evaluate<a class="headerlink" href="#module-sinr.text.evaluate" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.clf_fit">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">clf_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clf=XGBClassifier(base_score=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">booster=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colsample_bylevel=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colsample_bynode=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colsample_bytree=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_stopping_rounds=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_categorical=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_metric=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_types=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grow_policy=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction_constraints=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_bin=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cat_threshold=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cat_to_onehot=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_delta_step=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_leaves=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_child_weight=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing=nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monotone_constraints=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_strategy=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_estimators=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_parallel_tree=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.clf_fit" title="Permalink to this definition"></a></dt>
+<dd><p>Fit a classification model according to the given training data.
+:param X_train: training data
+:type X_train: list of vectors
+:param y_train: labels
+:type y_train: numpy.ndarray
+:param clf: classifier
+:type clf: classifier (ex.: xgboost.XGBClassifier, sklearn.svm.SVC)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Fitted classifier</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>classifier</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.clf_score">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">clf_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'accuracy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.clf_score" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluate classification on given test data.
+:param clf: classifier
+:type clf: classifier (ex.: xgboost.XGBClassifier, sklearn.svm.SVC)
+:param X_test: test data
+:type X_test: list of vectors
+:param y_test: labels
+:type y_test: numpy.ndarray
+:param scoring: scikit-learn scorer object, default=’accuracy’
+:type scoring: str
+:param params: parameters for the scorer object
+:type params: dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Score</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.clf_xgb_interpretability">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">clf_xgb_interpretability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xgb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpreter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gain'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.clf_xgb_interpretability" title="Permalink to this definition"></a></dt>
+<dd><p>Interpretability of main dimensions used by the xgboost classifier
+:param sinr_vec: SINrVectors object from which datas were vectorized
+:type sinr_vec: SINrVectors
+:param xgb: fitted xgboost classifier
+:type xgb: xgboost.XGBClassifier
+:param interpreter: whether stereotypes or descriptors are requested
+:type interpreter: str
+:param topk_dim: Number of features requested among the main features used by the classifier (Default value = 10)
+:type topk_dim: int
+:param topk: <cite>topk</cite> value to consider on each dimension (Default value = 5)
+:type topk: int
+:param importance_type: ‘weight’: the number of times a feature is used to split the data across all trees,</p>
+<blockquote>
+<div><p>‘gain’: the average gain across all splits the feature is used in,
+‘cover’: the average coverage across all splits the feature is used in,
+‘total_gain’: the total gain across all splits the feature is used in
+‘total_cover’: the total coverage across all splits the feature is used in</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Interpreters of dimensions, importance of dimensions</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of set of object, list of tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.dist_ratio">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">dist_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">union</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prctbot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prcttop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbtopk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.dist_ratio" title="Permalink to this definition"></a></dt>
+<dd><p>DistRatio of the model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> (<a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors" title="sinr.graph_embeddings.SINrVectors"><em>SINrVectors</em></a>) – SINrVectors object</p></li>
+<li><p><strong>union</strong> (<em>int list</em>) – ids of words that are among the top prct of at least one dimension (defaults to None)</p></li>
+<li><p><strong>prctbot</strong> (<em>int</em>) – bottom prctbot to pick (defaults to 50)</p></li>
+<li><p><strong>prcttop</strong> (<em>int</em>) – top prcttop to pick (defaults to 10)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DisRatio of the model</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.dist_ratio_dim">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">dist_ratio_dim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">union</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prctbot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prcttop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbtopk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.dist_ratio_dim" title="Permalink to this definition"></a></dt>
+<dd><p>DistRatio for one dimension of the model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> (<a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors" title="sinr.graph_embeddings.SINrVectors"><em>SINrVectors</em></a>) – SINrVectors object</p></li>
+<li><p><strong>dim</strong> (<em>int</em>) – the index of the dimension for which to get the DistRatio</p></li>
+<li><p><strong>union</strong> (<em>int list</em>) – ids of words that are among the top prct of at least one dimension (defaults to None)</p></li>
+<li><p><strong>prctbot</strong> (<em>int</em>) – bottom prctbot to pick (defaults to 50)</p></li>
+<li><p><strong>prcttop</strong> (<em>int</em>) – top prcttop to pick (defaults to 10)</p></li>
+<li><p><strong>nbtopk</strong> (<em>int</em>) – number of top words to pick (defaults to 5)</p></li>
+<li><p><strong>dist</strong> (<em>boolean</em>) – set to True (default) to use cosine distance and False to use cosine similarity</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DistRatio for dimension <cite>dim</cite></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.eval_similarity">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">eval_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.eval_similarity" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluate similarity with Spearman correlation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> – SINrVectors object</p></li>
+<li><p><strong>dataset</strong> – sklearn.datasets.base.Bunch
+dictionary-like object. Keys of interest:
+‘X’: matrix of 2 words per column,
+‘y’: vector with scores</p></li>
+<li><p><strong>print_missing</strong> – boolean (default : True)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Spearman correlation between cosine similarity and human rated similarity</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.fetch_SimLex">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">fetch_SimLex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'665'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.fetch_SimLex" title="Permalink to this definition"></a></dt>
+<dd><p>Fetch SimLex datasets for testing relatedness similarity</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>which</strong> (<em>str</em>) – dataset (default value = “665”)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>dictionary-like object. Keys of interest:
+‘X’: matrix of 2 words per column,
+‘y’: vector with scores</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sklearn.datasets.base.Bunch</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.fetch_data_MEN">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">fetch_data_MEN</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.fetch_data_MEN" title="Permalink to this definition"></a></dt>
+<dd><p>Fetch MEN dataset for testing relatedness similarity</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dictionary-like object. Keys of interest:
+‘X’: matrix of 2 words per column,
+‘y’: vector with scores</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>sklearn.datasets.base.Bunch</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.fetch_data_SCWS">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">fetch_data_SCWS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.fetch_data_SCWS" title="Permalink to this definition"></a></dt>
+<dd><p>Fetch SCWS dataset for testing relatedness similarity</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dictionary-like object. Keys of interest:
+‘X’: matrix of 2 words per column,
+‘y’: vector with scores</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>sklearn.datasets.base.Bunch</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.fetch_data_WS353">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">fetch_data_WS353</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.fetch_data_WS353" title="Permalink to this definition"></a></dt>
+<dd><p>Fetch WS353 dataset for testing relatedness similarity</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dictionary-like object. Keys of interest:
+‘X’: matrix of 2 words per column,
+‘y’: vector with scores</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>sklearn.datasets.base.Bunch</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.similarity_MEN_WS353_SCWS">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">similarity_MEN_WS353_SCWS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.similarity_MEN_WS353_SCWS" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluate similarity with MEN, WS353 and SCWS datasets</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> – SINrVectors object</p></li>
+<li><p><strong>print_missing</strong> – boolean (default : True)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Spearman correlation for MEN, WS353 and SCWS datasets</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.vectorizer">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">vectorizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.vectorizer" title="Permalink to this definition"></a></dt>
+<dd><p>Vectorize preprocessed documents to sinr embeddings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> (<a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors" title="sinr.graph_embeddings.SINrVectors"><em>SINrVectors</em></a>) – SINrVectors object</p></li>
+<li><p><strong>X</strong> (<em>text</em><em> (</em><em>list</em><em>(</em><em>list</em><em>(</em><em>str</em><em>)</em><em>)</em><em>)</em><em>: A list</em><em> of </em><em>documents containing words</em>) – preprocessed documents</p></li>
+<li><p><strong>y</strong> (<em>numpy.ndarray</em>) – documents labels</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of vectors</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="module-sinr.text">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sinr.text" title="Permalink to this heading"></a></h2>
 <p>Package to preprocess text into word co-occurrence graphs prior to running <cite>SINr</cite>.</p>
@@ -368,7 +637,7 @@ the PMI is lower than a thershold min_pmi.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Thibault Prouteau, Nicolas Dugué, Simon Guillot.</p>
+    <p>&#169; Copyright 2023, Thibault Prouteau, Nicolas Dugué, Simon Guillot, Anna Béranger.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -17,7 +17,6 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
-        <script src="_static/tabs.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -115,22 +114,11 @@ section.</p>
 </section>
 <section id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h2>
-<p><strong>SINr</strong> can be installed through <code class="docutils literal notranslate"><span class="pre">pip</span></code> or from source using <code class="docutils literal notranslate"><span class="pre">poetry</span></code> directives.</p>
-<div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-cGlw" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-cGlw" name="cGlw" role="tab" tabindex="0">pip</button><button aria-controls="panel-0-ZnJvbSBzb3VyY2U=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-ZnJvbSBzb3VyY2U=" name="ZnJvbSBzb3VyY2U=" role="tab" tabindex="-1">from source</button></div><div aria-labelledby="tab-0-cGlw" class="sphinx-tabs-panel code-tab group-tab" id="panel-0-cGlw" name="cGlw" role="tabpanel" tabindex="0"><div class="highlight-zsh notranslate"><div class="highlight"><pre><span></span><span class="c1">#Activate conda environment</span>
-conda<span class="w"> </span>activate<span class="w"> </span>sinr
+<p><strong>SINr</strong> can be installed through <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>sinr<span class="w"> </span><span class="c1"># activate conda environment</span>
 pip<span class="w"> </span>install<span class="w"> </span>sinr
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-ZnJvbSBzb3VyY2U=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-ZnJvbSBzb3VyY2U=" name="ZnJvbSBzb3VyY2U=" role="tabpanel" tabindex="0"><div class="highlight-zsh notranslate"><div class="highlight"><pre><span></span><span class="c1">#Activate conda environment</span>
-conda<span class="w"> </span>activate<span class="w"> </span>sinr
-git<span class="w"> </span>clone<span class="w"> </span>git@github.com:SINr-Embeddings/sinr.git
-<span class="nb">cd</span><span class="w"> </span>sinr
-pip<span class="w"> </span>install<span class="w"> </span>poetry<span class="w"> </span><span class="c1">#poetry solves dependencies and installs SINr</span>
-poetry<span class="w"> </span>install<span class="w"> </span><span class="c1">#Installs SINr based on the pyproject.toml file</span>
-</pre></div>
-</div>
-</div></div>
 </section>
 <section id="usage-example">
 <h2>Usage example<a class="headerlink" href="#usage-example" title="Permalink to this heading"></a></h2>
@@ -138,30 +126,66 @@ poetry<span class="w"> </span>install<span class="w"> </span><span class="c1">#I
 <a class="reference external" href="https://github.com/SINr-Embeddings/sinr/tree/main/notebooks">notebook</a>
 directory.</p>
 <p>Here is a minimum working example of SINr :</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">urllib</span>
-<span class="kn">import</span> <span class="nn">io</span>
-<span class="kn">import</span> <span class="nn">gzip</span>
-<span class="kn">import</span> <span class="nn">networkit</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nltk</span> <span class="c1"># For textual resources</span>
+
+<span class="kn">import</span> <span class="nn">sinr.text.preprocess</span> <span class="k">as</span> <span class="nn">ppcs</span>
+<span class="kn">from</span> <span class="nn">sinr.text.cooccurrence</span> <span class="kn">import</span> <span class="n">Cooccurrence</span>
+<span class="kn">from</span> <span class="nn">sinr.text.pmi</span> <span class="kn">import</span> <span class="n">pmi_filter</span>
 <span class="kn">import</span> <span class="nn">sinr.graph_embeddings</span> <span class="k">as</span> <span class="nn">ge</span>
+<span class="kn">import</span> <span class="nn">sinr.text.evaluate</span> <span class="k">as</span> <span class="nn">ev</span>
 
+<span class="c1"># Get a textual corpus</span>
+<span class="c1"># For example, texts from the Project Gutenberg electronic text archive,</span>
+<span class="c1"># hosted at http://www.gutenberg.org/</span>
+<span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;gutenberg&#39;</span><span class="p">)</span>
+<span class="n">gutenberg</span> <span class="o">=</span> <span class="n">nltk</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">gutenberg</span> <span class="c1"># contains 25,000 free electronic books</span>
+<span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;my_corpus.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+<span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">gutenberg</span><span class="o">.</span><span class="n">raw</span><span class="p">())</span>
+<span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://snap.stanford.edu/data/wiki-Vote.txt.gz&quot;</span>
-<span class="n">graph_file</span> <span class="o">=</span> <span class="s2">&quot;wikipedia-votes.txt&quot;</span>
-<span class="c1"># Read a graph from SNAP</span>
-<span class="n">sock</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>  <span class="c1"># open URL</span>
-<span class="n">s</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">sock</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>  <span class="c1"># read into BytesIO &quot;file&quot;</span>
-<span class="n">sock</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_in</span><span class="p">:</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">graph_file</span><span class="p">,</span> <span class="s2">&quot;wt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_out</span><span class="p">:</span>
-        <span class="n">f_out</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">f_in</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
-<span class="c1"># Initialize a networkit.Graph object from SNAP graph</span>
-<span class="n">G</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">readGraph</span><span class="p">(</span><span class="n">graph_file</span><span class="p">,</span> <span class="n">nk</span><span class="o">.</span><span class="n">Format</span><span class="o">.</span><span class="n">SNAP</span><span class="p">)</span>
+<span class="c1"># Preprocess corpus</span>
+<span class="n">vrt_maker</span> <span class="o">=</span> <span class="n">ppcs</span><span class="o">.</span><span class="n">VRTMaker</span><span class="p">(</span><span class="n">ppcs</span><span class="o">.</span><span class="n">Corpus</span><span class="p">(</span><span class="n">ppcs</span><span class="o">.</span><span class="n">Corpus</span><span class="o">.</span><span class="n">REGISTER_WEB</span><span class="p">,</span>
+                                      <span class="n">ppcs</span><span class="o">.</span><span class="n">Corpus</span><span class="o">.</span><span class="n">LANGUAGE_EN</span><span class="p">,</span>
+                                      <span class="s2">&quot;my_corpus.txt&quot;</span><span class="p">),</span>
+                                      <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">vrt_maker</span><span class="o">.</span><span class="n">do_txt_to_vrt</span><span class="p">()</span>
+<span class="n">sentences</span> <span class="o">=</span> <span class="n">ppcs</span><span class="o">.</span><span class="n">extract_text</span><span class="p">(</span><span class="s2">&quot;my_corpus.vrt&quot;</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
-<span class="c1"># Build a SINr model and extract embeddings</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">SINr</span><span class="o">.</span><span class="n">load_from_graph</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">algo</span><span class="o">=</span><span class="n">nk</span><span class="o">.</span><span class="n">community</span><span class="o">.</span><span class="n">PLM</span><span class="p">(</span><span class="n">G</span><span class="p">))</span>
-<span class="n">embeddings</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_nr</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">embeddings</span><span class="p">)</span>
+<span class="c1"># Construct cooccurrence matrix</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">Cooccurrence</span><span class="p">()</span>
+<span class="n">c</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">sentences</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="n">pmi_filter</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">matrix</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;my_cooc_matrix.pk&quot;</span><span class="p">)</span>
+
+<span class="c1"># Train SINr model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">SINr</span><span class="o">.</span><span class="n">load_from_cooc_pkl</span><span class="p">(</span><span class="s2">&quot;my_cooc_matrix.pk&quot;</span><span class="p">)</span>
+<span class="n">commu</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">detect_communities</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">extract_embeddings</span><span class="p">(</span><span class="n">commu</span><span class="p">)</span>
+
+<span class="c1"># Construct SINrVectors to manipulate the model</span>
+<span class="n">sinr_vec</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">InterpretableWordsModelBuilder</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
+                                             <span class="s1">&#39;my_sinr_vectors&#39;</span><span class="p">,</span>
+                                             <span class="n">n_jobs</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+                                             <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">sinr_vec</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+<span class="c1"># Sparsify vectors for better interpretability and performances</span>
+<span class="n">sinr_vec</span><span class="o">.</span><span class="n">sparsify</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Evaluate the model with the similarity task</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Results of the similarity evaluation :&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ev</span><span class="o">.</span><span class="n">similarity_MEN_WS353_SCWS</span><span class="p">(</span><span class="n">sinr_vec</span><span class="p">))</span>
+
+<span class="c1"># Explore word vectors and dimensions of the model</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Dimensions activated by the word &#39;apple&#39; :&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sinr_vec</span><span class="o">.</span><span class="n">get_obj_stereotypes</span><span class="p">(</span><span class="s1">&#39;apple&#39;</span><span class="p">,</span> <span class="n">topk_dim</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">topk_val</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Words similar to &#39;apple&#39; :&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sinr_vec</span><span class="o">.</span><span class="n">most_similar</span><span class="p">(</span><span class="s1">&#39;apple&#39;</span><span class="p">))</span>
+
+<span class="c1"># Load an existing SinrVectors object</span>
+<span class="n">sinr_vec</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">SINrVectors</span><span class="p">(</span><span class="s1">&#39;my_sinr_vectors&#39;</span><span class="p">)</span>
+<span class="n">sinr_vec</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
@@ -180,11 +204,35 @@ for your own research, please cite the appropriate papers from the list below.
 Publications can also be found on <a class="reference internal" href="publications.html#publications"><span class="std std-ref">Publications</span></a>.</p>
 <p><strong>Initial SINr paper, 2021</strong></p>
 <ul class="simple">
-<li><p>Thibault Prouteau, Victor Connes, Nicolas Dugué, Anthony Perez, Jean-Charles Lamirel, et al.. SINr: Fast Computing of Sparse Interpretable Node Representations is not a Sin!. Advances in Intelligent Data Analysis XIX, 19th International Symposium on Intelligent Data Analysis, IDA 2021, Apr 2021, Porto, Portugal. pp.325-337, ⟨<a class="reference external" href="https://dx.doi.org/10.1007/978-3-030-74251-5_26">10.1007/978-3-030-74251-5_26</a>⟩. <a class="reference external" href="https://hal.science/hal-03197434">⟨hal-03197434⟩</a></p></li>
+<li><p>Thibault Prouteau, Victor Connes, Nicolas Dugué, Anthony Perez,
+Jean-Charles Lamirel, et al.. SINr: Fast Computing of Sparse
+Interpretable Node Representations is not a Sin!. Advances in
+Intelligent Data Analysis XIX, 19th International Symposium on
+Intelligent Data Analysis, IDA 2021, Apr 2021, Porto, Portugal.
+pp.325-337,
+⟨<a class="reference external" href="https://dx.doi.org/10.1007/978-3-030-74251-5_26">10.1007/978-3-030-74251-5_26</a>⟩.
+<a class="reference external" href="https://hal.science/hal-03197434">⟨hal-03197434⟩</a></p></li>
 </ul>
-<p><strong>Interpretability of SINr embeddings, 2022</strong></p>
+<p><strong>Interpretability of SINr embedding</strong></p>
 <ul class="simple">
-<li><p>Thibault Prouteau, Nicolas Dugué, Nathalie Camelin, Sylvain Meignier. Are Embedding Spaces Interpretable? Results of an Intrusion Detection Evaluation on a Large French Corpus. LREC 2022, Jun 2022, Marseille, France. <a class="reference external" href="https://hal.science/hal-03770444">⟨hal-03770444⟩</a></p></li>
+<li><p>Thibault Prouteau, Nicolas Dugué, Nathalie Camelin, Sylvain Meignier.
+Are Embedding Spaces Interpretable? Results of an Intrusion Detection
+Evaluation on a Large French Corpus. LREC 2022, Jun 2022, Marseille,
+France. <a class="reference external" href="https://hal.science/hal-03770444">⟨hal-03770444⟩</a></p></li>
+</ul>
+<p><strong>Sparsity of SINr embedding</strong></p>
+<ul class="simple">
+<li><p>Simon Guillot, Thibault Prouteau, Nicolas Dugué.
+Sparser is better: one step closer to word embedding interpretability.
+IWCS 2023, Nancy, France.
+<a class="reference external" href="https://hal.science/hal-04321407">⟨hal-04321407⟩</a></p></li>
+</ul>
+<p><strong>Filtering dimensions of SINr embedding</strong></p>
+<ul class="simple">
+<li><p>Anna Béranger, Nicolas Dugué, Simon Guillot, Thibault Prouteau.
+Filtering communities in word co-occurrence networks to foster the
+emergence of meaning. Complex Networks 2023, Menton, France.
+<a class="reference external" href="https://hal.science/hal-04398742">⟨hal-04398742⟩</a></p></li>
 </ul>
 </section>
 </section>
@@ -200,7 +248,7 @@ Publications can also be found on <a class="reference internal" href="publicatio
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Thibault Prouteau, Nicolas Dugué, Simon Guillot.</p>
+    <p>&#169; Copyright 2023, Thibault Prouteau, Nicolas Dugué, Simon Guillot, Anna Béranger.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
