@@ -1,7 +1,7 @@
 =====
 SINr
 =====
-|languages| |downloads| |license| |version| |cpython| |wheel| |python| |docs| |activity| |contributors| |quality| |build|
+|languages| |downloads| |license| |version| |cpython| |wheel| |python| |activity| |contributors|
 
 *SINr* is an open-source tool to efficiently compute graph and word
 embeddings. Its aim is to provide sparse interpretable vectors from a
@@ -50,7 +50,8 @@ Usage example
 =============
 
 To get started using *SINr* to build graph and word embeddings, have a
-look at the `notebook <./notebooks>`__ directory.
+look at the `notebook <https://github.com/SINr-Embeddings/sinr/tree/main/notebooks>`_ 
+directory.
 
 Here is a minimum working example of *SINr*
 
@@ -132,7 +133,7 @@ to disccus the changes to be made.
 License
 =======
 
-Released under `CeCILL 2.1 <https://cecill.info/>`__, see `LICENSE <./LICENSE>`__ for more details.
+Released under `CeCILL 2.1 <https://cecill.info/>`__, see `LICENSE <https://github.com/SINr-Embeddings/sinr/blob/main/LICENSE>`__ for more details.
 
 Publications
 ============
@@ -141,7 +142,7 @@ Publications
 find *SINr* useful for your own research, please cite the appropriate
 papers from the list below. Publications can also be found on
 `publications page in the
-documentation <https://sinr-embeddings.github.io/sinr/_build/html/publications.html>`__.
+documentation <https://sinr-embeddings.github.io/sinr/publications.html>`__.
 
 **Initial SINr paper, 2021**
 
@@ -184,8 +185,6 @@ documentation <https://sinr-embeddings.github.io/sinr/_build/html/publications.h
 .. |cpython| image:: https://img.shields.io/pypi/implementation/sinr
 .. |wheel| image:: https://img.shields.io/pypi/wheel/sinr
 .. |python| image:: https://img.shields.io/pypi/pyversions/sinr
-.. |docs| image:: https://img.shields.io/website?url=https%3A%2F%2Fsinr-embeddings.github.io%2Fsinr%2F_build%2Fhtml%2Findex.html
 .. |activity| image:: https://img.shields.io/github/commit-activity/y/SINr-Embeddings/sinr
 .. |contributors| image:: https://img.shields.io/github/contributors/SINr-Embeddings/sinr
-.. |quality| image:: https://scrutinizer-ci.com/g/SINr-Embeddings/sinr/badges/quality-score.png?b=main
-.. |build| image:: https://scrutinizer-ci.com/g/SINr-Embeddings/sinr/badges/build.png?b=main
+
