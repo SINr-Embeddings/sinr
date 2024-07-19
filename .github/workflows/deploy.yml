@@ -1,0 +1,57 @@
+name: Deploy to PyPI
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  deploy:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    env:
+      POETRY_VIRTUALENVS_CREATE: "false"
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install poetry
+        run: |
+         pipx install poetry
+         pipx inject poetry poetry-bumpversion
+
+      - name: Build
+        run: |
+          poetry version ${{ github.ref_name }}
+          poetry build
+
+      - name: Publish
+        run: |
+          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+          poetry publish
+      - name: Upload binaries to release
+        uses: softprops/action-gh-release@v1
+        if: ${{startsWith(github.ref, 'refs/tags/') }}
+        with:
+          files: dist/*
+
+      - name: Commit and push changes
+        uses: devops-infra/action-commit-push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          add_timestamp: false
+          target_branch: release/${{ github.event.release.tag_name }}
+          commit_prefix: "[AUTO-COMMIT] "
+          commit_message: Update release version to ${{ github.event.release.tag_name }}.
+
+      - name: Create pull request
+        uses: devops-infra/action-pull-request@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          body: Automated pull request<br><br>Updated release version to ${{ github.event.release.tag_name }}.
+          title: ${{ github.event.commits[0].message }}
+          target_branch: "main"
+          reviewer: "thibaultprouteau"
+          assignee: "thibaultprouteau"
+          label: "release"
+          allow_no_diff: false
+
+      # NOTE: Make sure you have added PYPI_API_TOKEN repository secret
