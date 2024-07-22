@@ -649,23 +649,27 @@ class SINrVectors(object):
             labels_sets.append(labels)
         return labels_sets
     
+    
+    
     def get_matching_communities(self, sinr_vector):
         """Get the matching between two partitions with common vocabularies
         
         :param sinr_vector: Small model (target)
         :type sinr_vector: SINrVectors
         
-        :returns: Lists. The first indicating, at each of its index corresponding to the community's index of the self object (src), its matching number in the parameter sinr_vector's communities (tgt) if it exists. The second indicating, at each of its index corresponding to the community's index of the object in parameter, its matching number in the self object.
+        :returns: Couple of lists. The first indicating, at each of its index corresponding to the community's index of the self object (src), its matching number in the parameter sinr_vector's communities (tgt) if it exists. The second indicating, at each of its index corresponding to the community's index of the object in parameter, its matching number in the self object.
         :rtype: (list[int],list[int])
-        """
-        
+        """ 
         src_communities = self.get_communities_as_labels_sets()
+        # -1 means no matching, initializing the list with no matching for all communities of the src model (self)
         l = [-1] * len(src_communities)
         tgt_communities = sinr_vector.get_communities_as_labels_sets()
         for id_src, lab_set_src in enumerate(src_communities):
             for id_tgt, lab_set_tgt in enumerate(tgt_communities):
+                # If there is an intersection it means that there is a matching, because we are working with hard clustering
                 if len(lab_set_src.intersection(lab_set_tgt)) > 0:
                     l[id_src] = id_tgt
+        # l is the matching from src ref to dst ref, tgt_from_src is the symmetric
         tgt_from_src = [-1] * len(tgt_communities)
         for idx, val in enumerate(l):
             tgt_from_src[val] = idx
@@ -685,13 +689,16 @@ class SINrVectors(object):
         
         matching_st, matching_ts = self.get_matching_communities(sinr_vector)
         
+        # Get the coo matrix of the tgt model to reshape it according to the communities of the src model (self)
         vectors = sinr_vector.vectors.tocoo()
         row = vectors.row
         data = vectors.data
+        # Updating the columns according to the matching
         col = [matching_ts[val] for val in vectors.col]
-    
+        # Recreating a coo matrix, equivalent to the previous one, but that makes sense in the src model
         matrix = coo_matrix((data, (row, col)), shape=(sinr_vector.vectors.shape[0], self.vectors.shape[1]))
         
+        # Copy the current object and set the matrix created and vocab to return it
         import copy
         self_copy = copy.deepcopy(self)
         self_copy.set_vectors(matrix.tocsr())

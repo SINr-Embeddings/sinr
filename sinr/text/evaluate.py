@@ -392,3 +392,25 @@ def clf_xgb_interpretability(sinr_vec, xgb, interpreter,topk_dim=10, topk=5, imp
         dim = [sinr_vec.get_dimension_stereotypes_idx(index, topk=topk) for index in features_index]
     
     return dim, features_importance
+
+def get_stereotypes_variation(model1, model2, k:int=10):
+    """Return a list of variation by dimensions according to the varnn of Pierrejean adapted to stereotypes.
+    Both models should be aligned !
+    It is 1 - (the intersection of the k stereotypes of k stereotypes for both models)/k
+    The more it is close to 0, the more the two models are similar according to their stereotypes
+    :type model1:SINrVectors
+    :type model2:SINrVectors
+    :type k:int
+    :rtype: list of tuple (idx dim, variation dim)
+    
+    """
+    l = list()
+    for idx in tqdm(range(model1.get_number_of_dimensions()), desc = 'Computing variations of stereotypes for dimensions', leave = False):
+        stereotypes1 = {v for (u,v) in model1.get_dimension_stereotypes_idx(idx, topk=k).get_dict()["stereotypes"]}
+        stereotypes2 = {v for (u,v) in model2.get_dimension_stereotypes_idx(idx, topk=k).get_dict()["stereotypes"]}
+        var_dim = 1 - (len(stereotypes1.intersection(stereotypes2)) / k)
+        l.append((idx, var_dim))
+    return l
+        
+        
+        
