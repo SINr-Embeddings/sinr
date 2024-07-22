@@ -648,6 +648,55 @@ class SINrVectors(object):
                 labels.add(self.vocab[u])
             labels_sets.append(labels)
         return labels_sets
+    
+    def get_matching_communities(self, sinr_vector):
+        """Get the matching between two partitions with common vocabularies
+        
+        :param sinr_vector: Small model (target)
+        :type sinr_vector: SINrVectors
+        
+        :returns: Lists. The first indicating, at each of its index corresponding to the community's index of the self object (src), its matching number in the parameter sinr_vector's communities (tgt) if it exists. The second indicating, at each of its index corresponding to the community's index of the object in parameter, its matching number in the self object.
+        :rtype: (list[int],list[int])
+        """
+        
+        src_communities = self.get_communities_as_labels_sets()
+        l = [-1] * len(src_communities)
+        tgt_communities = sinr_vector.get_communities_as_labels_sets()
+        for id_src, lab_set_src in enumerate(src_communities):
+            for id_tgt, lab_set_tgt in enumerate(tgt_communities):
+                if len(lab_set_src.intersection(lab_set_tgt)) > 0:
+                    l[id_src] = id_tgt
+        tgt_from_src = [-1] * len(tgt_communities)
+        for idx, val in enumerate(l):
+            tgt_from_src[val] = idx
+        
+        return l, tgt_from_src
+    
+    def get_vectors_using_self_space(self, sinr_vector):
+        """Transpose the vectors of the sinr_vector object in parameter in the embedding space of the self object, using matching communities
+        
+        :param sinr_vector: Small model (target)
+        :type sinr_vector: SINrVectors
+        
+        :returns: Copy of the self model (the big one) with vectors of the parameter (small one) transposed to its referential
+        :rtype: SINrVectors
+        """
+        from scipy.sparse import coo_matrix
+        
+        matching_st, matching_ts = self.get_matching_communities(sinr_vector)
+        
+        vectors = sinr_vector.vectors.tocoo()
+        row = vectors.row
+        data = vectors.data
+        col = [matching_ts[val] for val in vectors.col]
+    
+        matrix = coo_matrix((data, (row, col)), shape=(sinr_vector.vectors.shape[0], self.vectors.shape[1]))
+        
+        import copy
+        self_copy = copy.deepcopy(self)
+        self_copy.set_vectors(matrix.tocsr())
+        self_copy.vocab = sinr_vector.vocab
+        return self_copy
 
     def set_n_jobs(self, n_jobs):
         """Set the number of jobs.
