@@ -1,6 +1,7 @@
 import pickle as pk
 
 from networkit import Graph, components, community, setNumberOfThreads, getCurrentNumberOfThreads, getMaxNumberOfThreads, Partition
+import networkit.graphtools as nkg
 from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat, mean, nanmax, int64, shape, delete, nanmean
 from sklearn.neighbors import NearestNeighbors
 from scipy import spatial
@@ -48,6 +49,7 @@ class SINr(object):
 
         word_to_idx, matrix = strategy_loader.load_pkl_text(cooc_matrix_path)
         graph = get_graph_from_matrix(matrix)
+        graph, word_to_idx = get_compact_lgcc(graph, word_to_idx)
         out_of_LgCC = get_lgcc(graph)
         logger.info("Finished building graph.")
         return cls(graph, out_of_LgCC, word_to_idx)
@@ -67,6 +69,7 @@ class SINr(object):
         logger.info("Building Graph.")
         word_to_idx, matrix = strategy_loader.load_adj_mat(matrix_object, labels)
         graph = get_graph_from_matrix(matrix)
+        graph, word_to_idx = get_compact_lgcc(graph, word_to_idx)
         out_of_LgCC = get_lgcc(graph)
         logger.info("Finished building graph.")
         return cls(graph, out_of_LgCC, word_to_idx)
@@ -87,6 +90,7 @@ class SINr(object):
         for u in graph.iterNodes():
             word_to_idx[u] = idx
             idx += 1
+        graph, word_to_idx = get_compact_lgcc(graph, word_to_idx)
         out_of_LgCC = get_lgcc(graph)
         logger.info("Finished building graph.")
         return cls(graph, out_of_LgCC, word_to_idx)
@@ -230,7 +234,7 @@ class SINr(object):
         set_out_of_LgCC = set(self.out_of_LgCC)
         out_of_LgCC_coms = []
         for com in communities.getSubsetIds():
-            if set(communities.getMembers()) & set_out_of_LgCC != {}:
+            if set(communities.getMembers(com)) & set_out_of_LgCC != {}:
                 out_of_LgCC_coms.append(com)
         return out_of_LgCC_coms
 
@@ -310,6 +314,40 @@ def get_graph_from_matrix(matrix):
     for row, col, weight in zip(rows, cols, weights):
         graph.addEdge(u=row, v=col, w=weight, addMissing=True)
     return graph
+
+def get_compact_lgcc(graph, word_to_idx):
+    """Get a compacted graph with only nodes inside the largest connected component. Get the words with ids corresponding to the new node ids.
+    
+    :param graph: The input graph
+    :type graph: networkit graph
+    :param word_to_idx: The words mapped to their initial ids
+    :type word_to_idx: dictionnary
+    
+    :returns: The new graph and dictionnary of words
+    :rtype: networkit graph, dictionnary
+    
+    """
+    
+    # search isolated nodes
+    isolated_nodes = list()
+    for u in graph.iterNodes():
+        if graph.degree(u) == 0:
+            isolated_nodes.append(u)
+            
+    if len(isolated_nodes) != 0:
+        # remove nodes and corresponding words from the graph and dict of words
+        idx_to_word = _flip_keys_values(word_to_idx)
+        for u in isolated_nodes:
+            graph.removeNode(u)
+            del idx_to_word[u]
+        word_to_idx = _flip_keys_values(idx_to_word)
+        # change nodes ids to continuous ids
+        idx_map = nkg.getContinuousNodeIds(graph)
+        graph = nkg.getCompactedGraph(graph, idx_map)
+        # change words ids to continuous ids
+        word_to_idx = {k: idx_map[v] for k, v in word_to_idx.items()}
+        
+    return graph, word_to_idx
 
 
 class NoCommunityDetectedException(Exception):
