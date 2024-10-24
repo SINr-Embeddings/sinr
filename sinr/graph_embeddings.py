@@ -1608,3 +1608,4 @@ class SINrVectors(object):
 class DimensionFilteredException(Exception):
     """Exception raised when trying to access a dimension removed by filtering. """
     pass
+
