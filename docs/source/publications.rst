@@ -21,5 +21,4 @@ Publications
 
 **Filtering dimensions of SINr embedding**
 
-
 -  Anna Béranger, Nicolas Dugué, Simon Guillot, Thibault Prouteau. Filtering communities in word co-occurrence networks to foster the emergence of meaning. Complex Networks 2023, Menton, France. `⟨hal-04398742v1⟩ <https://hal.science/hal-04398742v1>`__
