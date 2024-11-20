@@ -7,7 +7,6 @@
   <title>SINr Core &mdash; SINr  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -62,6 +61,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINr"><code class="docutils literal notranslate"><span class="pre">SINr</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors"><code class="docutils literal notranslate"><span class="pre">SINrVectors</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.ThresholdedModelBuilder"><code class="docutils literal notranslate"><span class="pre">ThresholdedModelBuilder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.get_compact_lgcc"><code class="docutils literal notranslate"><span class="pre">get_compact_lgcc()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.get_graph_from_matrix"><code class="docutils literal notranslate"><span class="pre">get_graph_from_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.graph_embeddings.get_lgcc"><code class="docutils literal notranslate"><span class="pre">get_lgcc()</span></code></a></li>
 </ul>
@@ -779,6 +779,23 @@ Co-occurrence matrices should for instance be generated using sinr.text.cooccurr
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_matching_communities">
+<span class="sig-name descname"><span class="pre">get_matching_communities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vector</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_matching_communities" title="Permalink to this definition"></a></dt>
+<dd><p>Get the matching between two partitions with common vocabularies</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sinr_vector</strong> (<a class="reference internal" href="#sinr.graph_embeddings.SINrVectors" title="sinr.graph_embeddings.SINrVectors"><em>SINrVectors</em></a>) – Small model (target)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Lists. The first indicating, at each of its index corresponding to the community’s index of the self object (src), its matching number in the parameter sinr_vector’s communities (tgt) if it exists. The second indicating, at each of its index corresponding to the community’s index of the object in parameter, its matching number in the self object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(list[int],list[int])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_my_vector">
 <span class="sig-name descname"><span class="pre">get_my_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_my_vector" title="Permalink to this definition"></a></dt>
 <dd><p>Get the column or the row obj.</p>
@@ -972,6 +989,23 @@ Co-occurrence matrices should for instance be generated using sinr.text.cooccurr
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_vectors_using_self_space">
+<span class="sig-name descname"><span class="pre">get_vectors_using_self_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vector</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_vectors_using_self_space" title="Permalink to this definition"></a></dt>
+<dd><p>Transpose the vectors of the sinr_vector object in parameter in the embedding space of the self object, using matching communities</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sinr_vector</strong> (<a class="reference internal" href="#sinr.graph_embeddings.SINrVectors" title="sinr.graph_embeddings.SINrVectors"><em>SINrVectors</em></a>) – Small model (target)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Copy of the self model (the big one) with vectors of the parameter (small one) transposed to its referential</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors" title="sinr.graph_embeddings.SINrVectors">SINrVectors</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1248,6 +1282,26 @@ Just provide the name of the model and build it.</p>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.get_compact_lgcc">
+<span class="sig-prename descclassname"><span class="pre">sinr.graph_embeddings.</span></span><span class="sig-name descname"><span class="pre">get_compact_lgcc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_to_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.get_compact_lgcc" title="Permalink to this definition"></a></dt>
+<dd><p>Get a compacted graph with only nodes inside the largest connected component. Get the words with ids corresponding to the new node ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> (<em>networkit graph</em>) – The input graph</p></li>
+<li><p><strong>word_to_idx</strong> (<em>dictionnary</em>) – The words mapped to their initial ids</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new graph and dictionnary of words</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>networkit graph, dictionnary</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
