@@ -37,7 +37,7 @@ include = [
 
 
 [tool.poetry.dependencies]
-python = ">=3.8,<4.0"
+python = ">=3.9,<4.0"
 joblib = ">=1.1.1"
 networkit = "9.1.1"
 numpy = ">=1.26.0"
@@ -52,6 +52,7 @@ igraph = "^0.10.4"
 matplotlib = "^3.7.0"
 spacy = "^3.5.0"
 xgboost = "^2.0.3"
+docutils = "0.18.1" #To avoid problems, some of our dependencies relie on docutils and this version seems to be fine
 
 [tool.poetry.extras]
 docs = ["Sphinx", "sphinx-rtd-theme", "sphinxcontrib-napoleon", "sphinx-tabs"]
