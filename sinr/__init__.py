@@ -2,4 +2,4 @@
 
 __author__ = """Thibault Prouteau"""
 __email__ = 'thibault.prouteau@univ-lemans.fr'
-__version__ = 'v1.3.1'
+__version__ = 'v1.3.2-beta'
