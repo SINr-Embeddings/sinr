@@ -10,6 +10,8 @@ import os
 from tqdm.auto import tqdm
 import time
 import xgboost as xgb
+from sklearn.metrics.pairwise import cosine_similarity
+import itertools
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
@@ -149,6 +151,93 @@ def fetch_SimLex(which="665"):
     data = Bunch(X=data.values[:, 0:2].astype("object"), y=data.values[:, 2].astype(float))
     
     return data
+
+def best_predicted_word(sinr_vec, word_a, word_b, word_c):
+    """Solve analogy of the type A is t B as C is to D
+
+    :param sinr_vec: SINrVectors object
+    
+    :param word_a: string
+    :param word_b: string
+    :param word_c: string
+    
+    :return: best predicted word of the dataset
+    :rtype: string
+    """
+    if word_a in sinr_vec.vocab and word_b in sinr_vec.vocab and word_c in sinr_vec.vocab:
+        
+        vector_a = sinr_vec.vectors[sinr_vec.vocab.index(word_a)]
+        vector_b = sinr_vec.vectors[sinr_vec.vocab.index(word_b)]
+        vector_c = sinr_vec.vectors[sinr_vec.vocab.index(word_c)]
+    
+        result_vector = vector_c - vector_a + vector_b
+    
+        similarities = cosine_similarity(result_vector.reshape(1, -1), sinr_vec.vectors).flatten()
+    
+        excluded_indices = [sinr_vec.vocab.index(word) for word in [word_a, word_b, word_c]]
+        for idx in excluded_indices:
+            similarities[idx] = -np.inf
+    
+        best_index = np.argmax(similarities)
+        return sinr_vec.vocab[best_index]
+    return None
+
+def eval_analogy(sinr_vec, dataset):
+    """Compare the predicted with the expected word.
+    
+    :param sinr_vec: SINrVectors object
+    :param dataset: sklearn.datasets.base.Bunch
+                    dictionary-like object. Keys of interest:
+                    'X': matrix of 2 words per column,
+                    'y': vector with scores
+    
+    :return: error rate
+    :rtype: float
+    """
+    with open(dataset, 'r') as file:
+        lines = file.readlines()
+    
+    unused_lines = list(range(len(lines)))
+
+    total_analogies = 0
+    correct_count = 0
+    incorrect_count = 0
+
+    while unused_lines:
+        line_index = unused_lines.pop()
+        line = lines[line_index].strip()
+        words = line.split()
+
+        if len(words) == 4:
+            word_a, word_b, word_c, expected = words
+            print(f"\nProcessing analogy: '{word_a}' -> '{word_b}' :: '{word_c}' -> '{expected}'")
+            
+            # Predict directly based on the given order
+            predicted_word = best_predicted_word(sinr_vec, word_a, word_b, word_c)
+
+            if predicted_word is not None:
+                print(f"Prediction: {predicted_word}")
+                total_analogies += 1
+                if predicted_word == expected:
+                    print(f"Correct prediction for '{expected}'")
+                    correct_count += 1
+                else:
+                    print(f"Incorrect prediction. Expected: '{expected}'")
+                    incorrect_count += 1
+            else:
+                print("Prediction skipped (invalid words).")
+        else:
+            print(f"Invalid line format: {line}")
+
+    # Calculate error rate
+    error_rate = incorrect_count / total_analogies if total_analogies > 0 else 0
+    print("\n=== Summary ===")
+    print(f"Total valid analogies processed: {total_analogies}")
+    print(f"Correct analogies: {correct_count}")
+    print(f"Incorrect analogies: {incorrect_count}")
+    print(f"Error rate: {error_rate:.2%}")
+    
+    return error_rate
 
 def eval_similarity(sinr_vec, dataset, print_missing=True):
     """Evaluate similarity with Spearman correlation
