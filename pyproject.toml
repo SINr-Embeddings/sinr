@@ -37,7 +37,7 @@ include = [
 
 
 [tool.poetry.dependencies]
-python = ">=3.9,<4.0"
+python = ">=3.8,<4.0"
 joblib = ">=1.1.1"
 networkit = "9.1.1"
 numpy = ">=1.26.0"
