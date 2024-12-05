@@ -40,7 +40,7 @@ include = [
 python = ">=3.8,<4.0"
 joblib = ">=1.1.1"
 networkit = "9.1.1"
-numpy = ">=1.26.0"
+numpy = ">=1.20.0"
 scipy = ">=1.6.1"
 scikit-learn = "^1.2.1"
 ipykernel = "^6.21.1"
