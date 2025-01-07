@@ -368,6 +368,74 @@ def eval_analogy(sinr_vec, dataset):
     
     return error_rate
 
+def calcul_analogy_value_zero(sinr_vec, word_a, word_b, word_c):
+    """Solve analogy of the type A is to B as C is to D with only positives values in the resulting vector
+
+    :param sinr_vec: SINrVectors object
+
+    :param word_a: string
+    :param word_b: string
+    :param word_c: string
+
+    :return: best predicted word of the dataset
+    :rtype: string
+    """
+    if word_a in sinr_vec.vocab and word_b in sinr_vec.vocab and word_c in sinr_vec.vocab:
+
+        vector_a = sinr_vec.vectors[sinr_vec.vocab.index(word_a)]
+        vector_b = sinr_vec.vectors[sinr_vec.vocab.index(word_b)]
+        vector_c = sinr_vec.vectors[sinr_vec.vocab.index(word_c)]
+
+        result_vector = vector_c - vector_a + vector_b
+
+        result_vector[result_vector < 0] = 0
+
+        similarities = cosine_similarity(result_vector.reshape(1, -1), sinr_vec.vectors).flatten()
+
+        excluded_indices = [sinr_vec.vocab.index(word) for word in [word_a, word_b, word_c]]
+        for idx in excluded_indices:
+            similarities[idx] = 0
+
+        best_index = np.argmax(similarities)
+        return sinr_vec.vocab[best_index]
+    
+    return None
+
+def calcul_analogy_normalized(sinr_vec, word_a, word_b, word_c):
+    """Solve analogy of the type A is to B as C is to D with normalized values
+
+    :param sinr_vec: SINrVectors object
+
+    :param word_a: string
+    :param word_b: string
+    :param word_c: string
+
+    :return: best predicted word of the dataset
+    :rtype: string
+    """
+    if word_a in sinr_vec.vocab and word_b in sinr_vec.vocab and word_c in sinr_vec.vocab:
+
+        vector_a = sinr_vec.vectors[sinr_vec.vocab.index(word_a)]
+        vector_b = sinr_vec.vectors[sinr_vec.vocab.index(word_b)]
+        vector_c = sinr_vec.vectors[sinr_vec.vocab.index(word_c)]
+
+        result_vector = vector_c - vector_a + vector_b
+
+        result_vector[result_vector < 0] = 0
+
+        result_vector = result_vector / np.sum(result_vector)
+
+        similarities = cosine_similarity(result_vector.reshape(1, -1), sinr_vec.vectors).flatten()
+
+        excluded_indices = [sinr_vec.vocab.index(word) for word in [word_a, word_b, word_c]]
+        for idx in excluded_indices:
+            similarities[idx] = 0
+
+        best_index = np.argmax(similarities)
+        return sinr_vec.vocab[best_index]
+    
+    return None
+
 def eval_similarity(sinr_vec, dataset, print_missing=True):
     """Evaluate similarity with Spearman correlation
     
