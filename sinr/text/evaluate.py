@@ -1,3 +1,5 @@
+import shutil
+import zipfile
 import numpy as np
 from numpy.linalg import norm
 import scipy
@@ -150,6 +152,133 @@ def fetch_SimLex(which="665"):
         
     data = Bunch(X=data.values[:, 0:2].astype("object"), y=data.values[:, 2].astype(float))
     
+    return data
+
+def find_txt_files(directory):
+    """Find all text files in a directory and its subdirectories.
+    
+    :param directory: path to the directory
+    :type directory: str
+    
+    :return: list of text files
+    :rtype: list
+    
+    """
+    
+    txt_files = []
+    for root, _, files in os.walk(directory):
+        for file in files:
+            if file.endswith('.txt'):
+                txt_files.append(os.path.join(root, file))
+    return txt_files
+
+def remove_invalid_lines(content):
+    """Remove invalid lines from the content.
+    
+    :param content: content of the file
+    :type content: str
+    
+    :return: cleaned content
+    :rtype: str
+    
+    """
+    
+    lines = content.splitlines()
+    return '\n'.join(line.strip() for line in lines if '/' not in line and line.strip())
+
+def format_lines(content):
+    """Format lines of the content.
+    
+    :param content: content of the file
+    :type content: str
+    
+    :return: formatted content
+    :rtype: str
+    
+    """
+    
+    words = content.split()
+    formatted_lines = []
+    for i in range(0, len(words), 4):
+        if i + 4 <= len(words):
+            formatted_lines.append(' '.join(words[i:i+4]))
+    return '\n'.join(formatted_lines)
+
+def fetch_analogy(langage):
+    """Fetch dataset for testing analogies
+    
+    :param langage: language of the dataset
+    :type langage: str
+    
+    :return: dictionary-like object. Keys of interest:
+                'X': matrix of 4 words per column
+    :rtype: sklearn.datasets.base.Bunch
+    
+    """
+    
+    if langage == 'fr':
+        file_url = 'https://p-lux4.pcloud.com/D4ZTKr4DFZbBl110ZZZTojfXkZ2ZZosLZkZxKzZ17ZzkZf7ZOn0J7Z9zGco5qAJ3J0iMfwMoEtUFhyrsmy/BATS_3.0.zip'
+    elif langage == 'en':
+        file_url = 'https://p-lux4.pcloud.com/D4ZTKr4DFZbBl110ZZZTojfXkZ2ZZosLZkZxKzZ17ZzkZf7ZOn0J7Z9zGco5qAJ3J0iMfwMoEtUFhyrsmy/BATS_3.0.zip'
+    else:
+        raise ValueError("Language is not recognized.")
+
+    file_name = 'dataset' + str(round(time.time() * 1000))
+    file_path = file_name + '.txt'  # Name of download file (TXT or CSV)
+    output_dir = file_name
+    data = file_name + '_merged_cleaned.txt'
+
+    with urllib.request.urlopen(file_url) as response:
+        with open(file_path, 'wb') as file:
+            file.write(response.read())
+
+    if zipfile.is_zipfile(file_path):
+        with zipfile.ZipFile(file_path, 'r') as zip_ref:
+            zip_ref.extractall(output_dir)
+        
+        os.remove(file_path)
+        print(f"Temporary file deleted : {file_path}")
+
+        txt_files = find_txt_files(output_dir)
+
+        if txt_files:
+            with open(data, 'w', encoding='utf-8') as merged_file:
+                for txt_file in txt_files:
+                    with open(txt_file, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                        cleaned_content = remove_invalid_lines(content)
+                        formatted_content = format_lines(cleaned_content)
+                        if formatted_content.strip():
+                            merged_file.write(formatted_content)
+                            merged_file.write('\n')
+
+            print(f"Clean merge completed: file created -> {data}")
+        else:
+            raise RuntimeError("No text files found in the ZIP archive.")
+
+        shutil.rmtree(output_dir)
+        print(f"Temporary folder deleted : {output_dir}")
+    else:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            cleaned_content = remove_invalid_lines(content)
+            formatted_content = format_lines(cleaned_content)
+            
+            if formatted_content.strip():
+                with open(data, 'w', encoding='utf-8') as merged_file:
+                    merged_file.write(formatted_content)
+
+        print(f"Text file processing complete: file created -> {data}")
+
+    try:
+        data_df = pd.read_csv(data, sep='\s+', header=None, names=['A', 'B', 'C', 'D'])
+    except Exception as e:
+        raise RuntimeError(f"Error reading the merged file: {e}")
+
+    data = Bunch(
+        X=data_df.values.tolist()
+    )
+
     return data
 
 def best_predicted_word(sinr_vec, word_a, word_b, word_c):
