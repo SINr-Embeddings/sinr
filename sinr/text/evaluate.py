@@ -495,6 +495,49 @@ def eval_similarity(sinr_vec, dataset, print_missing=True):
     
     return scipy.stats.spearmanr(cosine_sim, scores).correlation
 
+
+def calcul_analogy_sparsified_normalized(sinr_vec, word_a, word_b, word_c, n=100):
+    """Solve analogy of the type A is to B as C is to D with sparsification and normalization.
+
+    :param sinr_vec: SINrVectors object
+    :param word_a: string
+    :param word_b: string
+    :param word_c: string
+    :param n: int, number of dimensions to keep after sparsification
+
+    :return: best predicted word of the dataset
+    :rtype: string
+    """
+    if word_a in sinr_vec.vocab and word_b in sinr_vec.vocab and word_c in sinr_vec.vocab:
+
+        vector_a = sinr_vec.vectors[sinr_vec.vocab.index(word_a)].toarray().flatten()
+        vector_b = sinr_vec.vectors[sinr_vec.vocab.index(word_b)].toarray().flatten()
+        vector_c = sinr_vec.vectors[sinr_vec.vocab.index(word_c)].toarray().flatten()
+
+
+        result_vector = vector_c - vector_a + vector_b
+
+        #Sparsification: keep only the n highest values
+        sparse_vector = np.zeros_like(result_vector)
+        top_indices = np.argsort(result_vector)[-n:]
+        sparse_vector[top_indices] = result_vector[top_indices]
+
+        #Normalization: ensure the sum is 1
+        sparse_vector = np.maximum(sparse_vector, 0)
+        sparse_vector = sparse_vector / np.sum(sparse_vector) if np.sum(sparse_vector) > 0 else sparse_vector
+
+        #print(f"Sparse Vector (normalized): {sparse_vector}")
+        #print(f"Sum of dimensions: {np.sum(sparse_vector)}")
+
+        similarities = cosine_similarity(sparse_vector.reshape(1, -1), sinr_vec.vectors).flatten()
+        excluded_indices = [sinr_vec.vocab.index(word) for word in [word_a, word_b, word_c]]
+        for idx in excluded_indices:
+            similarities[idx] = 0
+
+        best_index = np.argmax(similarities)
+        return sinr_vec.vocab[best_index]
+    return None
+
 def similarity_MEN_WS353_SCWS(sinr_vec, print_missing=True):
     """Evaluate similarity with MEN, WS353 and SCWS datasets
 
