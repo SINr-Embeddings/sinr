@@ -281,8 +281,20 @@ def fetch_analogy(langage):
 
     return data
 
+def normalize_vector(vector):
+    """
+    Normalize a vector.
+    
+    :param vector: vector to normalize
+    :type vector: numpy.ndarray
+    
+    :return: normalized vector
+    :rtype: numpy.ndarray
+    """
+    return vector / np.linalg.norm(vector)
+
 def best_predicted_word(sinr_vec, word_a, word_b, word_c):
-    """Solve analogy of the type A is t B as C is to D
+    """Solve analogy of the type A is to B as C is to D
 
     :param sinr_vec: SINrVectors object
     
@@ -290,28 +302,27 @@ def best_predicted_word(sinr_vec, word_a, word_b, word_c):
     :param word_b: string
     :param word_c: string
     
-    :return: best predicted word of the dataset
-    :rtype: string
+    :return: best predicted word of the dataset or None if not in the vocab.
     """
+    
     if word_a in sinr_vec.vocab and word_b in sinr_vec.vocab and word_c in sinr_vec.vocab:
-        
-        vector_a = sinr_vec.vectors[sinr_vec.vocab.index(word_a)]
-        vector_b = sinr_vec.vectors[sinr_vec.vocab.index(word_b)]
-        vector_c = sinr_vec.vectors[sinr_vec.vocab.index(word_c)]
-    
-        result_vector = vector_c - vector_a + vector_b
-    
+        vector_a = sinr_vec.get_my_vector(word_a)
+        vector_b = sinr_vec.get_my_vector(word_b)
+        vector_c = sinr_vec.get_my_vector(word_c)
+
+        result_vector = normalize_vector(vector_b) - normalize_vector(vector_a) + normalize_vector(vector_c)
+
         similarities = cosine_similarity(result_vector.reshape(1, -1), sinr_vec.vectors).flatten()
-    
         excluded_indices = [sinr_vec.vocab.index(word) for word in [word_a, word_b, word_c]]
         for idx in excluded_indices:
             similarities[idx] = -np.inf
     
         best_index = np.argmax(similarities)
         return sinr_vec.vocab[best_index]
-    return None
+    else:
+        return None
 
-def eval_analogy(sinr_vec, dataset):
+def eval_analogy(sinr_vec, dataset, analogy_func):
     """Compare the predicted with the expected word.
     
     :param sinr_vec: SINrVectors object
@@ -323,49 +334,49 @@ def eval_analogy(sinr_vec, dataset):
     :return: error rate
     :rtype: float
     """
-    with open(dataset, 'r') as file:
-        lines = file.readlines()
-    
-    unused_lines = list(range(len(lines)))
+    with open(dataset, 'r') as f:
+        lines = f.readlines()
+
+    valid_analogies = []
+
+    for line in lines:
+        line = line.strip()
+        if line.startswith(':'):
+            continue
+        
+        words = line.split()
+
+        word_a, word_b, word_c, expected = words
+
+        if (word_a in sinr_vec.vocab 
+            and word_b in sinr_vec.vocab
+            and word_c in sinr_vec.vocab
+            and expected in sinr_vec.vocab):
+            valid_analogies.append(line)
 
     total_analogies = 0
     correct_count = 0
     incorrect_count = 0
 
-    while unused_lines:
-        line_index = unused_lines.pop()
-        line = lines[line_index].strip()
-        words = line.split()
-
-        if len(words) == 4:
-            word_a, word_b, word_c, expected = words
-            print(f"\nProcessing analogy: '{word_a}' -> '{word_b}' :: '{word_c}' -> '{expected}'")
-            
-            # Predict directly based on the given order
-            predicted_word = best_predicted_word(sinr_vec, word_a, word_b, word_c)
-
-            if predicted_word is not None:
-                print(f"Prediction: {predicted_word}")
-                total_analogies += 1
-                if predicted_word == expected:
-                    print(f"Correct prediction for '{expected}'")
-                    correct_count += 1
-                else:
-                    print(f"Incorrect prediction. Expected: '{expected}'")
-                    incorrect_count += 1
+    for line in valid_analogies:
+        word_a, word_b, word_c, expected = line.split()
+        
+        predicted_word = analogy_func(sinr_vec, word_a, word_b, word_c)
+        if predicted_word is not None:
+            total_analogies += 1
+            if predicted_word == expected:
+                correct_count += 1
             else:
-                print("Prediction skipped (invalid words).")
-        else:
-            print(f"Invalid line format: {line}")
-
-    # Calculate error rate
+                incorrect_count += 1
+            
     error_rate = incorrect_count / total_analogies if total_analogies > 0 else 0
+
     print("\n=== Summary ===")
     print(f"Total valid analogies processed: {total_analogies}")
     print(f"Correct analogies: {correct_count}")
     print(f"Incorrect analogies: {incorrect_count}")
     print(f"Error rate: {error_rate:.2%}")
-    
+
     return error_rate
 
 def calcul_analogy_value_zero(sinr_vec, word_a, word_b, word_c):
