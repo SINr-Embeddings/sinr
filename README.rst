@@ -144,6 +144,15 @@ papers from the list below. Publications can also be found on
 `publications page in the
 documentation <https://sinr-embeddings.github.io/sinr/publications.html>`__.
 
+**Journal article on SINr, in-depth presentation and evaluation (preferred citation for method & python library)**
+
+- Thibault Prouteau, Nicolas Dugué, Simon Guillot
+From Communities to Interpretable Network and Word Embedding: 
+an Unified Approach. Journal of Complex Networks, 2024, 12 (6),
+(\`10.1093/comnet/cnae034 <https://dx.doi.org/10.1093/comnet/cnae034>`__ \).
+`⟨hal-04829653⟩ <https://hal.science/hal-04829653v1>`__
+
+
 **Initial SINr paper, 2021**
 
 -  Thibault Prouteau, Victor Connes, Nicolas Dugué, Anthony Perez,
@@ -175,6 +184,13 @@ documentation <https://sinr-embeddings.github.io/sinr/publications.html>`__.
    Filtering communities in word co-occurrence networks to foster the
    emergence of meaning. Complex Networks 2023, Menton, France.
    `⟨hal-04398742⟩ <https://hal.science/hal-04398742>`__
+
+**SINr library**
+
+-  Thibault Prouteau, Nicolas Dugué, Simon Guillot, Anthony Perez.
+   SINr: a python package to train interpretable word and graph embeddings.
+   French Regional Conference on Complex Systems, May 2023, Le Havre, France. pp.215, 
+   `⟨10.5281/zenodo.7957531⟩ <https://dx.doi.org/10.5281/zenodo.7957531>`. `⟨hal-04113024⟩ <https://hal.science/hal-04113024v1>`__ 
 
    
    
