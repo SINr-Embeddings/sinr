@@ -144,13 +144,13 @@ papers from the list below. Publications can also be found on
 `publications page in the
 documentation <https://sinr-embeddings.github.io/sinr/publications.html>`__.
 
-**Journal article on SINr, in-depth presentation and evaluation (preferred citation for method & python library)**
+**Journal article on SINr, in-depth presentation and evaluation** *(preferred citation for method & python library)*
 
 - Thibault Prouteau, Nicolas Dugué, Simon Guillot
-From Communities to Interpretable Network and Word Embedding: 
-an Unified Approach. Journal of Complex Networks, 2024, 12 (6),
-(\`10.1093/comnet/cnae034 <https://dx.doi.org/10.1093/comnet/cnae034>`__ \).
-`⟨hal-04829653⟩ <https://hal.science/hal-04829653v1>`__
+  From Communities to Interpretable Network and Word Embedding: 
+  an Unified Approach. Journal of Complex Networks, 2024, 12 (6),
+  (\`10.1093/comnet/cnae034 <https://dx.doi.org/10.1093/comnet/cnae034>`__ \).
+  `⟨hal-04829653⟩ <https://hal.science/hal-04829653v1>`__
 
 
 **Initial SINr paper, 2021**
