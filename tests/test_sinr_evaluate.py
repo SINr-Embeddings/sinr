@@ -7,7 +7,7 @@ import pytest
 import unittest
 
 import sinr.graph_embeddings as ge
-from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer, clf_fit, clf_score
+from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer, clf_fit, clf_score, normalize, identify_gender_direction_sinr, calc_direct_bias_sinr, load_config
 import urllib.request
 import os
 
@@ -68,6 +68,47 @@ class TestSinr_embeddings(unittest.TestCase):
         
         self.assertTrue(score <= 1 and score >= 0)
         
+class MockSINrVectors:
+    def __init__(self, vocab, vectors):
+        self.vocab = vocab  
+        self.vectors = vectors
 
+    def get_my_vector(self, word):
+        if word in self.vocab:
+            return self.vectors[self.vocab.index(word)]
+        raise ValueError(f"Word '{word}' not found in vocab.")
+
+class TestBiasFunctions(unittest.TestCase):
+    def setUp(self):
+        self.vocab = ["men", "woman", "father", "mother", "male", "female", "actor", "actress"]
+        vectors = [np.random.rand(300) for _ in range(len(self.vocab))]
+        self.sinr_vec = MockSINrVectors(self.vocab, vectors)
+
+        self.config = {
+            "gender": {
+                "definitional_pairs": [["men", "woman"], ["father", "mother"]]
+            },
+            "professions": ["actor", "actress"]
+        }
+
+    def test_gender_direction(self):
+        direction = identify_gender_direction_sinr(
+            self.sinr_vec, 
+            self.config["gender"]["definitional_pairs"], 
+            method="pca"
+        )
+        self.assertEqual(direction.shape[0], 300)
+
+    def test_direct_bias(self):
+        direction = identify_gender_direction_sinr(
+            self.sinr_vec, 
+            self.config["gender"]["definitional_pairs"]
+        )
+        bias = calc_direct_bias_sinr(
+            self.sinr_vec, 
+            self.config["professions"], 
+            direction
+        )
+        self.assertTrue(0 <= bias <= 1)
 if __name__ == '__main__':
     unittest.main()
