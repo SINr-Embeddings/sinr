@@ -215,6 +215,14 @@ def eval_similarity(sinr_vec, dataset, print_missing=True):
 def normalize(vec):
     return vec / np.linalg.norm(vec)
 
+def project_vector(v,u):
+    normalize_u = normalize(u)
+    return np.dot(v, normalize_u) * normalize_u
+
+def reject_vector(v, u):
+    "Calculate the orthogonal projection of a vector onto a given direction."
+    return v - project_vector(v,u)
+
 def load_config(path):
     with open(path, 'r') as f:
         return json.load(f)
@@ -268,6 +276,42 @@ def calc_direct_bias_sinr(sinr_vec, word_list, gender_direction, c=1):
     gender_direction = gender_direction.reshape(1, -1)
     cos_similarities = np.abs(cosine_similarity(word_vectors, gender_direction)).flatten()
     return np.mean(cos_similarities ** c)
+
+
+def calc_indirect_bias_sinr(sinr_vec, word1, word2, direction):
+   """
+    Calculate the indirect bias SINr model.
+
+    :param sinr_vec: SINr model.
+    :param word1: The first word.
+    :param word2: The second word.
+    :param direction: The gender direction.
+    :return: The gender component of the similarity between the two words.
+    """
+
+    vector1 = normalize(sinr_vec.get_my_vector(word1))
+    vector2 = normalize(sinr_vec.get_my_vector(word2))
+
+
+    gender_component1 = np.dot(vector1, direction) * direction
+    gender_component2 = np.dot(vector2, direction) * direction
+
+
+    perpendicular_vector1 = reject_vector(vector1, direction)
+    perpendicular_vector2 = reject_vector(vector2, direction)
+
+
+    inner_product = np.dot(vector1, vector2)
+
+    perpendicular_vector1_2d = perpendicular_vector1.reshape(1, -1)
+    perpendicular_vector2_2d = perpendicular_vector2.reshape(1, -1)
+    
+
+    perpendicular_similarity = cosine_similarity(perpendicular_vector1_2d, perpendicular_vector2_2d)[0][0]
+
+    indirect_bias = ((inner_product - perpendicular_similarity) / inner_product)
+
+    return indirect_bias
 
 def similarity_MEN_WS353_SCWS(sinr_vec, print_missing=True):
     """Evaluate similarity with MEN, WS353 and SCWS datasets
