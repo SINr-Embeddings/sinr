@@ -10,6 +10,9 @@ import os
 from tqdm.auto import tqdm
 import time
 import xgboost as xgb
+import json
+from sklearn.decomposition import PCA
+from sklearn.metrics.pairwise import cosine_similarity
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
@@ -208,6 +211,63 @@ def eval_similarity(sinr_vec, dataset, print_missing=True):
         print(str(len(missing_words)) + ' missing words')
     
     return scipy.stats.spearmanr(cosine_sim, scores).correlation
+
+def normalize(vec):
+    return vec / np.linalg.norm(vec)
+
+def load_config(path):
+    with open(path, 'r') as f:
+        return json.load(f)
+
+def identify_gender_direction_sinr(sinr_vec, definitional_pairs, method="pca", positive_end="brother", negative_end="sister"):
+    """
+    Identifies the gender direction in a SINr model.
+
+    Parameters:
+    - sinr_vec: SINr model.
+    - positive_end: word representing the masculine gender.
+    - negative_end: word representing the feminine gender.
+    - definitional_pairs: list of word pairs defining gender.
+    - method: method used to compute the gender direction ('single', 'sum', 'pca').
+
+    Returns:
+    - A vector representing the gender direction.
+    """
+    if method == "single":
+        return normalize(sinr_vec.get_my_vector(positive_end) - sinr_vec.get_my_vector(negative_end))
+    elif method == "sum":
+        group1 = np.sum([sinr_vec.get_my_vector(w1) for w1, w2 in definitional_pairs], axis=0)
+        group2 = np.sum([sinr_vec.get_my_vector(w2) for w1, w2 in definitional_pairs], axis=0)
+        return normalize(group1 - group2)
+    elif method == "pca":
+        matrix = np.array([sinr_vec.get_my_vector(w1) - sinr_vec.get_my_vector(w2) for w1, w2 in definitional_pairs])
+        pca = PCA(n_components=1)
+        pca.fit(matrix)
+        return normalize(pca.components_[0])
+    else:
+        raise ValueError("Invalid method. Use 'single', 'sum' ou 'pca'.")
+
+def calc_direct_bias_sinr(sinr_vec, word_list, gender_direction, c=1):
+    """
+    Computes the direct bias of a set of words with respect to the gender direction
+    using cosine similarity.
+
+    Args:  
+        sinr_vec: SINr model.  
+        word_list: List of words to analyze. (professions in config.json)
+        gender_direction: Gender direction vector.  
+        c: Exponent applied to cosine similarity (default is c=1).  
+
+    Returns:  
+        float: Direct bias value.
+    """
+    word_vectors = [sinr_vec.get_my_vector(word) for word in word_list if word in sinr_vec.vocab]
+    if not word_vectors:
+        return 0.0
+    word_vectors = np.array(word_vectors)
+    gender_direction = gender_direction.reshape(1, -1)
+    cos_similarities = np.abs(cosine_similarity(word_vectors, gender_direction)).flatten()
+    return np.mean(cos_similarities ** c)
 
 def similarity_MEN_WS353_SCWS(sinr_vec, print_missing=True):
     """Evaluate similarity with MEN, WS353 and SCWS datasets
