@@ -110,5 +110,36 @@ class TestBiasFunctions(unittest.TestCase):
             direction
         )
         self.assertTrue(0 <= bias <= 1)
+
+class TestIndirectBiasFunctions(unittest.TestCase):
+
+    def setUp(self):
+        self.vocab = ['father', 'mother', 'he', 'she']
+        np.random.seed(42)  
+        vectors = [np.random.rand(300) for _ in range(len(self.vocab))]
+        self.model = MockSINrVectors(self.vocab, vectors)
+        self.gender_direction = np.random.rand(300)
+
+    def test_project_vector(self):
+        v = np.array([3, 4])
+        u = np.array([1, 0])
+        projected_vector = project_vector(v, u)
+        self.assertTrue(np.allclose(projected_vector, np.array([3, 0])))
+
+    def test_reject_vector(self):
+        v = np.array([3, 4])
+        u = np.array([1, 0])
+        rejected_vector = reject_vector(v, u)
+        self.assertTrue(np.allclose(rejected_vector, np.array([0, 4])))
+
+    def test_calc_indirect_bias_sinr(self):
+        similarity = calc_indirect_bias_sinr(self.model, 'father', 'mother', self.gender_direction)
+        self.assertIsInstance(similarity, float)
+
+    def test_calc_indirect_bias_sinr_edge_case(self):
+        similarity = calc_indirect_bias_sinr(self.model, 'father', 'father', self.gender_direction)
+        self.assertEqual(similarity, 0.0)  
+
+        
 if __name__ == '__main__':
     unittest.main()
