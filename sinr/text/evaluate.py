@@ -572,14 +572,14 @@ def calc_direct_bias_sinr(sinr_vec, word_list, gender_direction, c=1):
 
 
 def calc_indirect_bias_sinr(sinr_vec, word1, word2, direction):
-   """
-    Calculate the indirect bias SINr model.
+    """
+        Calculate the indirect bias SINr model.
 
-    :param sinr_vec: SINr model.
-    :param word1: The first word.
-    :param word2: The second word.
-    :param direction: The gender direction.
-    :return: The gender component of the similarity between the two words.
+        :param sinr_vec: SINr model.
+        :param word1: The first word.
+        :param word2: The second word.
+        :param direction: The gender direction.
+        :return: The gender component of the similarity between the two words.
     """
 
     vector1 = normalize_vector(sinr_vec.get_my_vector(word1))
