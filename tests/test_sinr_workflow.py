@@ -69,6 +69,9 @@ class TestSinr_embeddings(unittest.TestCase):
 
         res = set(chain(*self.sentences))
         # ['a', 'fun', 'is', 'package', 'python', 'sinr']
+        # The node of 'is' is outside the lgcc, 'is' is removed from the model vocabulary
+        # ['a', 'fun' 'package', 'python', 'sinr']
+        res.remove('is')
         self.assertEquals(set(self.sinr_from_cooc.get_vocabulary()), res)
     
         self.assertEquals(set(self.sinr_from_graph.get_vocabulary()), set(self.G.iterNodes()))
@@ -95,8 +98,11 @@ class TestSinr_embeddings(unittest.TestCase):
         communities = communities.getVector()
         # ['a', 'fun', 'is', 'package', 'python', 'sinr']
         # [0    ,1     ,2    ,0         ,0      ,1]
-        self.assertAlmostEqual(rand_score([0,1,2,0,0,1], communities), 1)
-        self.assertAlmostEqual(rand_score([0,1,2,0,0,1], self.sinr_from_cooc.get_communities().getVector()), 1)
+        
+        # the node of 'is' (ids 3) is disconnected from the lgcc, it is removed
+        # [0, 1, 0, 0, 1]
+        self.assertAlmostEqual(rand_score([0,1,0,0,1], communities), 1)
+        self.assertAlmostEqual(rand_score([0,1,0,0,1], self.sinr_from_cooc.get_communities().getVector()), 1)
         
     def test_extract_embeddings(self):
         communities = self.sinr_from_graph.detect_communities(gamma=1, inspect=False)
@@ -117,8 +123,9 @@ class TestSinr_embeddings(unittest.TestCase):
             self.fail("Nr not equals to what is expected")
             
         # Graphe : a-package-python, fun-sinr, is
-        # "is" of community 2 is not connected
-        ref = csr_matrix([[1, 0, 0],[0,1,0],[0, 0, 0], [1, 0, 0], [1, 0, 0], [0,1, 0]])
+        # "is" of community 2 is not connected, the node and the word are removed
+        # There are only 2 communities remaining
+        ref = csr_matrix([[1, 0],[0,1], [1, 0], [1, 0], [0,1]])
         communities = self.sinr_from_cooc.detect_communities(gamma=1, inspect=False)
         self.sinr_from_cooc.extract_embeddings(communities)
         nr = self.sinr_from_cooc.get_nr()
