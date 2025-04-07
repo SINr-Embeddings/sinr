@@ -2,6 +2,7 @@
 from .logger import logger
 import pickle as pk
 import networkit as nk
+from scipy.sparse import coo_matrix, csr_matrix
 
 def load_pkl_text(mat_path):
     """Load a cooccurrence matrix.
@@ -17,9 +18,9 @@ def load_pkl_text(mat_path):
     with open(mat_path, "rb") as file:
         word_to_idx, mat = pk.load(file)
     logger.info("Finished loading data.")
-    return (word_to_idx, mat)
+    # when converting to CSR format, duplicate (i,j) entries are summed together
+    return (word_to_idx, coo_matrix(csr_matrix(mat)))
 
-from scipy.sparse import coo_matrix
 def load_adj_mat(matrix, labels=None):
     """Load a cooccurrence matrix.
 
