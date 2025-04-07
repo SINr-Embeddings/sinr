@@ -1,0 +1,51 @@
+{
+    "genre": {
+      "paires_définitions": [
+        ["femme", "homme"],
+        ["mère", "père"],
+        ["féminin", "masculin"]
+      ],
+      "professions": [
+        "comptable", "connaissance", "acteur", "actrice", "professeur_associé", "administrateur", "aventurier", 
+        "avocat", "aide", "conseiller", "alter_ego", "ambassadeur", "analyste", "anthropologue", "archéologue", 
+        "archevêque", "architecte", "artiste", "assassin", "professeur_assistant", "doyen_associé", 
+        "professeur_associé", "astronaute", "astronome", "athlète", "directeur_athlétique", "avocat", "auteur", 
+        "boulanger", "ballet", "joueur_de_ballon", "banquier", "barbier", "baron", "avocat", "barman", "biologiste", 
+        "évêque", "garde_du_corps", "comptable", "patron", "boxeur", "présentateur", "courtier", "bureaucrate", "homme_d_affaires", 
+        "femme_d_affaires", "boucher", "majordome", "chauffeur_de_taxi", "taxi", "caméraman", "campagne", "capitaine", 
+        "cardiologue", "soignant", "charpentier", "cartooniste", "violoniste", "chancelier", "chaplain", "caractère", 
+        "chef", "chimiste", "chorégraphe", "cinématographe", "citoyen", "fonctionnaire", "clerc", "clerk", "entraîneur", 
+        "collecteur", "colonel", "chroniqueur", "comedien", "comedian", "commandant", "commentateur", "commissaire", 
+        "compositeur", "conducteur", "confesses", "congressman", "constable", "consultant", "cop", "correspondant", 
+        "conseiller", "consultant", "conseiller", "critique", "crooner", "croisé", "curateur", "gardien", "papa", 
+        "danseur", "doyen", "dentiste", "adjoint", "dermatologue", "détective", "diplomate", "directeur", "disc_jockey", 
+        "docteur", "étudiant_doctoral", "toxicomane", "batteur", "professeur_d_économie", "économiste", "éditeur", 
+        "éducateur", "électricien", "employé", "divertisseur", "entrepreneur", "environnementaliste", "envoyé", 
+        "épidémiologiste", "évangéliste", "agriculteur", "créateur_de_mode", "pilote_de_chasseur", "réalisateur", "financier", 
+        "homme_de_feu", "pompier", "homme_de_feu", "pêcheur", "footballeur", "chef_d_équipe", "écrivain_indépendant", "gangster", 
+        "jardinier", "géologue", "gardien_de_but", "graphiste", "conseiller_pédagogique", "guitariste", "coiffeur", 
+        "bricoleur", "directeur", "historien", "tueur_a_salaire", "domestic", "prostituée", "femme_de_ménage", "illustrateur", 
+        "industriel", "instructeur", "inventeur", "investigateur", "banquier_investisseur", "concierge", "bijoutier", "journaliste", 
+        "juge", "juriste", "travailleur", "propriétaire", "législateur", "avocat", "conférencier", "législateur", "bibliothécaire", 
+        "lieutenant", "sauveteur", "lyriciste", "maestro", "magicien", "magistrat", "femme_de_ménage", "joueur_de_haut_niveau", 
+        "directeur", "marqueur", "marshal", "mathématicien", "mécanicien", "médiateur", "médecin", "milieu_de_terrain", "ministre", 
+        "missionnaire", "gangster", "moine", "musicien", "nounou", "narrateur", "naturaliste", "négociateur", "neurologue", 
+        "neurochirurgien", "romancier", "nonne", "infirmière", "observateur", "officier", "organiste", "peintre", "paralégal", 
+        "paroissien", "parlementaire", "pasteur", "pathologiste", "patrouilleur", "pédiatre", "interprète", "pharmacien", 
+        "philanthrope", "philosophe", "photographe", "journaliste_photographe", "médecin", "physicien", "pianiste", "planificateur", 
+        "chirurgien_esthétique", "dramaturge", "plombier", "poète", "policier", "homme_politique", "sondeur", "prédicateur", 
+        "président", "prêtre", "directeur", "prisonnier", "professeur", "professeur_émérite", "programmeur", "promoteur", 
+        "propriétaire", "procureur", "protagoniste", "protégé", "protestant", "provost", "psychiatre", "psychologue", "publiciste", 
+        "pundit", "rabbin", "radiologue", "ranger", "agent_immo", "réceptionniste", "infirmière_enregistrée", "chercheur", 
+        "restaurateur", "marin", "saint", "vendeur", "saxophoniste", "bachelier", "scientifique", "scénariste", "sculpteur", 
+        "secrétaire", "sénateur", "sergent", "serviteur", "soldat", "sergent_adjoint", "commerçant", "chanteur", 
+        "compositeur", "meneur", "socialite", "sociologue", "voix_haute", "soldat", "soliciteur", "soliciteur_général", 
+        "soloiste", "sportif", "journaliste_sportif", "homme_d_état", "steward", "courtier", "stratégiste", "étudiant", 
+        "styliste", "substitut", "directeur", "chirurgien", "géomètre", "nageur", "chauffeur_de_taxi", "enseignant", 
+        "technicien", "adolescent", "thérapeute", "trader", "trésorier", "gendarme", "camionneur", "trompettiste", "tuteur", 
+        "tycoon", "secrétaire_d'État", "soutien_d_etudes", "valedictorian", "vice_chancelier", "violoniste", "chanteur", "serveur", 
+        "serveuse", "garde", "guerrier", "soudeur", "travailleur", "lutteur", "écrivain"
+      ]
+    }
+  }
+  
