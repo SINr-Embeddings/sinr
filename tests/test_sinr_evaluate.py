@@ -7,7 +7,7 @@ import pytest
 import unittest
 
 import sinr.graph_embeddings as ge
-from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer, clf_fit, clf_score, calcul_analogy_normalized, calcul_analogy_sparsified_normalized, identify_gender_direction_sinr, calc_direct_bias_sinr, load_config
+from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer, clf_fit, clf_score, calcul_analogy_normalized, calcul_analogy_sparsified_normalized, calcul_analogy_value_zero, identify_gender_direction_sinr, calc_direct_bias_sinr, load_config, calc_indirect_bias_sinr, project_vector, reject_vector
 import urllib.request
 import os
 
