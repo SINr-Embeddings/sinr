@@ -88,7 +88,7 @@ class TestIndirectBiasFunctions(unittest.TestCase):
         self.vocab = ['father', 'mother', 'he', 'she']
         np.random.seed(42)  
         vectors = [np.random.rand(300) for _ in range(len(self.vocab))]
-        self.model = MockClassSINr(self.vocab, vectors)
+        self.sinr_vec = MockClassSINr(self.vocab, vectors)
         self.gender_direction = np.random.rand(300)
 class MockSINrVectors:
     """Mock SINrVectors class for testing analogy functions."""
@@ -205,11 +205,11 @@ class TestCalculAnalogyValueZero(unittest.TestCase):
         self.assertTrue(np.allclose(rejected_vector, np.array([0, 4])))
 
     def test_calc_indirect_bias_sinr(self):
-        similarity = calc_indirect_bias_sinr(self.model, 'father', 'mother', self.gender_direction)
+        similarity = calc_indirect_bias_sinr(self.sinr_vec, 'father', 'mother', self.gender_direction)
         self.assertIsInstance(similarity, float)
 
     def test_calc_indirect_bias_sinr_edge_case(self):
-        similarity = calc_indirect_bias_sinr(self.model, 'father', 'father', self.gender_direction)
+        similarity = calc_indirect_bias_sinr(self.sinr_vec, 'father', 'father', self.gender_direction)
         self.assertEqual(similarity, 0.0)  
 
         
