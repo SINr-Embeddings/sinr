@@ -68,7 +68,7 @@ class TestSinr_embeddings(unittest.TestCase):
         
         self.assertTrue(score <= 1 and score >= 0)
         
-class MockSINrVectors:
+class MockClassSINr:
     def __init__(self, vocab, vectors):
         self.vocab = vocab  
         self.vectors = vectors
@@ -82,7 +82,7 @@ class TestBiasFunctions(unittest.TestCase):
     def setUp(self):
         self.vocab = ["men", "woman", "father", "mother", "male", "female", "actor", "actress"]
         vectors = [np.random.rand(300) for _ in range(len(self.vocab))]
-        self.sinr_vec = MockSINrVectors(self.vocab, vectors)
+        self.sinr_vec = MockClassSINr(self.vocab, vectors)
 
         self.config = {
             "gender": {
