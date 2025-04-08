@@ -78,6 +78,11 @@ class MockSINrVectors:
         self.vocab = vocab
         self.vectors = csr_matrix(vectors)
         
+    def get_my_vector(self, word):
+        if word in self.vocab:
+            return self.vectors[self.vocab.index(word)]
+        raise ValueError(f"Word '{word}' not found in vocab.")
+        
 class TestAnalogyFunctions(unittest.TestCase):
     """Tests for analogy functions."""
     def setUp(self):
