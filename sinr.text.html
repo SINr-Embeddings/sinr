@@ -69,16 +69,37 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-sinr.text.evaluate">Evaluate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.best_predicted_word"><code class="docutils literal notranslate"><span class="pre">best_predicted_word()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.best_predicted_word_k"><code class="docutils literal notranslate"><span class="pre">best_predicted_word_k()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.calc_direct_bias_sinr"><code class="docutils literal notranslate"><span class="pre">calc_direct_bias_sinr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.calc_indirect_bias_sinr"><code class="docutils literal notranslate"><span class="pre">calc_indirect_bias_sinr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.calcul_analogy_normalized"><code class="docutils literal notranslate"><span class="pre">calcul_analogy_normalized()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.calcul_analogy_sparsified_normalized"><code class="docutils literal notranslate"><span class="pre">calcul_analogy_sparsified_normalized()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.calcul_analogy_value_zero"><code class="docutils literal notranslate"><span class="pre">calcul_analogy_value_zero()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.clf_fit"><code class="docutils literal notranslate"><span class="pre">clf_fit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.clf_score"><code class="docutils literal notranslate"><span class="pre">clf_score()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.clf_xgb_interpretability"><code class="docutils literal notranslate"><span class="pre">clf_xgb_interpretability()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.dist_ratio"><code class="docutils literal notranslate"><span class="pre">dist_ratio()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.dist_ratio_dim"><code class="docutils literal notranslate"><span class="pre">dist_ratio_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.eval_analogy"><code class="docutils literal notranslate"><span class="pre">eval_analogy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.eval_analogy_by_category_k"><code class="docutils literal notranslate"><span class="pre">eval_analogy_by_category_k()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.eval_analogy_k"><code class="docutils literal notranslate"><span class="pre">eval_analogy_k()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.eval_similarity"><code class="docutils literal notranslate"><span class="pre">eval_similarity()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.fetch_SimLex"><code class="docutils literal notranslate"><span class="pre">fetch_SimLex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.fetch_analogy"><code class="docutils literal notranslate"><span class="pre">fetch_analogy()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.fetch_data_MEN"><code class="docutils literal notranslate"><span class="pre">fetch_data_MEN()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.fetch_data_SCWS"><code class="docutils literal notranslate"><span class="pre">fetch_data_SCWS()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.fetch_data_WS353"><code class="docutils literal notranslate"><span class="pre">fetch_data_WS353()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.find_txt_files"><code class="docutils literal notranslate"><span class="pre">find_txt_files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.format_lines"><code class="docutils literal notranslate"><span class="pre">format_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.identify_gender_direction_sinr"><code class="docutils literal notranslate"><span class="pre">identify_gender_direction_sinr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.normalize_vector"><code class="docutils literal notranslate"><span class="pre">normalize_vector()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.plot_category_error_rates"><code class="docutils literal notranslate"><span class="pre">plot_category_error_rates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.plot_global_error_rates"><code class="docutils literal notranslate"><span class="pre">plot_global_error_rates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.project_vector"><code class="docutils literal notranslate"><span class="pre">project_vector()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.reject_vector"><code class="docutils literal notranslate"><span class="pre">reject_vector()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.remove_invalid_lines"><code class="docutils literal notranslate"><span class="pre">remove_invalid_lines()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.similarity_MEN_WS353_SCWS"><code class="docutils literal notranslate"><span class="pre">similarity_MEN_WS353_SCWS()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.vectorizer"><code class="docutils literal notranslate"><span class="pre">vectorizer()</span></code></a></li>
 </ul>
@@ -368,6 +389,150 @@ the PMI is lower than a thershold min_pmi.</p>
 <section id="module-sinr.text.evaluate">
 <span id="evaluate"></span><h2>Evaluate<a class="headerlink" href="#module-sinr.text.evaluate" title="Permalink to this heading"></a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.best_predicted_word">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">best_predicted_word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.best_predicted_word" title="Permalink to this definition"></a></dt>
+<dd><p>Solve analogy of the type A is to B as C is to D</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> – SINrVectors object</p></li>
+<li><p><strong>word_a</strong> – string</p></li>
+<li><p><strong>word_b</strong> – string</p></li>
+<li><p><strong>word_c</strong> – string</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>best predicted word of the dataset or None if not in the vocab.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.best_predicted_word_k">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">best_predicted_word_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.best_predicted_word_k" title="Permalink to this definition"></a></dt>
+<dd><p>Predict the best word for the analogy A is to B as C is to D with k best words.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> – SINrVectors object</p></li>
+<li><p><strong>word_a</strong> – string</p></li>
+<li><p><strong>word_b</strong> – string</p></li>
+<li><p><strong>word_c</strong> – string</p></li>
+<li><p><strong>k</strong> – int, number of best words to return (default is 1)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of k best predicted words of the dataset or None if not in the vocab.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of strings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.calc_direct_bias_sinr">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">calc_direct_bias_sinr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gender_direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.calc_direct_bias_sinr" title="Permalink to this definition"></a></dt>
+<dd><p>Computes the direct bias of a set of words with respect to the gender direction
+using cosine similarity.</p>
+<dl class="simple">
+<dt>Args:  </dt><dd><p>sinr_vec: SINr model.  
+word_list: List of words to analyze. (professions in config.json)
+gender_direction: Gender direction vector.  
+c: Exponent applied to cosine similarity (default is c=1).</p>
+</dd>
+<dt>Returns:  </dt><dd><p>float: Direct bias value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.calc_indirect_bias_sinr">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">calc_indirect_bias_sinr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.calc_indirect_bias_sinr" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the indirect bias SINr model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> – SINr model.</p></li>
+<li><p><strong>word1</strong> – The first word.</p></li>
+<li><p><strong>word2</strong> – The second word.</p></li>
+<li><p><strong>direction</strong> – The gender direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The gender component of the similarity between the two words.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.calcul_analogy_normalized">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">calcul_analogy_normalized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.calcul_analogy_normalized" title="Permalink to this definition"></a></dt>
+<dd><p>Solve analogy of the type A is to B as C is to D with normalized values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> – SINrVectors object</p></li>
+<li><p><strong>word_a</strong> – string</p></li>
+<li><p><strong>word_b</strong> – string</p></li>
+<li><p><strong>word_c</strong> – string</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>best predicted word of the dataset</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.calcul_analogy_sparsified_normalized">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">calcul_analogy_sparsified_normalized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.calcul_analogy_sparsified_normalized" title="Permalink to this definition"></a></dt>
+<dd><p>Solve analogy of the type A is to B as C is to D with sparsification and normalization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> – SINrVectors object</p></li>
+<li><p><strong>word_a</strong> – string</p></li>
+<li><p><strong>word_b</strong> – string</p></li>
+<li><p><strong>word_c</strong> – string</p></li>
+<li><p><strong>n</strong> – int, number of dimensions to keep after sparsification</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>best predicted word of the dataset</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.calcul_analogy_value_zero">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">calcul_analogy_value_zero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.calcul_analogy_value_zero" title="Permalink to this definition"></a></dt>
+<dd><p>Solve analogy of the type A is to B as C is to D with only positives values in the resulting vector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> – SINrVectors object</p></li>
+<li><p><strong>word_a</strong> – string</p></li>
+<li><p><strong>word_b</strong> – string</p></li>
+<li><p><strong>word_c</strong> – string</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>best predicted word of the dataset</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="sinr.text.evaluate.clf_fit">
 <span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">clf_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clf=XGBClassifier(base_score=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">booster=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colsample_bylevel=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colsample_bynode=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colsample_bytree=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_stopping_rounds=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_categorical=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_metric=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_types=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grow_policy=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction_constraints=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_bin=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cat_threshold=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cat_to_onehot=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_delta_step=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_leaves=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_child_weight=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing=nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monotone_constraints=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_strategy=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_estimators=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_parallel_tree=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.clf_fit" title="Permalink to this definition"></a></dt>
 <dd><p>Fit a classification model according to the given training data.
@@ -490,6 +655,74 @@ the PMI is lower than a thershold min_pmi.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.eval_analogy">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">eval_analogy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analogy_func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.eval_analogy" title="Permalink to this definition"></a></dt>
+<dd><p>Compare the predicted with the expected word.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> – SINrVectors object</p></li>
+<li><p><strong>dataset</strong> – sklearn.datasets.base.Bunch
+dictionary-like object. Keys of interest:
+‘X’: matrix of 2 words per column,
+‘y’: vector with scores</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>error rate</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.eval_analogy_by_category_k">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">eval_analogy_by_category_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analogy_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.eval_analogy_by_category_k" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluate analogy by category with k best words</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> – SINrVectors object</p></li>
+<li><p><strong>dataset</strong> – sklearn.datasets.base.Bunch</p></li>
+<li><p><strong>analogy_func</strong> – function to use for analogy prediction</p></li>
+<li><p><strong>k</strong> – int, number of best words to return (default is 1)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>dictionary with categories as keys and error rates as values</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.eval_analogy_k">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">eval_analogy_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analogy_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.eval_analogy_k" title="Permalink to this definition"></a></dt>
+<dd><p>Compare the predicted with the expected word with k best words.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> – SINrVectors object</p></li>
+<li><p><strong>dataset</strong> – sklearn.datasets.base.Bunch
+dictionary-like object. Keys of interest:
+‘X’: matrix of 2 words per column,
+‘y’: vector with scores</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>error rate</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="sinr.text.evaluate.eval_similarity">
 <span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">eval_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.eval_similarity" title="Permalink to this definition"></a></dt>
 <dd><p>Evaluate similarity with Spearman correlation</p>
@@ -525,6 +758,24 @@ dictionary-like object. Keys of interest:
 <dd class="field-even"><p>dictionary-like object. Keys of interest:
 ‘X’: matrix of 2 words per column,
 ‘y’: vector with scores</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sklearn.datasets.base.Bunch</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.fetch_analogy">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">fetch_analogy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">langage</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.fetch_analogy" title="Permalink to this definition"></a></dt>
+<dd><p>Fetch dataset for testing analogies</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>langage</strong> (<em>str</em>) – language of the dataset</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>dictionary-like object. Keys of interest:
+‘X’: matrix of 4 words per column</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>sklearn.datasets.base.Bunch</p>
@@ -576,6 +827,136 @@ dictionary-like object. Keys of interest:
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>sklearn.datasets.base.Bunch</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.find_txt_files">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">find_txt_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.find_txt_files" title="Permalink to this definition"></a></dt>
+<dd><p>Find all text files in a directory and its subdirectories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>directory</strong> (<em>str</em>) – path to the directory</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of text files</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.format_lines">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">format_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.format_lines" title="Permalink to this definition"></a></dt>
+<dd><p>Format lines of the content.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>content</strong> (<em>str</em>) – content of the file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>formatted content</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.identify_gender_direction_sinr">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">identify_gender_direction_sinr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">definitional_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pca'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positive_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'brother'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negative_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sister'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.identify_gender_direction_sinr" title="Permalink to this definition"></a></dt>
+<dd><p>Identifies the gender direction in a SINr model.</p>
+<p>Parameters:
+- sinr_vec: SINr model.
+- positive_end: word representing the masculine gender.
+- negative_end: word representing the feminine gender.
+- definitional_pairs: list of word pairs defining gender.
+- method: method used to compute the gender direction (‘single’, ‘sum’, ‘pca’).</p>
+<p>Returns:
+- A vector representing the gender direction.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.load_config">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">load_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.load_config" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.normalize_vector">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">normalize_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.normalize_vector" title="Permalink to this definition"></a></dt>
+<dd><p>Normalize a vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vector</strong> (<em>numpy.ndarray</em>) – vector to normalize</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>normalized vector</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.plot_category_error_rates">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">plot_category_error_rates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_predicted_word_k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ks</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.plot_category_error_rates" title="Permalink to this definition"></a></dt>
+<dd><p>Plot error rates by category for different values of k</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> – SINrVectors object</p></li>
+<li><p><strong>file_path</strong> – path to the dataset file</p></li>
+<li><p><strong>best_predicted_word_k</strong> – function to use for analogy prediction</p></li>
+<li><p><strong>ks</strong> – list of k values to evaluate - [1, 2, 5, 10]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.plot_global_error_rates">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">plot_global_error_rates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_predicted_word_k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ks</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.plot_global_error_rates" title="Permalink to this definition"></a></dt>
+<dd><p>Plot global error rates for different values of k</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sinr_vec</strong> – SINrVectors object</p></li>
+<li><p><strong>file_path</strong> – path to the dataset file</p></li>
+<li><p><strong>best_predicted_word_k</strong> – function to use for analogy prediction</p></li>
+<li><p><strong>ks</strong> – list of k values to evaluate - [1, 2, 5, 10]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.project_vector">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">project_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.project_vector" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.reject_vector">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">reject_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.reject_vector" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the orthogonal projection of a vector onto a given direction.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.remove_invalid_lines">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">remove_invalid_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.remove_invalid_lines" title="Permalink to this definition"></a></dt>
+<dd><p>Remove invalid lines from the content.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>content</strong> (<em>str</em>) – content of the file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>cleaned content</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>

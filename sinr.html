@@ -730,23 +730,23 @@ Co-occurrence matrices should for instance be generated using sinr.text.cooccurr
 <dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_dimension_descriptors_idx">
 <span class="sig-name descname"><span class="pre">get_dimension_descriptors_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_dimension_descriptors_idx" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the objects that constitute the dimension of obj, i.e. the members of the community of obj</p>
+<dd><p>Returns the objects that constitute the dimension idx, i.e. the members of the community idx</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>topk</strong> – 1 returns all the members of the community, a positive int returns juste the <cite>topk</cite> members with</p>
+<dd class="field-odd"><p><strong>topk</strong> – 1 returns all the members of the community, a positive int returns just the <cite>topk</cite> members with</p>
 </dd>
 </dl>
-<p>highest <cite>nr</cite> values on the community (Default value = -1)
+<p>highest <cite>nr</cite> values on the dimension (Default value = -1)
 :type topk: int
 :param index: the index of the dimension
 :type index: int
-:returns: a set of object, the community of <cite>obj</cite></p>
+:returns: a set of object, the community of index <cite>index</cite></p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_dimension_stereotypes">
 <span class="sig-name descname"><span class="pre">get_dimension_stereotypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_dimension_stereotypes" title="Permalink to this definition"></a></dt>
-<dd><p>Get the words with the highest values on dimension obj.</p>
+<dd><p>Get the words with the highest values on the highest dimension of word obj.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -755,7 +755,7 @@ Co-occurrence matrices should for instance be generated using sinr.text.cooccurr
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>the topk words that describe this dimension (highest values)</p>
+<dd class="field-even"><p>the topk words that describe this dimension (highest values for the highest dimension of obj)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -767,7 +767,6 @@ Co-occurrence matrices should for instance be generated using sinr.text.cooccurr
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>obj</strong> (<em>int</em><em> or </em><em>str</em>) – id of a dimension, or label of a word (then turned into the id of its community)</p></li>
 <li><p><strong>topk</strong> (<em>int</em>) – <cite>topk</cite> value to consider on the dimension (Default value = 5)</p></li>
 <li><p><strong>idx</strong> (<em>int</em>) – dimension to fetch <cite>topk</cite> on</p></li>
 </ul>
