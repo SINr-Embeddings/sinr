@@ -12,6 +12,8 @@ import os
 from tqdm.auto import tqdm
 import time
 import xgboost as xgb
+import json
+from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import cosine_similarity
 import itertools
 
@@ -506,6 +508,103 @@ def eval_similarity(sinr_vec, dataset, print_missing=True):
     
     return scipy.stats.spearmanr(cosine_sim, scores).correlation
 
+def project_vector(v,u):
+    normalize_u = normalize_vector(u)
+    return np.dot(v, normalize_u) * normalize_u
+
+def reject_vector(v, u):
+    "Calculate the orthogonal projection of a vector onto a given direction."
+    return v - project_vector(v,u)
+
+def load_config(path):
+    with open(path, 'r') as f:
+        return json.load(f)
+
+def identify_gender_direction_sinr(sinr_vec, definitional_pairs, method="pca", positive_end="brother", negative_end="sister"):
+    """
+    Identifies the gender direction in a SINr model.
+
+    Parameters:
+    - sinr_vec: SINr model.
+    - positive_end: word representing the masculine gender.
+    - negative_end: word representing the feminine gender.
+    - definitional_pairs: list of word pairs defining gender.
+    - method: method used to compute the gender direction ('single', 'sum', 'pca').
+
+    Returns:
+    - A vector representing the gender direction.
+    """
+    if method == "single":
+        return normalize_vector(sinr_vec.get_my_vector(positive_end) - sinr_vec.get_my_vector(negative_end))
+    elif method == "sum":
+        group1 = np.sum([sinr_vec.get_my_vector(w1) for w1, w2 in definitional_pairs], axis=0)
+        group2 = np.sum([sinr_vec.get_my_vector(w2) for w1, w2 in definitional_pairs], axis=0)
+        return normalize_vector(group1 - group2)
+    elif method == "pca":
+        matrix = np.array([sinr_vec.get_my_vector(w1) - sinr_vec.get_my_vector(w2) for w1, w2 in definitional_pairs])
+        pca = PCA(n_components=1)
+        pca.fit(matrix)
+        return normalize_vector(pca.components_[0])
+    else:
+        raise ValueError("Invalid method. Use 'single', 'sum' ou 'pca'.")
+
+def calc_direct_bias_sinr(sinr_vec, word_list, gender_direction, c=1):
+    """
+    Computes the direct bias of a set of words with respect to the gender direction
+    using cosine similarity.
+
+    Args:  
+        sinr_vec: SINr model.  
+        word_list: List of words to analyze. (professions in config.json)
+        gender_direction: Gender direction vector.  
+        c: Exponent applied to cosine similarity (default is c=1).  
+
+    Returns:  
+        float: Direct bias value.
+    """
+    word_vectors = [sinr_vec.get_my_vector(word) for word in word_list if word in sinr_vec.vocab]
+    if not word_vectors:
+        return 0.0
+    word_vectors = np.array(word_vectors)
+    gender_direction = gender_direction.reshape(1, -1)
+    cos_similarities = np.abs(cosine_similarity(word_vectors, gender_direction)).flatten()
+    return np.mean(cos_similarities ** c)
+
+
+def calc_indirect_bias_sinr(sinr_vec, word1, word2, direction):
+    """
+        Calculate the indirect bias SINr model.
+
+        :param sinr_vec: SINr model.
+        :param word1: The first word.
+        :param word2: The second word.
+        :param direction: The gender direction.
+        :return: The gender component of the similarity between the two words.
+    """
+
+    vector1 = normalize_vector(sinr_vec.get_my_vector(word1))
+    vector2 = normalize_vector(sinr_vec.get_my_vector(word2))
+
+
+    gender_component1 = np.dot(vector1, direction) * direction
+    gender_component2 = np.dot(vector2, direction) * direction
+
+
+    perpendicular_vector1 = reject_vector(vector1, direction)
+    perpendicular_vector2 = reject_vector(vector2, direction)
+
+
+    inner_product = np.dot(vector1, vector2)
+
+    perpendicular_vector1_2d = perpendicular_vector1.reshape(1, -1)
+    perpendicular_vector2_2d = perpendicular_vector2.reshape(1, -1)
+    
+
+    perpendicular_similarity = cosine_similarity(perpendicular_vector1_2d, perpendicular_vector2_2d)[0][0]
+
+    indirect_bias = ((inner_product - perpendicular_similarity) / inner_product)
+
+    return indirect_bias
 
 def calcul_analogy_sparsified_normalized(sinr_vec, word_a, word_b, word_c, n=100):
     """Solve analogy of the type A is to B as C is to D with sparsification and normalization.

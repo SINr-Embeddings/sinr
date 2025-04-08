@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 
 import sinr.graph_embeddings as ge
-from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer, clf_fit, clf_score, calcul_analogy_normalized, calcul_analogy_sparsified_normalized, calcul_analogy_value_zero
+from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer, clf_fit, clf_score, calcul_analogy_normalized, calcul_analogy_sparsified_normalized, calcul_analogy_value_zero, calc_direct_bias_sinr, calc_indirect_bias_sinr, project_vector, reject_vector, identify_gender_direction_sinr
 import urllib.request
 import os
 
@@ -172,6 +172,77 @@ class TestCalculAnalogyValueZero(unittest.TestCase):
     def test_vector_clamping_to_zero(self):
         result = calcul_analogy_value_zero(self.sinr_vec, "woman", "man", "queen")
         self.assertIn(result, self.vocab)
+
+class MockClassSINr:
+    def __init__(self, vocab, vectors):
+        self.vocab = vocab  
+        self.vectors = vectors
+
+    def get_my_vector(self, word):
+        if word in self.vocab:
+            return self.vectors[self.vocab.index(word)]
+        raise ValueError(f"Word '{word}' not found in vocab.")
+
+class TestBiasFunctions(unittest.TestCase):
+    def setUp(self):
+        self.vocab = ["men", "woman", "father", "mother", "male", "female", "actor", "actress"]
+        vectors = [np.random.rand(300) for _ in range(len(self.vocab))]
+        self.sinr_vec = MockClassSINr(self.vocab, vectors)
+
+        self.config = {
+            "gender": {
+                "definitional_pairs": [["men", "woman"], ["father", "mother"]]
+            },
+            "professions": ["actor", "actress"]
+        }
+
+    def test_gender_direction(self):
+        direction = identify_gender_direction_sinr(
+            self.sinr_vec, 
+            self.config["gender"]["definitional_pairs"], 
+            method="pca"
+        )
+        self.assertEqual(direction.shape[0], 300)
+
+    def test_direct_bias(self):
+        direction = identify_gender_direction_sinr(
+            self.sinr_vec, 
+            self.config["gender"]["definitional_pairs"]
+        )
+        bias = calc_direct_bias_sinr(
+            self.sinr_vec, 
+            self.config["professions"], 
+            direction
+        )
+        self.assertTrue(0 <= bias <= 1)
+        
+class TestIndirectBiasFunctions(unittest.TestCase):
+    def setUp(self):
+        self.vocab = ['father', 'mother', 'he', 'she']
+        np.random.seed(42)  
+        vectors = [np.random.rand(300) for _ in range(len(self.vocab))]
+        self.sinr_vec = MockClassSINr(self.vocab, vectors)
+        self.gender_direction = np.random.rand(300)
+
+    def test_project_vector(self):
+        v = np.array([3, 4])
+        u = np.array([1, 0])
+        projected_vector = project_vector(v, u)
+        self.assertTrue(np.allclose(projected_vector, np.array([3, 0])))
+
+    def test_reject_vector(self):
+        v = np.array([3, 4])
+        u = np.array([1, 0])
+        rejected_vector = reject_vector(v, u)
+        self.assertTrue(np.allclose(rejected_vector, np.array([0, 4])))
+
+    def test_calc_indirect_bias_sinr(self):
+        similarity = calc_indirect_bias_sinr(self.sinr_vec, 'father', 'mother', self.gender_direction)
+        self.assertIsInstance(similarity, float)
+
+    def test_calc_indirect_bias_sinr_edge_case(self):
+        similarity = calc_indirect_bias_sinr(self.sinr_vec, 'father', 'father', self.gender_direction)
+        self.assertEqual(similarity, 0.0)
 
 if __name__ == '__main__':
     unittest.main()
