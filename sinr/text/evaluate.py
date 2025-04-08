@@ -16,6 +16,7 @@ import json
 from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import cosine_similarity
 import itertools
+import matplotlib.pyplot as plt
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
@@ -448,6 +449,219 @@ def calcul_analogy_normalized(sinr_vec, word_a, word_b, word_c):
         return sinr_vec.vocab[best_index]
     
     return None
+
+def best_predicted_word_k(sinr_vec, word_a, word_b, word_c, k=1):
+    """Predict the best word for the analogy A is to B as C is to D with k best words.
+    
+    :param sinr_vec: SINrVectors object
+    
+    :param word_a: string
+    :param word_b: string
+    :param word_c: string
+    :param k: int, number of best words to return (default is 1)
+    
+    :return: list of k best predicted words of the dataset or None if not in the vocab.
+    :rtype: list of strings
+    """
+    word_a, word_b, word_c = word_a.lower(), word_b.lower(), word_c.lower()
+    
+    if word_a in sinr_vec.vocab and word_b in sinr_vec.vocab and word_c in sinr_vec.vocab:
+        vector_a = sinr_vec.get_my_vector(word_a)
+        vector_b = sinr_vec.get_my_vector(word_b)
+        vector_c = sinr_vec.get_my_vector(word_c)
+
+        result_vector = normalize_vector(vector_b) - normalize_vector(vector_a) + normalize_vector(vector_c)
+        similarities = cosine_similarity(result_vector.reshape(1, -1), sinr_vec.vectors).flatten()
+        
+        excluded_indices = [sinr_vec.vocab.index(word) for word in [word_a, word_b, word_c]]
+        for idx in excluded_indices:
+            similarities[idx] = -np.inf
+        
+        top_indices = np.argsort(similarities)[-k:][::-1]
+        predicted_words = [sinr_vec.vocab[i] for i in top_indices]
+        return predicted_words
+    else:
+        return None
+    
+def eval_analogy_k(sinr_vec, dataset, analogy_func, k=1):
+    """Compare the predicted with the expected word with k best words.
+    
+    :param sinr_vec: SINrVectors object
+    :param dataset: sklearn.datasets.base.Bunch
+                    dictionary-like object. Keys of interest:
+                    'X': matrix of 2 words per column,
+                    'y': vector with scores
+    
+    :return: error rate
+    :rtype: float
+    """
+    with open(dataset, 'r') as f:
+        lines = f.readlines()
+
+    valid_analogies = []
+
+    for line in lines:
+        line = line.strip()
+        if line.startswith(':'):
+            continue
+        
+        words = line.split()
+
+        word_a, word_b, word_c, expected = words
+
+        if (word_a in sinr_vec.vocab 
+            and word_b in sinr_vec.vocab
+            and word_c in sinr_vec.vocab
+            and expected in sinr_vec.vocab):
+            valid_analogies.append(line)
+
+    total_analogies = 0
+    correct_count = 0
+    incorrect_count = 0
+
+    for line in valid_analogies:
+        word_a, word_b, word_c, expected = line.split()
+        
+        predicted_words = analogy_func(sinr_vec, word_a, word_b, word_c, k)
+        if predicted_words is not None:
+            total_analogies += 1
+            if expected in predicted_words:
+                correct_count += 1
+            else:
+                incorrect_count += 1
+            
+    error_rate = incorrect_count / total_analogies if total_analogies > 0 else 0
+
+    print("\n=== Category ===")
+    print(f"Total validated analogies: {total_analogies}")
+    print(f"Correct analogies: {correct_count}")
+    print(f"Incorrect analogies: {incorrect_count}")
+    print(f"Error rate: {error_rate:.2%}")
+
+    return error_rate
+
+
+def eval_analogy_by_category_k(sinr_vec, dataset, analogy_func, k=1):
+    """Evaluate analogy by category with k best words
+    
+    :param sinr_vec: SINrVectors object
+    :param dataset: sklearn.datasets.base.Bunch
+    :param analogy_func: function to use for analogy prediction
+    :param k: int, number of best words to return (default is 1)
+    
+    :return: dictionary with categories as keys and error rates as values
+    :rtype: dict
+    """
+    with open(dataset, 'r') as f:
+        lines = f.readlines()
+
+    current_category = "default"
+    categories = {}
+
+    for line in lines:
+        line = line.strip()
+        if line.startswith(':'):
+            current_category = line[1:].strip()
+            categories[current_category] = []
+        else:
+            words = line.split()
+            if len(words) != 4:
+                continue
+            word_a, word_b, word_c, expected = [w.lower() for w in words]
+            if (word_a in sinr_vec.vocab and 
+                word_b in sinr_vec.vocab and 
+                word_c in sinr_vec.vocab and 
+                expected in sinr_vec.vocab):
+                categories[current_category].append((word_a, word_b, word_c, expected))
+
+    results = {}
+    for category, analogies in categories.items():
+        total = 0
+        correct = 0
+        incorrect = 0
+        for word_a, word_b, word_c, expected in analogies:
+            predicted_words = analogy_func(sinr_vec, word_a, word_b, word_c, k)
+            if predicted_words is not None:
+                total += 1
+                if expected in predicted_words:
+                    correct += 1
+                else:
+                    incorrect += 1
+        error_rate = incorrect / total if total > 0 else 0
+        results[category] = {
+            'total': total,
+            'correct': correct,
+            'incorrect': incorrect,
+            'error_rate': error_rate
+        }
+        print("\n=== Category : {} ===".format(category))
+        print("Total validated analogies :", total)
+        print("Correct analogies :", correct)
+        print("Incorrect analogies :", incorrect)
+        print("Error rate : {:.2%}".format(error_rate))
+    return results
+
+def plot_global_error_rates(sinr_vec, file_path, best_predicted_word_k, ks):
+    """ Plot global error rates for different values of k
+    
+    :param sinr_vec: SINrVectors object
+    :param file_path: path to the dataset file
+    :param best_predicted_word_k: function to use for analogy prediction
+    :param ks: list of k values to evaluate - [1, 2, 5, 10]
+    """
+    global_error_rates = []
+
+    for k_val in ks:
+        err_rate = eval_analogy_k(sinr_vec, file_path, best_predicted_word_k, k=k_val)
+        global_error_rates.append(err_rate)
+
+    global_error_rates_pct = [rate * 100 for rate in global_error_rates]
+
+    plt.figure(figsize=(8, 5))
+    plt.plot(ks, global_error_rates_pct, marker='o')
+    plt.xlabel("k")
+    plt.ylabel("Global error rate (%)")
+    plt.title("Global error rate k values")
+    plt.xticks(ks)
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+def plot_category_error_rates(sinr_vec, file_path, best_predicted_word_k, ks):
+    """ Plot error rates by category for different values of k
+    
+    :param sinr_vec: SINrVectors object
+    :param file_path: path to the dataset file
+    :param best_predicted_word_k: function to use for analogy prediction
+    :param ks: list of k values to evaluate - [1, 2, 5, 10]
+    
+    """
+    category_error_rates = {}
+
+    for k_val in ks:
+        cat_results = eval_analogy_by_category_k(sinr_vec, file_path, best_predicted_word_k, k=k_val)
+        for cat, metrics in cat_results.items():
+            if cat not in category_error_rates:
+                category_error_rates[cat] = []
+            category_error_rates[cat].append(metrics['error_rate'] * 100)
+
+    categories = list(category_error_rates.keys())
+    n_categories = len(categories)
+    x = np.arange(n_categories)
+    width = 0.15
+
+    plt.figure(figsize=(12, 6))
+    for i, k_val in enumerate(ks):
+        error_vals = [category_error_rates[cat][i] for cat in categories]
+        plt.bar(x + i * width, error_vals, width, label=f'k={k_val}')
+
+    plt.xlabel("Category")
+    plt.ylabel("Global error rate (%)")
+    plt.title("Global error by category for k values")
+    plt.xticks(x + width * (len(ks) - 1) / 2, categories, rotation=45, ha='right')
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
 
 def eval_similarity(sinr_vec, dataset, print_missing=True):
     """Evaluate similarity with Spearman correlation

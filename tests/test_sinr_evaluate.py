@@ -8,9 +8,10 @@ import unittest
 import numpy as np
 
 import sinr.graph_embeddings as ge
-from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer, clf_fit, clf_score, calcul_analogy_normalized, calcul_analogy_sparsified_normalized, calcul_analogy_value_zero, calc_direct_bias_sinr, calc_indirect_bias_sinr, project_vector, reject_vector, identify_gender_direction_sinr
+from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer, clf_fit, clf_score, calcul_analogy_normalized, calcul_analogy_sparsified_normalized, calcul_analogy_value_zero, calc_direct_bias_sinr, calc_indirect_bias_sinr, project_vector, reject_vector, identify_gender_direction_sinr, eval_analogy_k, best_predicted_word_k
 import urllib.request
 import os
+import tempfile
 
 from scipy.sparse import csr_matrix
 
@@ -172,6 +173,55 @@ class TestCalculAnalogyValueZero(unittest.TestCase):
     def test_vector_clamping_to_zero(self):
         result = calcul_analogy_value_zero(self.sinr_vec, "woman", "man", "queen")
         self.assertIn(result, self.vocab)
+        
+class TestBestPredictedWordK(unittest.TestCase):
+    """Tests for `best_predicted_word_k` function."""
+    def setUp(self):
+        self.vocab = ["king", "queen", "man", "woman"]
+        self.vectors = [
+            [0.8, 0.2],
+            [0.7, 0.3],
+            [0.6, 0.4],
+            [0.5, 0.5],
+        ]
+        self.sinr_vec = MockSINrVectors(self.vocab, self.vectors)
+
+    def test_analogy_correct(self):
+        result = best_predicted_word_k(self.sinr_vec, "king", "queen", "man", k=1)
+        self.assertIn("woman", result)
+
+    def test_invalid_word(self):
+        result = best_predicted_word_k(self.sinr_vec, "foo", "queen", "man", k=1)
+        self.assertIsNone(result)
+
+    def test_exclusion_from_results(self):
+        result = best_predicted_word_k(self.sinr_vec, "king", "queen", "king", k=1)
+        self.assertNotIn("king", result)
+        
+class TestEvalAnalogyK(unittest.TestCase):
+    """Tests for `eval_analogy_k` function."""
+    def setUp(self):
+        self.vocab = ["king", "queen", "man", "woman"]
+        self.vectors = [
+            [0.8, 0.2],
+            [0.7, 0.3],
+            [0.6, 0.4],
+            [0.5, 0.5],
+        ]
+        self.sinr_vec = MockSINrVectors(self.vocab, self.vectors)
+
+        self.temp_file = tempfile.NamedTemporaryFile(delete=False, mode='w+', suffix='.txt')
+        self.temp_file.write(": capital-common-countries\n")
+        self.temp_file.write("king queen man woman\n")
+        self.temp_file.write("man woman king queen\n")
+        self.temp_file.flush()
+
+    def tearDown(self):
+        os.unlink(self.temp_file.name)
+
+    def test_eval_analogy(self):
+        error_rate = eval_analogy_k(self.sinr_vec, self.temp_file.name, best_predicted_word_k, k=1)
+        self.assertTrue(0 <= error_rate <= 1)
 
 class MockClassSINr:
     def __init__(self, vocab, vectors):
