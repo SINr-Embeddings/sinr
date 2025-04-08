@@ -80,7 +80,8 @@ class MockSINrVectors:
         
     def get_my_vector(self, word):
         if word in self.vocab:
-            return self.vectors[self.vocab.index(word)]
+            vec = self.vectors[self.vocab.index(word)]
+            return vec.toarray().flatten()
         raise ValueError(f"Word '{word}' not found in vocab.")
         
 class TestAnalogyFunctions(unittest.TestCase):
