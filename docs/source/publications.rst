@@ -35,3 +35,4 @@ Publications
 
 -  Thibault Prouteau, Nicolas Dugué, Simon Guillot, Anthony Perez. SINr: a python package to train interpretable word and graph embeddings. French Regional Conference on Complex Systems, May 2023, Le Havre, France. pp.215, 
    `⟨10.5281/zenodo.7957531⟩ <https://dx.doi.org/10.5281/zenodo.7957531>`. `⟨hal-04113024⟩ <https://hal.science/hal-04113024v1>`__ 
+=======

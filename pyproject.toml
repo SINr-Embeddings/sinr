@@ -10,7 +10,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "sinr"
-version = "v1.3.1"
+version = "v1.3.3.3"
 description = "Build word and graph embeddings based on community detection in graphs."
 authors = ["Thibault Prouteau <thibault.prouteau@univ-lemans.fr>", "Nicolas Dugue <nicolas.dugue@univ-lemans.fr>", " Simon Guillot <simon.guillot@univ-lemans.fr>", "Anthony Perez"]
 license = "CeCILL 2.1"
@@ -40,7 +40,7 @@ include = [
 python = ">=3.9,<4.0"
 joblib = ">=1.1.1"
 networkit = "9.1.1"
-numpy = ">=1.26.0"
+numpy = ">=1.20.0"
 scipy = ">=1.6.1"
 scikit-learn = "^1.2.1"
 ipykernel = "^6.21.1"
@@ -50,7 +50,7 @@ tabulate = "^0.9.0"
 leidenalg = "^0.9.1"
 igraph = "^0.10.4"
 matplotlib = "^3.7.0"
-spacy = "^3.5.0"
+spacy = "3.7.0"
 xgboost = "^2.0.3"
 docutils = "0.18.1" #To avoid problems, some of our dependencies relie on docutils and this version seems to be fine
 
