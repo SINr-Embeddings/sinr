@@ -17,6 +17,7 @@ from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import cosine_similarity
 import itertools
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
@@ -168,12 +169,7 @@ def find_txt_files(directory):
     
     """
     
-    txt_files = []
-    for root, _, files in os.walk(directory):
-        for file in files:
-            if file.endswith('.txt'):
-                txt_files.append(os.path.join(root, file))
-    return txt_files
+    return Path(directory).rglob('*.txt')
 
 def remove_invalid_lines(content):
     """Remove invalid lines from the content.
@@ -187,7 +183,7 @@ def remove_invalid_lines(content):
     """
     
     lines = content.splitlines()
-    return '\n'.join(line.strip() for line in lines if '/' not in line and line.strip())
+    return '\n'.join(line.strip() for line in lines if '/' not in line)
 
 def format_lines(content):
     """Format lines of the content.
@@ -305,7 +301,7 @@ def best_predicted_word(sinr_vec, word_a, word_b, word_c):
     :param word_b: string
     :param word_c: string
     
-    :return: best predicted word of the dataset or None if not in the vocab.
+    :return: best predicted word of the dataset (word D) or None if not in the vocab.
     """
     
     if word_a in sinr_vec.vocab and word_b in sinr_vec.vocab and word_c in sinr_vec.vocab:
@@ -382,7 +378,7 @@ def eval_analogy(sinr_vec, dataset, analogy_func):
 
     return error_rate
 
-def calcul_analogy_value_zero(sinr_vec, word_a, word_b, word_c):
+def compute_analogy_value_zero(sinr_vec, word_a, word_b, word_c):
     """Solve analogy of the type A is to B as C is to D with only positives values in the resulting vector
 
     :param sinr_vec: SINrVectors object
@@ -391,7 +387,7 @@ def calcul_analogy_value_zero(sinr_vec, word_a, word_b, word_c):
     :param word_b: string
     :param word_c: string
 
-    :return: best predicted word of the dataset
+    :return: best predicted word of the dataset (word D) or None if not in the vocab.
     :rtype: string
     """
     if word_a in sinr_vec.vocab and word_b in sinr_vec.vocab and word_c in sinr_vec.vocab:
@@ -415,7 +411,7 @@ def calcul_analogy_value_zero(sinr_vec, word_a, word_b, word_c):
     
     return None
 
-def calcul_analogy_normalized(sinr_vec, word_a, word_b, word_c):
+def compute_analogy_normalized(sinr_vec, word_a, word_b, word_c):
     """Solve analogy of the type A is to B as C is to D with normalized values
 
     :param sinr_vec: SINrVectors object
@@ -727,7 +723,7 @@ def project_vector(v,u):
     return np.dot(v, normalize_u) * normalize_u
 
 def reject_vector(v, u):
-    "Calculate the orthogonal projection of a vector onto a given direction."
+    "Compute the orthogonal projection of a vector onto a given direction."
     return v - project_vector(v,u)
 
 def load_config(path):
@@ -760,9 +756,9 @@ def identify_gender_direction_sinr(sinr_vec, definitional_pairs, method="pca", p
         pca.fit(matrix)
         return normalize_vector(pca.components_[0])
     else:
-        raise ValueError("Invalid method. Use 'single', 'sum' ou 'pca'.")
+        raise ValueError("Invalid method. Use 'single', 'sum' or 'pca'.")
 
-def calc_direct_bias_sinr(sinr_vec, word_list, gender_direction, c=1):
+def compute_direct_bias_sinr(sinr_vec, word_list, gender_direction, c=1):
     """
     Computes the direct bias of a set of words with respect to the gender direction
     using cosine similarity.
@@ -785,9 +781,9 @@ def calc_direct_bias_sinr(sinr_vec, word_list, gender_direction, c=1):
     return np.mean(cos_similarities ** c)
 
 
-def calc_indirect_bias_sinr(sinr_vec, word1, word2, direction):
+def compute_indirect_bias_sinr(sinr_vec, word1, word2, direction):
     """
-        Calculate the indirect bias SINr model.
+        Compute the indirect bias SINr model.
 
         :param sinr_vec: SINr model.
         :param word1: The first word.
@@ -804,23 +800,23 @@ def calc_indirect_bias_sinr(sinr_vec, word1, word2, direction):
     gender_component2 = np.dot(vector2, direction) * direction
 
 
-    perpendicular_vector1 = reject_vector(vector1, direction)
-    perpendicular_vector2 = reject_vector(vector2, direction)
+    orthogonal_vector1 = reject_vector(vector1, direction)
+    orthogonal_vector2 = reject_vector(vector2, direction)
 
 
     inner_product = np.dot(vector1, vector2)
 
-    perpendicular_vector1_2d = perpendicular_vector1.reshape(1, -1)
-    perpendicular_vector2_2d = perpendicular_vector2.reshape(1, -1)
+    orthogonal_vector1_2d = orthogonal_vector1.reshape(1, -1)
+    orthogonal_vector2_2d = orthogonal_vector2.reshape(1, -1)
     
 
-    perpendicular_similarity = cosine_similarity(perpendicular_vector1_2d, perpendicular_vector2_2d)[0][0]
+    orthogonal_similarity = cosine_similarity(orthogonal_vector1_2d, orthogonal_vector2_2d)[0][0]
 
-    indirect_bias = ((inner_product - perpendicular_similarity) / inner_product)
+    indirect_bias = ((inner_product - orthogonal_similarity) / inner_product)
 
     return indirect_bias
 
-def calcul_analogy_sparsified_normalized(sinr_vec, word_a, word_b, word_c, n=100):
+def compute_analogy_sparse_normalized(sinr_vec, word_a, word_b, word_c, n=100):
     """Solve analogy of the type A is to B as C is to D with sparsification and normalization.
 
     :param sinr_vec: SINrVectors object
@@ -829,7 +825,7 @@ def calcul_analogy_sparsified_normalized(sinr_vec, word_a, word_b, word_c, n=100
     :param word_c: string
     :param n: int, number of dimensions to keep after sparsification
 
-    :return: best predicted word of the dataset
+    :return: best predicted word of the dataset (word D) or None if not in the vocab.
     :rtype: string
     """
     if word_a in sinr_vec.vocab and word_b in sinr_vec.vocab and word_c in sinr_vec.vocab:

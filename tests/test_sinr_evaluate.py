@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 
 import sinr.graph_embeddings as ge
-from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer, clf_fit, clf_score, calcul_analogy_normalized, calcul_analogy_sparsified_normalized, calcul_analogy_value_zero, calc_direct_bias_sinr, calc_indirect_bias_sinr, project_vector, reject_vector, identify_gender_direction_sinr, eval_analogy_k, best_predicted_word_k
+from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer, clf_fit, clf_score, compute_analogy_normalized, compute_analogy_sparse_normalized, compute_analogy_value_zero, compute_direct_bias_sinr, compute_indirect_bias_sinr, project_vector, reject_vector, identify_gender_direction_sinr, eval_analogy_k, best_predicted_word_k
 import urllib.request
 import os
 import tempfile
@@ -103,12 +103,12 @@ class TestAnalogyFunctions(unittest.TestCase):
         word_c = "man"
         expected = "woman"
 
-        result = calcul_analogy_normalized(self.sinr_vec, word_a, word_b, word_c)
+        result = compute_analogy_normalized(self.sinr_vec, word_a, word_b, word_c)
 
         self.assertEqual(result, expected)
 
     def test_best_predicted_word_exclusion(self):
-        result = calcul_analogy_normalized(self.sinr_vec, "king", "queen", "king")
+        result = compute_analogy_normalized(self.sinr_vec, "king", "queen", "king")
         self.assertNotEqual(result, "king")
 
     def test_best_predicted_word_invalid_word(self):
@@ -117,7 +117,7 @@ class TestAnalogyFunctions(unittest.TestCase):
         word_c = "man"
         expected = None
 
-        result = calcul_analogy_normalized(self.sinr_vec, word_a, word_b, word_c)
+        result = compute_analogy_normalized(self.sinr_vec, word_a, word_b, word_c)
 
         self.assertIsNone(result)        
         
@@ -135,19 +135,19 @@ class TestCalculAnalogySparsifiedNormalized(unittest.TestCase):
         self.sinr_vec = MockSINrVectors(self.vocab, self.vectors)
 
     def test_correct_analogy(self):
-        result = calcul_analogy_sparsified_normalized(self.sinr_vec, "king", "queen", "man", n=2)
+        result = compute_analogy_sparse_normalized(self.sinr_vec, "king", "queen", "man", n=2)
         self.assertEqual(result, "woman")
 
     def test_nonexistent_word(self):
-        result = calcul_analogy_sparsified_normalized(self.sinr_vec, "dog", "queen", "man", n=2)
+        result = compute_analogy_sparse_normalized(self.sinr_vec, "dog", "queen", "man", n=2)
         self.assertIsNone(result)
 
     def test_small_n(self):
-        result = calcul_analogy_sparsified_normalized(self.sinr_vec, "king", "queen", "man", n=1)
+        result = compute_analogy_sparse_normalized(self.sinr_vec, "king", "queen", "man", n=1)
         self.assertEqual(result, "woman")
 
     def test_large_n(self):
-        result = calcul_analogy_sparsified_normalized(self.sinr_vec, "king", "queen", "man", n=10)
+        result = compute_analogy_sparse_normalized(self.sinr_vec, "king", "queen", "man", n=10)
         self.assertEqual(result, "woman")
 
 class TestCalculAnalogyValueZero(unittest.TestCase):
@@ -164,20 +164,20 @@ class TestCalculAnalogyValueZero(unittest.TestCase):
         self.sinr_vec = MockSINrVectors(self.vocab, self.vectors)
 
     def test_correct_analogy(self):
-        result = calcul_analogy_value_zero(self.sinr_vec, "king", "queen", "man")
+        result = compute_analogy_value_zero(self.sinr_vec, "king", "queen", "man")
         self.assertEqual(result, "woman")
 
     def test_nonexistent_word(self):
-        result = calcul_analogy_value_zero(self.sinr_vec, "dog", "queen", "man")
+        result = compute_analogy_value_zero(self.sinr_vec, "dog", "queen", "man")
         self.assertIsNone(result)
 
     def test_exclusion_of_words(self):
-        result = calcul_analogy_value_zero(self.sinr_vec, "king", "queen", "king")
+        result = compute_analogy_value_zero(self.sinr_vec, "king", "queen", "king")
         self.assertNotEqual(result, "king")
         self.assertNotEqual(result, "queen")
 
     def test_vector_clamping_to_zero(self):
-        result = calcul_analogy_value_zero(self.sinr_vec, "woman", "man", "queen")
+        result = compute_analogy_value_zero(self.sinr_vec, "woman", "man", "queen")
         self.assertIn(result, self.vocab)
         
 class TestBestPredictedWordK(unittest.TestCase):
@@ -265,7 +265,7 @@ class TestBiasFunctions(unittest.TestCase):
             self.sinr_vec, 
             self.config["gender"]["definitional_pairs"]
         )
-        bias = calc_direct_bias_sinr(
+        bias = compute_direct_bias_sinr(
             self.sinr_vec, 
             self.config["professions"], 
             direction
@@ -293,11 +293,11 @@ class TestIndirectBiasFunctions(unittest.TestCase):
         self.assertTrue(np.allclose(rejected_vector, np.array([0, 4])))
 
     def test_calc_indirect_bias_sinr(self):
-        similarity = calc_indirect_bias_sinr(self.sinr_vec, 'father', 'mother', self.gender_direction)
+        similarity = compute_indirect_bias_sinr(self.sinr_vec, 'father', 'mother', self.gender_direction)
         self.assertIsInstance(similarity, float)
 
     def test_calc_indirect_bias_sinr_edge_case(self):
-        similarity = calc_indirect_bias_sinr(self.sinr_vec, 'father', 'father', self.gender_direction)
+        similarity = compute_indirect_bias_sinr(self.sinr_vec, 'father', 'father', self.gender_direction)
         self.assertEqual(similarity, 0.0)
 
 if __name__ == '__main__':
