@@ -1,3 +1,5 @@
+import shutil
+import zipfile
 import numpy as np
 from numpy.linalg import norm
 import scipy
@@ -10,6 +12,12 @@ import os
 from tqdm.auto import tqdm
 import time
 import xgboost as xgb
+import json
+from sklearn.decomposition import PCA
+from sklearn.metrics.pairwise import cosine_similarity
+import itertools
+import matplotlib.pyplot as plt
+from pathlib import Path
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
@@ -150,6 +158,507 @@ def fetch_SimLex(which="665"):
     
     return data
 
+def find_txt_files(directory):
+    """Find all text files in a directory and its subdirectories.
+    
+    :param directory: path to the directory
+    :type directory: str
+    
+    :return: list of text files
+    :rtype: list
+    
+    """
+    
+    return Path(directory).rglob('*.txt')
+
+def remove_invalid_lines(content):
+    """Remove invalid lines from the content.
+    
+    :param content: content of the file
+    :type content: str
+    
+    :return: cleaned content
+    :rtype: str
+    
+    """
+    
+    lines = content.splitlines()
+    return '\n'.join(line.strip() for line in lines if '/' not in line)
+
+def format_lines(content):
+    """Format lines of the content.
+    
+    :param content: content of the file
+    :type content: str
+    
+    :return: formatted content
+    :rtype: str
+    
+    """
+    
+    words = content.split()
+    formatted_lines = []
+    for i in range(0, len(words), 4):
+        if i + 4 <= len(words):
+            formatted_lines.append(' '.join(words[i:i+4]))
+    return '\n'.join(formatted_lines)
+
+def fetch_analogy(langage):
+    """Fetch dataset for testing analogies
+    
+    :param langage: language of the dataset
+    :type langage: str
+    
+    :return: dictionary-like object. Keys of interest:
+                'X': matrix of 4 words per column
+    :rtype: sklearn.datasets.base.Bunch
+    
+    """
+    
+    if langage == 'fr':
+        file_url = 'https://p-lux4.pcloud.com/D4ZTKr4DFZbBl110ZZZTojfXkZ2ZZosLZkZxKzZ17ZzkZf7ZOn0J7Z9zGco5qAJ3J0iMfwMoEtUFhyrsmy/BATS_3.0.zip'
+    elif langage == 'en':
+        file_url = 'https://p-lux4.pcloud.com/D4ZTKr4DFZbBl110ZZZTojfXkZ2ZZosLZkZxKzZ17ZzkZf7ZOn0J7Z9zGco5qAJ3J0iMfwMoEtUFhyrsmy/BATS_3.0.zip'
+    else:
+        raise ValueError("Language is not recognized.")
+
+    file_name = 'dataset' + str(round(time.time() * 1000))
+    file_path = file_name + '.txt'  # Name of download file (TXT or CSV)
+    output_dir = file_name
+    data = file_name + '_merged_cleaned.txt'
+
+    with urllib.request.urlopen(file_url) as response:
+        with open(file_path, 'wb') as file:
+            file.write(response.read())
+
+    if zipfile.is_zipfile(file_path):
+        with zipfile.ZipFile(file_path, 'r') as zip_ref:
+            zip_ref.extractall(output_dir)
+        
+        os.remove(file_path)
+        print(f"Temporary file deleted : {file_path}")
+
+        txt_files = find_txt_files(output_dir)
+
+        if txt_files:
+            with open(data, 'w', encoding='utf-8') as merged_file:
+                for txt_file in txt_files:
+                    with open(txt_file, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                        cleaned_content = remove_invalid_lines(content)
+                        formatted_content = format_lines(cleaned_content)
+                        if formatted_content.strip():
+                            merged_file.write(formatted_content)
+                            merged_file.write('\n')
+
+            print(f"Clean merge completed: file created -> {data}")
+        else:
+            raise RuntimeError("No text files found in the ZIP archive.")
+
+        shutil.rmtree(output_dir)
+        print(f"Temporary folder deleted : {output_dir}")
+    else:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            cleaned_content = remove_invalid_lines(content)
+            formatted_content = format_lines(cleaned_content)
+            
+            if formatted_content.strip():
+                with open(data, 'w', encoding='utf-8') as merged_file:
+                    merged_file.write(formatted_content)
+
+        print(f"Text file processing complete: file created -> {data}")
+
+    try:
+        data_df = pd.read_csv(data, sep='\s+', header=None, names=['A', 'B', 'C', 'D'])
+    except Exception as e:
+        raise RuntimeError(f"Error reading the merged file: {e}")
+
+    data = Bunch(
+        X=data_df.values.tolist()
+    )
+
+    return data
+
+def normalize_vector(vector):
+    """
+    Normalize a vector.
+    
+    :param vector: vector to normalize
+    :type vector: numpy.ndarray
+    
+    :return: normalized vector
+    :rtype: numpy.ndarray
+    """
+    return vector / np.linalg.norm(vector)
+
+def best_predicted_word(sinr_vec, word_a, word_b, word_c):
+    """Solve analogy of the type A is to B as C is to D
+
+    :param sinr_vec: SINrVectors object
+    
+    :param word_a: string
+    :param word_b: string
+    :param word_c: string
+    
+    :return: best predicted word of the dataset (word D) or None if not in the vocab.
+    """
+    
+    if word_a in sinr_vec.vocab and word_b in sinr_vec.vocab and word_c in sinr_vec.vocab:
+        vector_a = sinr_vec.get_my_vector(word_a)
+        vector_b = sinr_vec.get_my_vector(word_b)
+        vector_c = sinr_vec.get_my_vector(word_c)
+
+        result_vector = normalize_vector(vector_b) - normalize_vector(vector_a) + normalize_vector(vector_c)
+
+        similarities = cosine_similarity(result_vector.reshape(1, -1), sinr_vec.vectors).flatten()
+        excluded_indices = [sinr_vec.vocab.index(word) for word in [word_a, word_b, word_c]]
+        for idx in excluded_indices:
+            similarities[idx] = -np.inf
+    
+        best_index = np.argmax(similarities)
+        return sinr_vec.vocab[best_index]
+    else:
+        return None
+
+def eval_analogy(sinr_vec, dataset, analogy_func):
+    """Compare the predicted with the expected word.
+    
+    :param sinr_vec: SINrVectors object
+    :param dataset: sklearn.datasets.base.Bunch
+                    dictionary-like object. Keys of interest:
+                    'X': matrix of 2 words per column,
+                    'y': vector with scores
+    
+    :return: error rate
+    :rtype: float
+    """
+    with open(dataset, 'r') as f:
+        lines = f.readlines()
+
+    valid_analogies = []
+
+    for line in lines:
+        line = line.strip()
+        if line.startswith(':'):
+            continue
+        
+        words = line.split()
+
+        word_a, word_b, word_c, expected = words
+
+        if (word_a in sinr_vec.vocab 
+            and word_b in sinr_vec.vocab
+            and word_c in sinr_vec.vocab
+            and expected in sinr_vec.vocab):
+            valid_analogies.append(line)
+
+    total_analogies = 0
+    correct_count = 0
+    incorrect_count = 0
+
+    for line in valid_analogies:
+        word_a, word_b, word_c, expected = line.split()
+        
+        predicted_word = analogy_func(sinr_vec, word_a, word_b, word_c)
+        if predicted_word is not None:
+            total_analogies += 1
+            if predicted_word == expected:
+                correct_count += 1
+            else:
+                incorrect_count += 1
+            
+    error_rate = incorrect_count / total_analogies if total_analogies > 0 else 0
+
+    print("\n=== Summary ===")
+    print(f"Total valid analogies processed: {total_analogies}")
+    print(f"Correct analogies: {correct_count}")
+    print(f"Incorrect analogies: {incorrect_count}")
+    print(f"Error rate: {error_rate:.2%}")
+
+    return error_rate
+
+def compute_analogy_value_zero(sinr_vec, word_a, word_b, word_c):
+    """Solve analogy of the type A is to B as C is to D with only positives values in the resulting vector
+
+    :param sinr_vec: SINrVectors object
+
+    :param word_a: string
+    :param word_b: string
+    :param word_c: string
+
+    :return: best predicted word of the dataset (word D) or None if not in the vocab.
+    :rtype: string
+    """
+    if word_a in sinr_vec.vocab and word_b in sinr_vec.vocab and word_c in sinr_vec.vocab:
+
+        vector_a = sinr_vec.vectors[sinr_vec.vocab.index(word_a)]
+        vector_b = sinr_vec.vectors[sinr_vec.vocab.index(word_b)]
+        vector_c = sinr_vec.vectors[sinr_vec.vocab.index(word_c)]
+
+        result_vector = vector_c - vector_a + vector_b
+
+        result_vector[result_vector < 0] = 0
+
+        similarities = cosine_similarity(result_vector.reshape(1, -1), sinr_vec.vectors).flatten()
+
+        excluded_indices = [sinr_vec.vocab.index(word) for word in [word_a, word_b, word_c]]
+        for idx in excluded_indices:
+            similarities[idx] = 0
+
+        best_index = np.argmax(similarities)
+        return sinr_vec.vocab[best_index]
+    
+    return None
+
+def compute_analogy_normalized(sinr_vec, word_a, word_b, word_c):
+    """Solve analogy of the type A is to B as C is to D with normalized values
+
+    :param sinr_vec: SINrVectors object
+
+    :param word_a: string
+    :param word_b: string
+    :param word_c: string
+
+    :return: best predicted word of the dataset
+    :rtype: string
+    """
+    if word_a in sinr_vec.vocab and word_b in sinr_vec.vocab and word_c in sinr_vec.vocab:
+
+        vector_a = sinr_vec.vectors[sinr_vec.vocab.index(word_a)]
+        vector_b = sinr_vec.vectors[sinr_vec.vocab.index(word_b)]
+        vector_c = sinr_vec.vectors[sinr_vec.vocab.index(word_c)]
+
+        result_vector = vector_c - vector_a + vector_b
+
+        result_vector[result_vector < 0] = 0
+
+        result_vector = result_vector / np.sum(result_vector)
+
+        similarities = cosine_similarity(result_vector.reshape(1, -1), sinr_vec.vectors).flatten()
+
+        excluded_indices = [sinr_vec.vocab.index(word) for word in [word_a, word_b, word_c]]
+        for idx in excluded_indices:
+            similarities[idx] = 0
+
+        best_index = np.argmax(similarities)
+        return sinr_vec.vocab[best_index]
+    
+    return None
+
+def best_predicted_word_k(sinr_vec, word_a, word_b, word_c, k=1):
+    """Predict the best word for the analogy A is to B as C is to D with k best words.
+    
+    :param sinr_vec: SINrVectors object
+    
+    :param word_a: string
+    :param word_b: string
+    :param word_c: string
+    :param k: int, number of best words to return (default is 1)
+    
+    :return: list of k best predicted words of the dataset or None if not in the vocab.
+    :rtype: list of strings
+    """
+    word_a, word_b, word_c = word_a.lower(), word_b.lower(), word_c.lower()
+    
+    if word_a in sinr_vec.vocab and word_b in sinr_vec.vocab and word_c in sinr_vec.vocab:
+        vector_a = sinr_vec.get_my_vector(word_a)
+        vector_b = sinr_vec.get_my_vector(word_b)
+        vector_c = sinr_vec.get_my_vector(word_c)
+
+        result_vector = normalize_vector(vector_b) - normalize_vector(vector_a) + normalize_vector(vector_c)
+        similarities = cosine_similarity(result_vector.reshape(1, -1), sinr_vec.vectors).flatten()
+        
+        excluded_indices = [sinr_vec.vocab.index(word) for word in [word_a, word_b, word_c]]
+        for idx in excluded_indices:
+            similarities[idx] = -np.inf
+        
+        top_indices = np.argsort(similarities)[-k:][::-1]
+        predicted_words = [sinr_vec.vocab[i] for i in top_indices]
+        return predicted_words
+    else:
+        return None
+    
+def eval_analogy_k(sinr_vec, dataset, analogy_func, k=1):
+    """Compare the predicted with the expected word with k best words.
+    
+    :param sinr_vec: SINrVectors object
+    :param dataset: sklearn.datasets.base.Bunch
+                    dictionary-like object. Keys of interest:
+                    'X': matrix of 2 words per column,
+                    'y': vector with scores
+    
+    :return: error rate
+    :rtype: float
+    """
+    with open(dataset, 'r') as f:
+        lines = f.readlines()
+
+    valid_analogies = []
+
+    for line in lines:
+        line = line.strip()
+        if line.startswith(':'):
+            continue
+        
+        words = line.split()
+
+        word_a, word_b, word_c, expected = words
+
+        if (word_a in sinr_vec.vocab 
+            and word_b in sinr_vec.vocab
+            and word_c in sinr_vec.vocab
+            and expected in sinr_vec.vocab):
+            valid_analogies.append(line)
+
+    total_analogies = 0
+    correct_count = 0
+    incorrect_count = 0
+
+    for line in valid_analogies:
+        word_a, word_b, word_c, expected = line.split()
+        
+        predicted_words = analogy_func(sinr_vec, word_a, word_b, word_c, k)
+        if predicted_words is not None:
+            total_analogies += 1
+            if expected in predicted_words:
+                correct_count += 1
+            else:
+                incorrect_count += 1
+            
+    error_rate = incorrect_count / total_analogies if total_analogies > 0 else 0
+
+    print("\n=== Category ===")
+    print(f"Total validated analogies: {total_analogies}")
+    print(f"Correct analogies: {correct_count}")
+    print(f"Incorrect analogies: {incorrect_count}")
+    print(f"Error rate: {error_rate:.2%}")
+
+    return error_rate
+
+
+def eval_analogy_by_category_k(sinr_vec, dataset, analogy_func, k=1):
+    """Evaluate analogy by category with k best words
+    
+    :param sinr_vec: SINrVectors object
+    :param dataset: sklearn.datasets.base.Bunch
+    :param analogy_func: function to use for analogy prediction
+    :param k: int, number of best words to return (default is 1)
+    
+    :return: dictionary with categories as keys and error rates as values
+    :rtype: dict
+    """
+    with open(dataset, 'r') as f:
+        lines = f.readlines()
+
+    current_category = "default"
+    categories = {}
+
+    for line in lines:
+        line = line.strip()
+        if line.startswith(':'):
+            current_category = line[1:].strip()
+            categories[current_category] = []
+        else:
+            words = line.split()
+            if len(words) != 4:
+                continue
+            word_a, word_b, word_c, expected = [w.lower() for w in words]
+            if (word_a in sinr_vec.vocab and 
+                word_b in sinr_vec.vocab and 
+                word_c in sinr_vec.vocab and 
+                expected in sinr_vec.vocab):
+                categories[current_category].append((word_a, word_b, word_c, expected))
+
+    results = {}
+    for category, analogies in categories.items():
+        total = 0
+        correct = 0
+        incorrect = 0
+        for word_a, word_b, word_c, expected in analogies:
+            predicted_words = analogy_func(sinr_vec, word_a, word_b, word_c, k)
+            if predicted_words is not None:
+                total += 1
+                if expected in predicted_words:
+                    correct += 1
+                else:
+                    incorrect += 1
+        error_rate = incorrect / total if total > 0 else 0
+        results[category] = {
+            'total': total,
+            'correct': correct,
+            'incorrect': incorrect,
+            'error_rate': error_rate
+        }
+        print("\n=== Category : {} ===".format(category))
+        print("Total validated analogies :", total)
+        print("Correct analogies :", correct)
+        print("Incorrect analogies :", incorrect)
+        print("Error rate : {:.2%}".format(error_rate))
+    return results
+
+def plot_global_error_rates(sinr_vec, file_path, best_predicted_word_k, ks):
+    """ Plot global error rates for different values of k
+    
+    :param sinr_vec: SINrVectors object
+    :param file_path: path to the dataset file
+    :param best_predicted_word_k: function to use for analogy prediction
+    :param ks: list of k values to evaluate - [1, 2, 5, 10]
+    """
+    global_error_rates = []
+
+    for k_val in ks:
+        err_rate = eval_analogy_k(sinr_vec, file_path, best_predicted_word_k, k=k_val)
+        global_error_rates.append(err_rate)
+
+    global_error_rates_pct = [rate * 100 for rate in global_error_rates]
+
+    plt.figure(figsize=(8, 5))
+    plt.plot(ks, global_error_rates_pct, marker='o')
+    plt.xlabel("k")
+    plt.ylabel("Global error rate (%)")
+    plt.title("Global error rate k values")
+    plt.xticks(ks)
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+def plot_category_error_rates(sinr_vec, file_path, best_predicted_word_k, ks):
+    """ Plot error rates by category for different values of k
+    
+    :param sinr_vec: SINrVectors object
+    :param file_path: path to the dataset file
+    :param best_predicted_word_k: function to use for analogy prediction
+    :param ks: list of k values to evaluate - [1, 2, 5, 10]
+    
+    """
+    category_error_rates = {}
+
+    for k_val in ks:
+        cat_results = eval_analogy_by_category_k(sinr_vec, file_path, best_predicted_word_k, k=k_val)
+        for cat, metrics in cat_results.items():
+            if cat not in category_error_rates:
+                category_error_rates[cat] = []
+            category_error_rates[cat].append(metrics['error_rate'] * 100)
+
+    categories = list(category_error_rates.keys())
+    n_categories = len(categories)
+    x = np.arange(n_categories)
+    width = 0.15
+
+    plt.figure(figsize=(12, 6))
+    for i, k_val in enumerate(ks):
+        error_vals = [category_error_rates[cat][i] for cat in categories]
+        plt.bar(x + i * width, error_vals, width, label=f'k={k_val}')
+
+    plt.xlabel("Category")
+    plt.ylabel("Global error rate (%)")
+    plt.title("Global error by category for k values")
+    plt.xticks(x + width * (len(ks) - 1) / 2, categories, rotation=45, ha='right')
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
 def eval_similarity(sinr_vec, dataset, print_missing=True):
     """Evaluate similarity with Spearman correlation
     
@@ -208,6 +717,146 @@ def eval_similarity(sinr_vec, dataset, print_missing=True):
         print(str(len(missing_words)) + ' missing words')
     
     return scipy.stats.spearmanr(cosine_sim, scores).correlation
+
+def project_vector(v,u):
+    normalize_u = normalize_vector(u)
+    return np.dot(v, normalize_u) * normalize_u
+
+def reject_vector(v, u):
+    "Compute the orthogonal projection of a vector onto a given direction."
+    return v - project_vector(v,u)
+
+def load_config(path):
+    with open(path, 'r') as f:
+        return json.load(f)
+
+def identify_gender_direction_sinr(sinr_vec, definitional_pairs, method="pca", positive_end="brother", negative_end="sister"):
+    """
+    Identifies the gender direction in a SINr model.
+
+    Parameters:
+    - sinr_vec: SINr model.
+    - positive_end: word representing the masculine gender.
+    - negative_end: word representing the feminine gender.
+    - definitional_pairs: list of word pairs defining gender.
+    - method: method used to compute the gender direction ('single', 'sum', 'pca').
+
+    Returns:
+    - A vector representing the gender direction.
+    """
+    if method == "single":
+        return normalize_vector(sinr_vec.get_my_vector(positive_end) - sinr_vec.get_my_vector(negative_end))
+    elif method == "sum":
+        group1 = np.sum([sinr_vec.get_my_vector(w1) for w1, w2 in definitional_pairs], axis=0)
+        group2 = np.sum([sinr_vec.get_my_vector(w2) for w1, w2 in definitional_pairs], axis=0)
+        return normalize_vector(group1 - group2)
+    elif method == "pca":
+        matrix = np.array([sinr_vec.get_my_vector(w1) - sinr_vec.get_my_vector(w2) for w1, w2 in definitional_pairs])
+        pca = PCA(n_components=1)
+        pca.fit(matrix)
+        return normalize_vector(pca.components_[0])
+    else:
+        raise ValueError("Invalid method. Use 'single', 'sum' or 'pca'.")
+
+def compute_direct_bias_sinr(sinr_vec, word_list, gender_direction, c=1):
+    """
+    Computes the direct bias of a set of words with respect to the gender direction
+    using cosine similarity.
+
+    Args:  
+        sinr_vec: SINr model.  
+        word_list: List of words to analyze. (professions in config.json)
+        gender_direction: Gender direction vector.  
+        c: Exponent applied to cosine similarity (default is c=1).  
+
+    Returns:  
+        float: Direct bias value.
+    """
+    word_vectors = [sinr_vec.get_my_vector(word) for word in word_list if word in sinr_vec.vocab]
+    if not word_vectors:
+        return 0.0
+    word_vectors = np.array(word_vectors)
+    gender_direction = gender_direction.reshape(1, -1)
+    cos_similarities = np.abs(cosine_similarity(word_vectors, gender_direction)).flatten()
+    return np.mean(cos_similarities ** c)
+
+
+def compute_indirect_bias_sinr(sinr_vec, word1, word2, direction):
+    """
+        Compute the indirect bias SINr model.
+
+        :param sinr_vec: SINr model.
+        :param word1: The first word.
+        :param word2: The second word.
+        :param direction: The gender direction.
+        :return: The gender component of the similarity between the two words.
+    """
+
+    vector1 = normalize_vector(sinr_vec.get_my_vector(word1))
+    vector2 = normalize_vector(sinr_vec.get_my_vector(word2))
+
+
+    gender_component1 = np.dot(vector1, direction) * direction
+    gender_component2 = np.dot(vector2, direction) * direction
+
+
+    orthogonal_vector1 = reject_vector(vector1, direction)
+    orthogonal_vector2 = reject_vector(vector2, direction)
+
+
+    inner_product = np.dot(vector1, vector2)
+
+    orthogonal_vector1_2d = orthogonal_vector1.reshape(1, -1)
+    orthogonal_vector2_2d = orthogonal_vector2.reshape(1, -1)
+    
+
+    orthogonal_similarity = cosine_similarity(orthogonal_vector1_2d, orthogonal_vector2_2d)[0][0]
+
+    indirect_bias = ((inner_product - orthogonal_similarity) / inner_product)
+
+    return indirect_bias
+
+def compute_analogy_sparse_normalized(sinr_vec, word_a, word_b, word_c, n=100):
+    """Solve analogy of the type A is to B as C is to D with sparsification and normalization.
+
+    :param sinr_vec: SINrVectors object
+    :param word_a: string
+    :param word_b: string
+    :param word_c: string
+    :param n: int, number of dimensions to keep after sparsification
+
+    :return: best predicted word of the dataset (word D) or None if not in the vocab.
+    :rtype: string
+    """
+    if word_a in sinr_vec.vocab and word_b in sinr_vec.vocab and word_c in sinr_vec.vocab:
+
+        vector_a = sinr_vec.vectors[sinr_vec.vocab.index(word_a)].toarray().flatten()
+        vector_b = sinr_vec.vectors[sinr_vec.vocab.index(word_b)].toarray().flatten()
+        vector_c = sinr_vec.vectors[sinr_vec.vocab.index(word_c)].toarray().flatten()
+
+
+        result_vector = vector_c - vector_a + vector_b
+
+        #Sparsification: keep only the n highest values
+        sparse_vector = np.zeros_like(result_vector)
+        top_indices = np.argsort(result_vector)[-n:]
+        sparse_vector[top_indices] = result_vector[top_indices]
+
+        #Normalization: ensure the sum is 1
+        sparse_vector = np.maximum(sparse_vector, 0)
+        sparse_vector = sparse_vector / np.sum(sparse_vector) if np.sum(sparse_vector) > 0 else sparse_vector
+
+        #print(f"Sparse Vector (normalized): {sparse_vector}")
+        #print(f"Sum of dimensions: {np.sum(sparse_vector)}")
+
+        similarities = cosine_similarity(sparse_vector.reshape(1, -1), sinr_vec.vectors).flatten()
+        excluded_indices = [sinr_vec.vocab.index(word) for word in [word_a, word_b, word_c]]
+        for idx in excluded_indices:
+            similarities[idx] = 0
+
+        best_index = np.argmax(similarities)
+        return sinr_vec.vocab[best_index]
+    return None
 
 def similarity_MEN_WS353_SCWS(sinr_vec, print_missing=True):
     """Evaluate similarity with MEN, WS353 and SCWS datasets

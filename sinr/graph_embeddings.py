@@ -1296,14 +1296,14 @@ class SINrVectors(object):
         return self.get_dimension_descriptors_idx(self.community_membership[index], topk)
 
     def get_dimension_descriptors_idx(self, index, topk=-1):
-        """Returns the objects that constitute the dimension of obj, i.e. the members of the community of obj
+        """Returns the objects that constitute the dimension idx, i.e. the members of the community idx 
 
-        :param topk: 1 returns all the members of the community, a positive int returns juste the `topk` members with
-        highest `nr` values on the community (Default value = -1)
+        :param topk: 1 returns all the members of the community, a positive int returns just the `topk` members with
+        highest `nr` values on the dimension (Default value = -1)
         :type topk: int
         :param index: the index of the dimension
         :type index: int
-        :returns: a set of object, the community of `obj`
+        :returns: a set of object, the community of index `index`
 
         """
         if self.communities_sets is None:
@@ -1349,13 +1349,13 @@ class SINrVectors(object):
 
     # Using top words to describe dimensions
     def get_dimension_stereotypes(self, obj, topk=5):
-        """Get the words with the highest values on dimension obj.
+        """Get the words with the highest values on the highest dimension of word obj.
 
         :param obj: id of a word, or label of a word (then turned into the id of its community)
         :type obj: int or str
         :param topk: topk value to consider on the dimension (Default value = 5)
         :type topk: int
-        :returns: the topk words that describe this dimension (highest values)
+        :returns: the topk words that describe this dimension (highest values for the highest dimension of obj)
 
         """
         index = self._get_index(obj)
@@ -1367,8 +1367,6 @@ class SINrVectors(object):
     def get_dimension_stereotypes_idx(self, idx, topk=5):
         """Get the indices of the words with the highest values on dimension obj.
 
-        :param obj: id of a dimension, or label of a word (then turned into the id of its community)
-        :type obj: int or str
         :param topk: `topk` value to consider on the dimension (Default value = 5)
         :type topk: int
         :param idx: dimension to fetch `topk` on

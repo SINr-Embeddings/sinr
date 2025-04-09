@@ -5,11 +5,15 @@ python -m sinr.tests.test_sinr_evaluate
 
 import pytest
 import unittest
+import numpy as np
 
 import sinr.graph_embeddings as ge
-from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer, clf_fit, clf_score
+from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer, clf_fit, clf_score, compute_analogy_normalized, compute_analogy_sparse_normalized, compute_analogy_value_zero, compute_direct_bias_sinr, compute_indirect_bias_sinr, project_vector, reject_vector, identify_gender_direction_sinr, eval_analogy_k, best_predicted_word_k
 import urllib.request
 import os
+import tempfile
+
+from scipy.sparse import csr_matrix
 
 
 class TestSinr_embeddings(unittest.TestCase):
@@ -68,6 +72,233 @@ class TestSinr_embeddings(unittest.TestCase):
         
         self.assertTrue(score <= 1 and score >= 0)
         
+class MockSINrVectors:
+    """Mock SINrVectors class for testing analogy functions."""
+    def __init__(self, vocab, vectors):
+        self.vocab = vocab
+        self.vectors = csr_matrix(vectors)
+        
+    def get_my_vector(self, word):
+        if word in self.vocab:
+            vec = self.vectors[self.vocab.index(word)]
+            return vec.toarray().flatten()
+        raise ValueError(f"Word '{word}' not found in vocab.")
+        
+class TestAnalogyFunctions(unittest.TestCase):
+    """Tests for analogy functions."""
+    def setUp(self):
+        """Set up a simple vocabulary and vectors for testing."""
+        vocab = ["king", "queen", "man", "woman"]
+        vectors = np.array([
+            [0.8, 0.2, 0.0],  # "king"
+            [0.7, 0.3, 0.0],  # "queen"
+            [0.6, 0.4, 0.0],  # "man"
+            [0.5, 0.5, 0.0],  # "woman"
+        ])
+        self.sinr_vec = MockSINrVectors(vocab, vectors)
+
+    def test_best_predicted_word_correct(self):
+        word_a = "king"
+        word_b = "queen"
+        word_c = "man"
+        expected = "woman"
+
+        result = compute_analogy_normalized(self.sinr_vec, word_a, word_b, word_c)
+
+        self.assertEqual(result, expected)
+
+    def test_best_predicted_word_exclusion(self):
+        result = compute_analogy_normalized(self.sinr_vec, "king", "queen", "king")
+        self.assertNotEqual(result, "king")
+
+    def test_best_predicted_word_invalid_word(self):
+        word_a = "dog"
+        word_b = "queen"
+        word_c = "man"
+        expected = None
+
+        result = compute_analogy_normalized(self.sinr_vec, word_a, word_b, word_c)
+
+        self.assertIsNone(result)        
+        
+class TestCalculAnalogySparsifiedNormalized(unittest.TestCase):
+    """Tests for `calcul_analogy_sparsified_normalized` function."""
+    def setUp(self):
+        self.vocab = ["king", "queen", "man", "woman", "child"]
+        self.vectors = np.array([
+            [0.8, 0.1, 0.1, 0.0],  # king
+            [0.7, 0.2, 0.1, 0.0],  # queen
+            [0.6, 0.3, 0.1, 0.0],  # man
+            [0.5, 0.4, 0.1, 0.0],  # woman
+            [0.2, 0.1, 0.7, 0.0],  # child
+        ])
+        self.sinr_vec = MockSINrVectors(self.vocab, self.vectors)
+
+    def test_correct_analogy(self):
+        result = compute_analogy_sparse_normalized(self.sinr_vec, "king", "queen", "man", n=2)
+        self.assertEqual(result, "woman")
+
+    def test_nonexistent_word(self):
+        result = compute_analogy_sparse_normalized(self.sinr_vec, "dog", "queen", "man", n=2)
+        self.assertIsNone(result)
+
+    def test_small_n(self):
+        result = compute_analogy_sparse_normalized(self.sinr_vec, "king", "queen", "man", n=1)
+        self.assertEqual(result, "woman")
+
+    def test_large_n(self):
+        result = compute_analogy_sparse_normalized(self.sinr_vec, "king", "queen", "man", n=10)
+        self.assertEqual(result, "woman")
+
+class TestCalculAnalogyValueZero(unittest.TestCase):
+    """Tests for `calcul_analogy_value_zero` function."""
+    def setUp(self):
+        self.vocab = ["king", "queen", "man", "woman", "child"]
+        self.vectors = np.array([
+            [0.8, 0.1, 0.1, 0.0],  # king
+            [0.7, 0.2, 0.1, 0.0],  # queen
+            [0.6, 0.3, 0.1, 0.0],  # man
+            [0.5, 0.4, 0.1, 0.0],  # woman
+            [0.2, 0.1, 0.7, 0.0],  # child
+        ])
+        self.sinr_vec = MockSINrVectors(self.vocab, self.vectors)
+
+    def test_correct_analogy(self):
+        result = compute_analogy_value_zero(self.sinr_vec, "king", "queen", "man")
+        self.assertEqual(result, "woman")
+
+    def test_nonexistent_word(self):
+        result = compute_analogy_value_zero(self.sinr_vec, "dog", "queen", "man")
+        self.assertIsNone(result)
+
+    def test_exclusion_of_words(self):
+        result = compute_analogy_value_zero(self.sinr_vec, "king", "queen", "king")
+        self.assertNotEqual(result, "king")
+        self.assertNotEqual(result, "queen")
+
+    def test_vector_clamping_to_zero(self):
+        result = compute_analogy_value_zero(self.sinr_vec, "woman", "man", "queen")
+        self.assertIn(result, self.vocab)
+        
+class TestBestPredictedWordK(unittest.TestCase):
+    """Tests for `best_predicted_word_k` function."""
+    def setUp(self):
+        self.vocab = ["king", "queen", "man", "woman"]
+        self.vectors = [
+            [0.8, 0.2],
+            [0.7, 0.3],
+            [0.6, 0.4],
+            [0.5, 0.5],
+        ]
+        self.sinr_vec = MockSINrVectors(self.vocab, self.vectors)
+
+    def test_analogy_correct(self):
+        result = best_predicted_word_k(self.sinr_vec, "king", "queen", "man", k=1)
+        self.assertIn("woman", result)
+
+    def test_invalid_word(self):
+        result = best_predicted_word_k(self.sinr_vec, "foo", "queen", "man", k=1)
+        self.assertIsNone(result)
+
+    def test_exclusion_from_results(self):
+        result = best_predicted_word_k(self.sinr_vec, "king", "queen", "king", k=1)
+        self.assertNotIn("king", result)
+        
+class TestEvalAnalogyK(unittest.TestCase):
+    """Tests for `eval_analogy_k` function."""
+    def setUp(self):
+        self.vocab = ["king", "queen", "man", "woman"]
+        self.vectors = [
+            [0.8, 0.2],
+            [0.7, 0.3],
+            [0.6, 0.4],
+            [0.5, 0.5],
+        ]
+        self.sinr_vec = MockSINrVectors(self.vocab, self.vectors)
+
+        self.temp_file = tempfile.NamedTemporaryFile(delete=False, mode='w+', suffix='.txt')
+        self.temp_file.write(": capital-common-countries\n")
+        self.temp_file.write("king queen man woman\n")
+        self.temp_file.write("man woman king queen\n")
+        self.temp_file.flush()
+
+    def tearDown(self):
+        os.unlink(self.temp_file.name)
+
+    def test_eval_analogy(self):
+        error_rate = eval_analogy_k(self.sinr_vec, self.temp_file.name, best_predicted_word_k, k=1)
+        self.assertTrue(0 <= error_rate <= 1)
+
+class MockClassSINr:
+    def __init__(self, vocab, vectors):
+        self.vocab = vocab  
+        self.vectors = vectors
+
+    def get_my_vector(self, word):
+        if word in self.vocab:
+            return self.vectors[self.vocab.index(word)]
+        raise ValueError(f"Word '{word}' not found in vocab.")
+
+class TestBiasFunctions(unittest.TestCase):
+    def setUp(self):
+        self.vocab = ["men", "woman", "father", "mother", "male", "female", "actor", "actress"]
+        vectors = [np.random.rand(300) for _ in range(len(self.vocab))]
+        self.sinr_vec = MockClassSINr(self.vocab, vectors)
+
+        self.config = {
+            "gender": {
+                "definitional_pairs": [["men", "woman"], ["father", "mother"]]
+            },
+            "professions": ["actor", "actress"]
+        }
+
+    def test_gender_direction(self):
+        direction = identify_gender_direction_sinr(
+            self.sinr_vec, 
+            self.config["gender"]["definitional_pairs"], 
+            method="pca"
+        )
+        self.assertEqual(direction.shape[0], 300)
+
+    def test_direct_bias(self):
+        direction = identify_gender_direction_sinr(
+            self.sinr_vec, 
+            self.config["gender"]["definitional_pairs"]
+        )
+        bias = compute_direct_bias_sinr(
+            self.sinr_vec, 
+            self.config["professions"], 
+            direction
+        )
+        self.assertTrue(0 <= bias <= 1)
+        
+class TestIndirectBiasFunctions(unittest.TestCase):
+    def setUp(self):
+        self.vocab = ['father', 'mother', 'he', 'she']
+        np.random.seed(42)  
+        vectors = [np.random.rand(300) for _ in range(len(self.vocab))]
+        self.sinr_vec = MockClassSINr(self.vocab, vectors)
+        self.gender_direction = np.random.rand(300)
+
+    def test_project_vector(self):
+        v = np.array([3, 4])
+        u = np.array([1, 0])
+        projected_vector = project_vector(v, u)
+        self.assertTrue(np.allclose(projected_vector, np.array([3, 0])))
+
+    def test_reject_vector(self):
+        v = np.array([3, 4])
+        u = np.array([1, 0])
+        rejected_vector = reject_vector(v, u)
+        self.assertTrue(np.allclose(rejected_vector, np.array([0, 4])))
+
+    def test_calc_indirect_bias_sinr(self):
+        similarity = compute_indirect_bias_sinr(self.sinr_vec, 'father', 'mother', self.gender_direction)
+        self.assertIsInstance(similarity, float)
+
+    def test_calc_indirect_bias_sinr_edge_case(self):
+        similarity = compute_indirect_bias_sinr(self.sinr_vec, 'father', 'father', self.gender_direction)
+        self.assertEqual(similarity, 0.0)
 
 if __name__ == '__main__':
     unittest.main()
