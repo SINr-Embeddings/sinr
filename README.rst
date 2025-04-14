@@ -152,6 +152,7 @@ documentation <https://sinr-embeddings.github.io/sinr/publications.html>`__.
   (\`10.1093/comnet/cnae034 <https://dx.doi.org/10.1093/comnet/cnae034>`__ \).
   `⟨hal-04829653⟩ <https://hal.science/hal-04829653v1>`__
 
+=======
 
 **Initial SINr paper, 2021**
 
@@ -192,6 +193,7 @@ documentation <https://sinr-embeddings.github.io/sinr/publications.html>`__.
    French Regional Conference on Complex Systems, May 2023, Le Havre, France. pp.215, 
    `⟨10.5281/zenodo.7957531⟩ <https://dx.doi.org/10.5281/zenodo.7957531>`. `⟨hal-04113024⟩ <https://hal.science/hal-04113024v1>`__ 
 
+=======
    
    
 .. |languages| image:: https://img.shields.io/github/languages/count/SINr-Embeddings/sinr
