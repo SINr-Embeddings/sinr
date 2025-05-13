@@ -18,6 +18,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 import itertools
 import matplotlib.pyplot as plt
 from pathlib import Path
+import sinr.graph_embeddings as ge
+from joblib import Parallel, delayed
+from statistics import mean 
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
@@ -857,6 +860,60 @@ def compute_analogy_sparse_normalized(sinr_vec, word_a, word_b, word_c, n=100):
         best_index = np.argmax(similarities)
         return sinr_vec.vocab[best_index]
     return None
+
+def varnn(model1, model2, word):
+    """Computes varnn for each word is model1 also present in model2
+    
+    :param model1: a SINrVectors object
+    :type model1: SINrVectors
+    :param model2: a second SINrVectors object
+    :type model2: SINrVectors:
+    :param word: an item in the vocabulary of the first model
+    :type word: str
+    :returns: Results of varnn between model1 and model2 on a single word as pierrejean score, the 1 - the proportion of shared neighbors, and a flat score the number of different neighbors
+    :rtype: tuple
+
+    """
+    #assuming the models are initialized with 25 neighbors as in the baseline implementation
+    neighbor1 = model1.most_similar(word)
+    neighbor2 = model2.most_similar(word)
+    neighborhood1 = set([t[0] for t in neighbor1['neighbors ']])
+    neighborhood2 = set([t[0] for t in neighbor2['neighbors ']])
+    metric_pierrejean = 1-(len(neighbor1.intersection(neighbor2))/len(neighbor1))
+    metric_flats = 25-len(neighbor1.intersection(neighbor2))
+    return (metric_pierrejean, metric_flats)
+
+def varnn_across_models(model1, model2):
+    """Computes varnn for each word is model1 also present in model2
+    
+    :param model1: a SINrVectors object
+    :type model1: SINrVectors
+    :param model2: a second SINrVectors object
+    :type model2: SINrVectors:
+    :returns: Results of varnn on the total vocabulary of model1
+    :rtype: list of tuples
+
+    """
+    sinr_vectors_1 = ge.SINrVectors(model1)
+    sinr_vectors_2 = ge.SINrVectors(model2)
+    sinr_vectors_1.load()
+    sinr_vectors_2.load()
+    res = Parallel(n_jobs=-1)(delayed(varnn)(sinr_vectors_1,sinr_vectors_2,w) for w in sinr_vectors_1.vocab)
+    return res
+
+def scores_varnn(model1, model2):
+    """Computes mean of pierrejean score on the shared vocabulary of model1 and model2
+    
+    :param model1: a SINrVectors object
+    :type model1: SINrVectors
+    :param model2: a second SINrVectors object
+    :type model2: SINrVectors:
+    :returns: A score of varnn between the two models
+    :rtype: float
+    """
+    res_per_word=varnn_across_models(model1, model2)
+    res_per_word_pierrejean = [i[0] for i in res_per_word]
+    return mean(res_per_word_pierrejean)
 
 def similarity_MEN_WS353_SCWS(sinr_vec, print_missing=True):
     """Evaluate similarity with MEN, WS353 and SCWS datasets
