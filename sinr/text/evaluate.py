@@ -9,6 +9,7 @@ import sklearn.metrics as metrics
 import pandas as pd
 import urllib.request
 import os
+from sklearn.neighbors import NearestNeighbors
 from tqdm.auto import tqdm
 import time
 import xgboost as xgb
@@ -861,7 +862,26 @@ def compute_analogy_sparse_normalized(sinr_vec, word_a, word_b, word_c, n=100):
         return sinr_vec.vocab[best_index]
     return None
 
-def varnn(model1, model2, word):
+def varnn(set1, set2, k=25):
+    """
+    Computes varnn metrics from two neighbor sets.
+    
+    :param set1: set of neighbors (e.g. from model1)
+    :type set1: set
+    :param set2: set of neighbors (e.g. from model2)
+    :type set2: set
+    :param k: number of neighbors used to compute the sets (default 25)
+    :type k: int
+    :returns: pierrejean score and flat score
+    :rtype: tuple
+    """
+    intersection_len = len(set1.intersection(set2))
+    metric_pierrejean = 1 - (intersection_len / len(set1))
+    metric_flats = k - intersection_len
+    
+    return (metric_pierrejean, metric_flats)
+
+def varnn_from_models(model1, model2, word, k=25, nn1=None, nn2=None):
     """Computes varnn for each word is model1 also present in model2
     
     :param model1: a SINrVectors object
@@ -870,38 +890,57 @@ def varnn(model1, model2, word):
     :type model2: SINrVectors:
     :param word: an item in the vocabulary of the first model
     :type word: str
+    :param k: number of neighbors used to compute the sets (default 25)
+    :type k: int
+    :param nn1: NearestNeighbors object for model1 (default None)
+    :type nn1: NearestNeighbors
+    :param nn2: NearestNeighbors object for model2 (default None)
+    :type nn2: NearestNeighbors
     :returns: Results of varnn between model1 and model2 on a single word as pierrejean score, the 1 - the proportion of shared neighbors, and a flat score the number of different neighbors
     :rtype: tuple
 
     """
-    #assuming the models are initialized with 25 neighbors as in the baseline implementation
-    neighbor1 = model1.most_similar(word)
-    neighbor2 = model2.most_similar(word)
-    neighborhood1 = set([t[0] for t in neighbor1['neighbors ']])
-    neighborhood2 = set([t[0] for t in neighbor2['neighbors ']])
-    metric_pierrejean = 1-(len(neighbor1.intersection(neighbor2))/len(neighbor1))
-    metric_flats = 25-len(neighbor1.intersection(neighbor2))
-    return (metric_pierrejean, metric_flats)
+    index1 = model1._get_index(word)
+    index2 = model2._get_index(word)
+    
+    if nn1 is None:
+        nn1 = NearestNeighbors(n_neighbors=k, metric='cosine').fit(model1.vectors)
+    if nn2 is None:
+        nn2 = NearestNeighbors(n_neighbors=k, metric='cosine').fit(model2.vectors)
 
-def varnn_across_models(model1, model2):
+    _, idxs1 = nn1.kneighbors(model1.vectors[index1])
+    _, idxs2 = nn2.kneighbors(model2.vectors[index2])
+
+    neighbors1 = set(model1.vocab[i] for i in idxs1.flatten()[1:])
+    neighbors2 = set(model2.vocab[i] for i in idxs2.flatten()[1:])
+    
+    return varnn(neighbors1, neighbors2, k)
+
+def varnn_across_models(model1, model2, k=25):
     """Computes varnn for each word is model1 also present in model2
     
     :param model1: a SINrVectors object
     :type model1: SINrVectors
     :param model2: a second SINrVectors object
     :type model2: SINrVectors:
+    :param k: number of neighbors used to compute the sets (default 25)
+    :type k: int
     :returns: Results of varnn on the total vocabulary of model1
     :rtype: list of tuples
 
     """
-    sinr_vectors_1 = ge.SINrVectors(model1)
-    sinr_vectors_2 = ge.SINrVectors(model2)
-    sinr_vectors_1.load()
-    sinr_vectors_2.load()
-    res = Parallel(n_jobs=-1)(delayed(varnn)(sinr_vectors_1,sinr_vectors_2,w) for w in sinr_vectors_1.vocab)
+    # Determining common vocabulary
+    shared_vocabulary = set(model1.vocab).intersection(set(model2.vocab))
+    
+    nn1 = NearestNeighbors(n_neighbors=k, metric='cosine').fit(model1.vectors)
+    nn2 = NearestNeighbors(n_neighbors=k, metric='cosine').fit(model2.vectors)
+    
+    res = Parallel(n_jobs=-1)(
+        delayed(varnn_from_models)(model1, model2, w, k, nn1, nn2) for w in tqdm(shared_vocabulary, desc="varnn calc", unit="word")
+    )
     return res
 
-def scores_varnn(model1, model2):
+def scores_varnn(model1, model2, k=25):
     """Computes mean of pierrejean score on the shared vocabulary of model1 and model2
     
     :param model1: a SINrVectors object
@@ -911,7 +950,7 @@ def scores_varnn(model1, model2):
     :returns: A score of varnn between the two models
     :rtype: float
     """
-    res_per_word=varnn_across_models(model1, model2)
+    res_per_word=varnn_across_models(model1, model2, k)
     res_per_word_pierrejean = [i[0] for i in res_per_word]
     return mean(res_per_word_pierrejean)
 
