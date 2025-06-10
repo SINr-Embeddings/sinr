@@ -1,7 +1,7 @@
 import shutil
 import zipfile
 import numpy as np
-from numpy.linalg import norm
+from numpy.linalg import norm, svd
 import scipy
 from scipy import stats
 from sklearn.datasets._base import Bunch
@@ -22,6 +22,7 @@ from pathlib import Path
 import sinr.graph_embeddings as ge
 from joblib import Parallel, delayed
 from statistics import mean 
+from collections import OrderedDict
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
@@ -953,6 +954,165 @@ def scores_varnn(model1, model2, k=25):
     res_per_word=varnn_across_models(model1, model2, k)
     res_per_word_pierrejean = [i[0] for i in res_per_word]
     return mean(res_per_word_pierrejean)
+
+def _compute_procrustes_rotation(src_model, tgt_model):
+    """
+    Compute the Procrustes rotation matrix between two SINr models.
+    :param src_model: Source SINrVectors model.
+    :param tgt_model: Target SINrVectors model.
+    
+    :return: Alignment matrix that aligns the source model to the target model.
+    :rtype: numpy.ndarray
+    """
+    src_vocab = set(src_model.vocab)
+    tgt_vocab = set(tgt_model.vocab)
+    common = sorted(src_vocab & tgt_vocab)
+    if not common:
+        raise ValueError("No word in common between the two models.")
+
+    X = np.vstack([src_model.get_my_vector(w) for w in common])
+    Y = np.vstack([tgt_model.get_my_vector(w) for w in common])
+
+    Prod = Y.T.dot(X)
+
+    U, _, Vt = svd(Prod, full_matrices=False)
+
+    alignment_matrix = U.dot(Vt)
+    return alignment_matrix 
+
+def _align_vectors(src_model, tgt_model, word):
+    """
+    Align the vectors of two SINr models using Procrustes.
+    :param src_model: Source SINrVectors model.
+    :param tgt_model: Target SINrVectors model.
+    
+    :return: Tuple of aligned target vector and source vector.
+    :rtype: tuple (numpy.ndarray, numpy.ndarray)
+    """
+    if word not in src_model.vocab:
+        raise ValueError(f"The word '{word}' does not exist in the vocabulary of the first model.")
+    if word not in tgt_model.vocab:
+        raise ValueError(f"The word '{word}' does not exist in the vocabulary of the second model.")
+
+    alignment_matrix = _compute_procrustes_rotation(src_model, tgt_model)
+
+    v_src = src_model.get_my_vector(word)
+    v_tgt = tgt_model.get_my_vector(word)
+
+    v_tgt_aligned = alignment_matrix.T.dot(v_tgt)
+    
+    return v_tgt_aligned, v_src
+    
+
+def cosine_similarity_aligned(src_model, tgt_model, word):
+    """
+    Compute cosine similarity between two aligned SINr models for a given word.
+    :param src_model: Source SINrVectors model.
+    :param tgt_model: Target SINrVectors model.
+    :param word: Word to compute similarity for.
+    
+    :return: Cosine similarity between the aligned vectors of the word in both models.
+    :rtype: float
+    """
+    v_tgt_aligned, v_src = _align_vectors(src_model, tgt_model, word)
+
+    sim = np.dot(v_src, v_tgt_aligned) / (norm(v_src) * norm(v_tgt_aligned))
+    return float(sim)
+
+def difference_vector_aligned(src_model, tgt_model, word):
+    """
+    Compute the difference vector between the aligned vectors of a word in two SINr models.
+    :param src_model: Source SINrVectors model.
+    :param tgt_model: Target SINrVectors model.
+    :param word: Word to compute the difference vector for.
+    
+    :return: Difference vector between the aligned target vector and the source vector.
+    :rtype: numpy.ndarray
+    """
+    v_tgt_aligned, v_src = _align_vectors(src_model, tgt_model, word)
+
+    diff = v_tgt_aligned - v_src
+
+    return diff
+
+def compute_change_norms(src_model, tgt_model, words):
+    """
+    Compute the norms of change vectors for a list of words between two aligned SINr models.
+    :param src_model: Source SINrVectors model.
+    :param tgt_model: Target SINrVectors model.
+    :param words: List of words to compute change norms for.
+    
+    :return: Dictionary with words as keys and their change norms as values.
+    :rtype: dict
+    """
+    results = {}
+    for w in words:
+        if w not in src_model.vocab or w not in tgt_model.vocab:
+            results[w] = None
+
+        diff_vec = difference_vector_aligned(src_model, tgt_model, w)
+        results[w] = float(np.linalg.norm(diff_vec))
+
+    valid = {w: results[w] for w in results if results[w] is not None}
+    missing = [w for w in results if results[w] is None]
+
+    sorted_valid = OrderedDict(
+        sorted(valid.items(), key=lambda item: item[1], reverse=True)
+    )
+
+    for w in missing:
+        sorted_valid[w] = None
+
+    return sorted_valid
+
+def get_change_vectors(src_model, tgt_model, words=None):
+    """
+    Compute change vectors for a list of words between two aligned SINr models.
+    :param src_model: Source SINrVectors model.
+    :type src_model: SINrVectors
+    :param tgt_model: Target SINrVectors model.
+    :type tgt_model: SINrVectors
+    :param words: List of words to compute change vectors for. If None, uses the common vocabulary.
+    
+    :return: Dictionary with words as keys and their change vectors as values.
+    :rtype: dict
+    """
+    if words is None:
+        common_vocab = sorted(set(src_model.vocab) & set(tgt_model.vocab))
+    else:
+        common_vocab = [w for w in words if w in src_model.vocab and w in tgt_model.vocab]
+
+    change_vectors = {}
+    for w in common_vocab:
+        diff_vec = difference_vector_aligned(src_model, tgt_model, w)
+        change_vectors[w] = diff_vec
+
+    return change_vectors
+
+def compute_similarity_matrix(change_vectors):
+    """
+    Compute a similarity matrix from change vectors.
+    :param change_vectors: Dictionary with words as keys and their change vectors as values.
+    :type change_vectors: dict
+    
+    :return: Tuple of words list and similarity matrix.
+    :rtype: tuple (list, numpy.ndarray)
+    """
+    words_list = list(change_vectors.keys())
+    n = len(words_list)
+
+    S = np.zeros((n, n), dtype=float)
+
+    V = np.stack([change_vectors[w] for w in words_list])
+    norms = np.linalg.norm(V, axis=1, keepdims=True)
+    
+    nonzero = norms[:, 0] > 0
+    V_normalized = V.copy()
+    V_normalized[nonzero] = V_normalized[nonzero] / norms[nonzero]
+
+    S = V_normalized.dot(V_normalized.T)
+
+    return words_list, S
 
 def similarity_MEN_WS353_SCWS(sinr_vec, print_missing=True):
     """Evaluate similarity with MEN, WS353 and SCWS datasets
