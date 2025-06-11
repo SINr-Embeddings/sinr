@@ -980,11 +980,13 @@ def _compute_procrustes_rotation(src_model, tgt_model):
     alignment_matrix = U.dot(Vt)
     return alignment_matrix 
 
-def _align_vectors(src_model, tgt_model, word):
+def _align_vectors(src_model, tgt_model, word, alignment_matrix=None):
     """
     Align the vectors of two SINr models using Procrustes.
     :param src_model: Source SINrVectors model.
     :param tgt_model: Target SINrVectors model.
+    :param word: Word to align vectors for.
+    :param R: Procrustes rotation matrix. If None, it will be computed.
     
     :return: Tuple of aligned target vector and source vector.
     :rtype: tuple (numpy.ndarray, numpy.ndarray)
@@ -994,7 +996,8 @@ def _align_vectors(src_model, tgt_model, word):
     if word not in tgt_model.vocab:
         raise ValueError(f"The word '{word}' does not exist in the vocabulary of the second model.")
 
-    alignment_matrix = _compute_procrustes_rotation(src_model, tgt_model)
+    if alignment_matrix is None:
+        alignment_matrix = _compute_procrustes_rotation(src_model, tgt_model)
 
     v_src = src_model.get_my_vector(word)
     v_tgt = tgt_model.get_my_vector(word)
@@ -1019,42 +1022,48 @@ def cosine_similarity_aligned(src_model, tgt_model, word):
     sim = np.dot(v_src, v_tgt_aligned) / (norm(v_src) * norm(v_tgt_aligned))
     return float(sim)
 
-def difference_vector_aligned(src_model, tgt_model, word):
+def difference_vector_aligned(src_model, tgt_model, word, alignment_matrix=None):
     """
     Compute the difference vector between the aligned vectors of a word in two SINr models.
     :param src_model: Source SINrVectors model.
     :param tgt_model: Target SINrVectors model.
     :param word: Word to compute the difference vector for.
+    :param R: Procrustes rotation matrix. If None, it will be computed.
     
     :return: Difference vector between the aligned target vector and the source vector.
     :rtype: numpy.ndarray
     """
-    v_tgt_aligned, v_src = _align_vectors(src_model, tgt_model, word)
+    v_tgt_aligned, v_src = _align_vectors(src_model, tgt_model, word, alignment_matrix=alignment_matrix)
 
     diff = v_tgt_aligned - v_src
 
     return diff
 
-def compute_change_norms(src_model, tgt_model, words):
+def compute_change_norms(src_model, tgt_model, words, n_jobs=-1):
     """
     Compute the norms of change vectors for a list of words between two aligned SINr models.
     :param src_model: Source SINrVectors model.
     :param tgt_model: Target SINrVectors model.
     :param words: List of words to compute change norms for.
+    :param n_jobs: Number of parallel jobs to run. If -1, uses all available cores.
     
     :return: Dictionary with words as keys and their change norms as values.
     :rtype: dict
     """
-    results = {}
-    for w in words:
+    alignment_matrix = _compute_procrustes_rotation(src_model, tgt_model)
+
+    def compute_one(w):
         if w not in src_model.vocab or w not in tgt_model.vocab:
-            results[w] = None
+            return (w, None)
+        diff_vec = difference_vector_aligned(src_model, tgt_model, w, alignment_matrix=alignment_matrix)
+        return (w, float(np.linalg.norm(diff_vec)))
 
-        diff_vec = difference_vector_aligned(src_model, tgt_model, w)
-        results[w] = float(np.linalg.norm(diff_vec))
+    results = Parallel(n_jobs=n_jobs)(
+        delayed(compute_one)(w) for w in tqdm(words)
+    )
 
-    valid = {w: results[w] for w in results if results[w] is not None}
-    missing = [w for w in results if results[w] is None]
+    valid = {w: v for (w, v) in results if v is not None}
+    missing = [w for (w, v) in results if v is None]
 
     sorted_valid = OrderedDict(
         sorted(valid.items(), key=lambda item: item[1], reverse=True)
@@ -1065,7 +1074,7 @@ def compute_change_norms(src_model, tgt_model, words):
 
     return sorted_valid
 
-def get_change_vectors(src_model, tgt_model, words=None):
+def get_change_vectors(src_model, tgt_model, words=None, n_jobs=-1):
     """
     Compute change vectors for a list of words between two aligned SINr models.
     :param src_model: Source SINrVectors model.
@@ -1073,21 +1082,27 @@ def get_change_vectors(src_model, tgt_model, words=None):
     :param tgt_model: Target SINrVectors model.
     :type tgt_model: SINrVectors
     :param words: List of words to compute change vectors for. If None, uses the common vocabulary.
+    :param n_jobs: Number of parallel jobs to run. If -1, uses all available cores.
     
     :return: Dictionary with words as keys and their change vectors as values.
     :rtype: dict
     """
+    alignment_matrix = _compute_procrustes_rotation(src_model, tgt_model)
+
     if words is None:
         common_vocab = sorted(set(src_model.vocab) & set(tgt_model.vocab))
     else:
         common_vocab = [w for w in words if w in src_model.vocab and w in tgt_model.vocab]
 
-    change_vectors = {}
-    for w in common_vocab:
-        diff_vec = difference_vector_aligned(src_model, tgt_model, w)
-        change_vectors[w] = diff_vec
+    def compute_one(w):
+        diff_vec = difference_vector_aligned(src_model, tgt_model, w, alignment_matrix=alignment_matrix)
+        return (w, diff_vec)
 
-    return change_vectors
+    results = Parallel(n_jobs=n_jobs)(
+        delayed(compute_one)(w) for w in common_vocab
+    )
+
+    return dict(results)
 
 def compute_similarity_matrix(change_vectors):
     """
