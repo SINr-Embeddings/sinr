@@ -727,6 +727,13 @@ class SINrVectors(object):
         row = vectors.row
         data = vectors.data
         col = [matching_ts[val] for val in vectors.col]
+        
+        # Filter out the -1 values in col
+        filtered = [(r, d, c) for r, d, c in zip(row, data, col) if c != -1]
+        if filtered:
+            row, data, col = zip(*filtered)
+        else:
+            row, data, col = [], [], []
     
         matrix = coo_matrix((data, (row, col)), shape=(sinr_vector.vectors.shape[0], self.vectors.shape[1]))
         
@@ -734,6 +741,22 @@ class SINrVectors(object):
         self_copy = copy.deepcopy(self)
         self_copy.set_vectors(matrix.tocsr())
         self_copy.vocab = sinr_vector.vocab
+        
+        new_sets = [set() for _ in range(self.vectors.shape[1])]
+
+        # For each community in the big model, we add the members of the small model that match
+        for big_com_id, small_com_id in enumerate(matching_st):
+            if small_com_id != -1:
+                new_sets[big_com_id] = sinr_vector.communities_sets[small_com_id].copy()
+    
+        self_copy.communities_sets = new_sets
+    
+        # update the community membership
+        self_copy.community_membership = [-1] * len(self_copy.vocab)
+        for com_id, members in enumerate(new_sets):
+            for u in members:
+                self_copy.community_membership[u] = com_id
+    
         return self_copy
 
     def set_n_jobs(self, n_jobs):
