@@ -135,7 +135,7 @@ class SINr(object):
         """Returns the size of the vocabulary."""
         return len(self.idx_to_wrd)
 
-    def transfert_communities_labels(self, community_labels, refine=False):
+    def _transfert_communities_labels(self, community_labels, refine=False):
         """Transfer communities computed on one graph to another, used mainly with co-occurence graphs.
 
         :param community_labels: a list of communities described by sets of labels describing the nodes
@@ -163,7 +163,6 @@ class SINr(object):
         self.communities.compact()
         if refine:
             self._refine_transfered_communities()
-
 
     def extract_embeddings(self, communities=None):
         """Extract the embeddings based on the graph and the partition in communities previously detected.
@@ -710,7 +709,7 @@ class SINrVectors(object):
         
         return l, tgt_from_src
     
-    def get_vectors_using_self_space(self, sinr_vector):
+    def _get_vectors_using_self_space(self, sinr_vector):
         """Transpose the vectors of the sinr_vector object in parameter in the embedding space of the self object, using matching communities
         
         :param sinr_vector: Small model (target)
@@ -727,6 +726,13 @@ class SINrVectors(object):
         row = vectors.row
         data = vectors.data
         col = [matching_ts[val] for val in vectors.col]
+        
+        # Filter out the -1 values in col
+        filtered = [(r, d, c) for r, d, c in zip(row, data, col) if c != -1]
+        if filtered:
+            row, data, col = zip(*filtered)
+        else:
+            row, data, col = [], [], []
     
         matrix = coo_matrix((data, (row, col)), shape=(sinr_vector.vectors.shape[0], self.vectors.shape[1]))
         
@@ -734,7 +740,49 @@ class SINrVectors(object):
         self_copy = copy.deepcopy(self)
         self_copy.set_vectors(matrix.tocsr())
         self_copy.vocab = sinr_vector.vocab
+        
+        new_sets = [set() for _ in range(self.vectors.shape[1])]
+
+        # For each community in the big model, we add the members of the small model that match
+        for big_com_id, small_com_id in enumerate(matching_st):
+            if small_com_id != -1:
+                new_sets[big_com_id] = sinr_vector.communities_sets[small_com_id].copy()
+    
+        self_copy.communities_sets = new_sets
+    
+        # update the community membership
+        self_copy.community_membership = [-1] * len(self_copy.vocab)
+        for com_id, members in enumerate(new_sets):
+            for u in members:
+                self_copy.community_membership[u] = com_id
+    
         return self_copy
+    
+    def transfert_sinr(self, small_cooc, name='model_transfert', n_neighbors=25, n_jobs=-1):
+        """Transfer the communities and embeddings from a small co-occurrence graph to the current one.
+        
+        :param small_cooc: A SINr object containing the small co-occurrence graph and the communities
+        :type small_cooc: SINr
+        :param name: Name of the model to be built, used for saving the model. The default is 'model_transfert'.
+        :type name: str, optional
+        :param n_neighbors: Number of neighbors to use for the Nearest Neighbors model. The default is 25.
+        :type n_neighbors: int, optional
+        :param n_jobs: Number of jobs that should be used The default is -1.
+        :type n_jobs: int, optional
+        :returns: A SINrVectors object transferred and aligned.
+        """
+        small_cooc._transfert_communities_labels(self.get_communities_as_labels_sets())
+        small_cooc.extract_embeddings()
+        
+        modele_small = InterpretableWordsModelBuilder(
+            small_cooc,
+            f'{name}',
+            n_jobs=n_jobs,
+            n_neighbors=n_neighbors
+        ).build()
+
+        transfert_align = self._get_vectors_using_self_space(modele_small)
+        return transfert_align
 
     def set_n_jobs(self, n_jobs):
         """Set the number of jobs.
