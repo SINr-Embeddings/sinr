@@ -135,7 +135,7 @@ class SINr(object):
         """Returns the size of the vocabulary."""
         return len(self.idx_to_wrd)
 
-    def transfert_communities_labels(self, community_labels, refine=False):
+    def _transfert_communities_labels(self, community_labels, refine=False):
         """Transfer communities computed on one graph to another, used mainly with co-occurence graphs.
 
         :param community_labels: a list of communities described by sets of labels describing the nodes
@@ -177,7 +177,7 @@ class SINr(object):
         :type n_jobs: int, optional
         :returns: A SINrVectors object transferred and aligned.
         """
-        small_cooc.transfert_communities_labels(self.get_communities_as_labels_sets())
+        small_cooc._transfert_communities_labels(self.get_communities_as_labels_sets())
         small_cooc.extract_embeddings()
         
         modele_small = InterpretableWordsModelBuilder(
@@ -187,7 +187,7 @@ class SINr(object):
             n_neighbors=n_neighbors
         ).build()
 
-        transfert_align = self.get_vectors_using_self_space(modele_small)
+        transfert_align = self._get_vectors_using_self_space(modele_small)
         return transfert_align
 
 
@@ -736,7 +736,7 @@ class SINrVectors(object):
         
         return l, tgt_from_src
     
-    def get_vectors_using_self_space(self, sinr_vector):
+    def _get_vectors_using_self_space(self, sinr_vector):
         """Transpose the vectors of the sinr_vector object in parameter in the embedding space of the self object, using matching communities
         
         :param sinr_vector: Small model (target)
