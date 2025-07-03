@@ -163,33 +163,6 @@ class SINr(object):
         self.communities.compact()
         if refine:
             self._refine_transfered_communities()
-            
-    def transfert_sinr(self, small_cooc, name='model_transfert', n_neighbors=25, n_jobs=-1):
-        """Transfer the communities and embeddings from a small co-occurrence graph to the current one.
-        
-        :param small_cooc: A SINr object containing the small co-occurrence graph and the communities
-        :type small_cooc: SINr
-        :param name: Name of the model to be built, used for saving the model. The default is 'model_transfert'.
-        :type name: str, optional
-        :param n_neighbors: Number of neighbors to use for the Nearest Neighbors model. The default is 25.
-        :type n_neighbors: int, optional
-        :param n_jobs: Number of jobs that should be used The default is -1.
-        :type n_jobs: int, optional
-        :returns: A SINrVectors object transferred and aligned.
-        """
-        small_cooc._transfert_communities_labels(self.get_communities_as_labels_sets())
-        small_cooc.extract_embeddings()
-        
-        modele_small = InterpretableWordsModelBuilder(
-            small_cooc,
-            f'{name}',
-            n_jobs=n_jobs,
-            n_neighbors=n_neighbors
-        ).build()
-
-        transfert_align = self._get_vectors_using_self_space(modele_small)
-        return transfert_align
-
 
     def extract_embeddings(self, communities=None):
         """Extract the embeddings based on the graph and the partition in communities previously detected.
@@ -784,6 +757,32 @@ class SINrVectors(object):
                 self_copy.community_membership[u] = com_id
     
         return self_copy
+    
+    def transfert_sinr(self, small_cooc, name='model_transfert', n_neighbors=25, n_jobs=-1):
+        """Transfer the communities and embeddings from a small co-occurrence graph to the current one.
+        
+        :param small_cooc: A SINr object containing the small co-occurrence graph and the communities
+        :type small_cooc: SINr
+        :param name: Name of the model to be built, used for saving the model. The default is 'model_transfert'.
+        :type name: str, optional
+        :param n_neighbors: Number of neighbors to use for the Nearest Neighbors model. The default is 25.
+        :type n_neighbors: int, optional
+        :param n_jobs: Number of jobs that should be used The default is -1.
+        :type n_jobs: int, optional
+        :returns: A SINrVectors object transferred and aligned.
+        """
+        small_cooc._transfert_communities_labels(self.get_communities_as_labels_sets())
+        small_cooc.extract_embeddings()
+        
+        modele_small = InterpretableWordsModelBuilder(
+            small_cooc,
+            f'{name}',
+            n_jobs=n_jobs,
+            n_neighbors=n_neighbors
+        ).build()
+
+        transfert_align = self._get_vectors_using_self_space(modele_small)
+        return transfert_align
 
     def set_n_jobs(self, n_jobs):
         """Set the number of jobs.
