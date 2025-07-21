@@ -100,25 +100,27 @@ class Diachronic:
         return list(words), S
 
     def plot_topk_similarity_matrix(self, sinr_model, file_name="heatmap", change_norms=None, topk=10):
-        """
-        Plot the top-k similarity matrix for the most changing words and their neighbors.
-        :param sinr_model: model used to get neighbors (must implement most_similar)
-        :param file_name: base name for saved PNGs
-        :param change_norms: optional precomputed norms
-        :param topk: number of top words to visualize
-        
-        :return: None
-        """
         if change_norms is None:
             change_norms = self.compute_change_norms(sinr_model.vocab)
-
+    
         top_k = [w for w, v in change_norms.items() if v is not None][:topk]
-
+    
         for word in top_k:
-            neighbors = sinr_model.most_similar(word)["neighbors "][:topk]
-            vecs = self.get_change_vectors([word] + neighbors)
+            try:
+                res = sinr_model.most_similar(word)
+                neighbors = res.get("neighbors", res.get("neighbors ", []))
+            except KeyError:
+                print(f"No neighbors found for '{word}', skipping.")
+                continue
+    
+            neigh_words = [w for w, _ in neighbors][:topk]
+            vecs = self.get_change_vectors([word] + neigh_words)
             words, S = self.compute_similarity_matrix(vecs)
-
+    
+            if len(words) <= 1:
+                print(f"Not enough valid neighbors for '{word}', skipping heatmap.")
+                continue
+    
             plt.figure(figsize=(6, 6))
             plt.imshow(S, cmap='RdBu_r', vmin=-1, vmax=1)
             plt.colorbar(label='Cosine similarity')
