@@ -158,7 +158,7 @@ class VRTMaker:
         corpus_opened.close()
         logger.info(f"VRT-style file written in {self.corpus_output.absolute()}")
 
-def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False, exclude_pos=[], en="chunking", min_freq=50, alpha=True, exclude_en=[], min_length_word=3, min_length_doc=2, dict_filt=[]):
+def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False, exclude_pos=[], en="chunking", min_freq=50, alpha=True, exclude_en=[], min_length_word=3, min_length_doc=2, dict_filt=[], with_pos=False):
     """Extracts the text from a VRT corpus file.
 
     :param corpus_path: str
@@ -223,8 +223,11 @@ def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=F
                     lemma_ = lemma
                 if not lemmatize:
                     lemma_ = token_
+                    
+                formatted = f"{lemma_}_#{pos}" if with_pos else lemma_
+                
                 if token_ in exceptions : 
-                    document.append(token_)
+                    document.append(formatted)
                 else :
                     if stop_words == is_stop and is_punct == punct and is_digit == number and like_num == number and not pos in exclude_pos and not ent_type in exclude_en and (alpha == is_alpha or ent_type != "None"):
                         if exclude_en and ent_iob != "None":
@@ -232,17 +235,17 @@ def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=F
                         else:
                             if ent_type != "None" and len(lemma_) > 1:
                                 if en == "chunking" :
-                                    document.append(token_)
+                                    document.append(formatted)
                                 elif en == "tagging" :
-                                    document.append(ent_type)  
+                                    document.append(f"{ent_type}_#{pos}" if with_pos else ent_type)  
                                 elif en == "deleting" :
                                     pass
                             elif len(lemma) > min_length_word:
                                 if len(dict_filt) > 0:
                                     if lemma_ in dict_filt:
-                                        document.append(lemma_)
+                                        document.append(formatted)
                                 else:
-                                    document.append(lemma_)
+                                    document.append(formatted)
                     else:
                         pass
             else:
