@@ -101,21 +101,21 @@ class SINr(object):
 
         @classmethod
         def _ensure_nodes(cls, graph, ids):
-        """Ensures that the nodes exist in the graph
-        Parameters:
-        graph: Networkit graph .
-        ids (Iterable[int]): A list or set of node IDs to ensure presence in the graph.
-        
-        Returns :
-             None.
-        """
-        for nid in ids:
-            if graph.hasNode(nid):
-                continue
-            if nid < graph.upperNodeIdBound():
-                graph.restoreNode(nid)
-            else:
-                graph.addNodes(nid - graph.upperNodeIdBound() + 1)
+            """Ensures that the nodes exist in the graph
+            Parameters:
+            graph: Networkit graph .
+            ids (Iterable[int]): A list or set of node IDs to ensure presence in the graph.
+            
+            Returns :
+                None.
+            """
+            for nid in ids:
+                if graph.hasNode(nid):
+                    continue
+                if nid < graph.upperNodeIdBound():
+                    graph.restoreNode(nid)
+                else:
+                    graph.addNodes(nid - graph.upperNodeIdBound() + 1)
 
     def run(self, algo=None):
         """Runs the training of the embedding, i.e. community detection + vectors extraction
