@@ -290,13 +290,13 @@ class SINr(object):
         Returns :
              None.
         """
-    for nid in ids:
-        if graph.hasNode(nid):
-            continue
-        if nid < graph.upperNodeIdBound():
-            graph.restoreNode(nid)
-        else:
-            graph.addNodes(nid - graph.upperNodeIdBound() + 1)
+        for nid in ids:
+            if graph.hasNode(nid):
+                continue
+            if nid < graph.upperNodeIdBound():
+                graph.restoreNode(nid)
+            else:
+                graph.addNodes(nid - graph.upperNodeIdBound() + 1)
 
     def add_oov_words(self, model, oov_words):
         """
