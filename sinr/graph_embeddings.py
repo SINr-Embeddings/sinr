@@ -281,8 +281,15 @@ class SINr(object):
         else:
             return self.communities
 
-    def ensure_nodes(graph, ids):
-        """Ensures that the nodes exist in the graph"""
+    def _ensure_nodes(graph, ids):
+        """Ensures that the nodes exist in the graph
+        Parameters:
+        graph: Networkit graph .
+        ids (Iterable[int]): A list or set of node IDs to ensure presence in the graph.
+        
+        Returns :
+             None.
+        """
     for nid in ids:
         if graph.hasNode(nid):
             continue
@@ -292,7 +299,16 @@ class SINr(object):
             graph.addNodes(nid - graph.upperNodeIdBound() + 1)
 
     def add_oov_words(self, model, oov_words):
-        """Adds OOV words to the model"""
+        """
+        Adds OOV (Out-Of-Vocabulary) words to the vocabulary and the graph.
+
+        Parameters:
+            model: Name of the model .
+            oov_words (Iterable[str]): A list of words not present in the original vocabulary.
+
+        Returns:
+            dict: A dictionary mapping each new OOV word to its assigned node ID.
+        """
         wrd_to_idx = self.wrd_to_idx
         idx_to_wrd = self.idx_to_wrd
         G = model.G or self.cooc_graph
@@ -308,35 +324,39 @@ class SINr(object):
                 idx_to_wrd[last_id] = w
                 new_ids[w] = last_id
         # Adds the nodes to the graph
-        ensure_nodes(self.cooc_graph, new_ids.values())
-        ensure_nodes(model.G, new_ids.values())
+        _ensure_nodes(self.cooc_graph, new_ids.values())
+        _ensure_nodes(model.G, new_ids.values())
 
         print(f" {len(new_ids)} OOV words added")
         return new_ids
 
-    def add_edges_for_oov_words(self, model, dataset, new_ids, window_size=10, min_cooccurrence=1):
-        """Adds edges between OOV words and their context"""
+    def add_edges_from_sentences(self, model, sentences, new_ids, window_size=10, min_cooccurrence=1):
+        """
+        Adds co-occurrence edges between OOV words and their context from a list of single sentences.
 
-    
-        print(f"Adding edges for OOVs (window={window_size})...") 
+        Parameters:
+            model: Name of the model .
+            sentences (Iterable[str]): A list of single sentences (str).
+            new_ids (dict): Mapping of OOV words to their assigned node IDs.
+            window_size (int): Size of the context window on each side of a word.
+            min_cooccurrence (int): Minimum number of co-occurrences required to keep an edge.
+
+        Returns:
+            None
+        """
+        print(f"Adding edges for OOVs from sentences (window={window_size})...")
         G = model.G
         wrd_to_id = self.wrd_to_idx
         edge_counter = defaultdict(int)
-        #  Iterates over dataset sentences to build contexts
-        for ex in tqdm(dataset, desc="Scanning sentences"):
-            text1 = ex['sentence1'].lower()
-            text2 = ex['sentence2'].lower()
 
-            words1 = [w for w in re.findall(r'\b[\w\-]+\b', text1) if w.isascii()]
-            words2 = [w for w in re.findall(r'\b[\w\-]+\b', text2) if w.isascii()]
-
-            words = words1 + words2
+        for sentence in tqdm(sentences, desc="Scanning sentences"):
+            words = [w for w in re.findall(r'\b[\w\-]+\b', sentence.lower()) if w.isascii()]
 
             for i, center_word in enumerate(words):
                 if center_word not in new_ids:
                     continue
+
                 center_id = new_ids[center_word]
-                # Context window around the central word
                 context = words[max(0, i - window_size): i] + words[i+1: i + window_size + 1]
 
                 for ctx in context:
@@ -345,10 +365,13 @@ class SINr(object):
                         pair = tuple(sorted((center_id, ctx_id)))
                         edge_counter[pair] += 1
 
-        # Filters out weak cooccurrences
-        filtered_edges = {pair: weight for pair, weight in edge_counter.items() if weight >= min_cooccurrence}
-        print(f" {len(edge_counter)} edges found, {len(filtered_edges)} after filtering (threshold={min_cooccurrence})")
-        # Adds the edges to the graph with weights
+        filtered_edges = {
+            pair: weight for pair, weight in edge_counter.items() 
+            if weight >= min_cooccurrence
+        }
+
+        print(f"{len(edge_counter)} edges found, {len(filtered_edges)} after filtering (threshold={min_cooccurrence})")
+
         added = 0
         for (u, v), weight in filtered_edges.items():
             if not G.hasEdge(u, v):
@@ -357,16 +380,17 @@ class SINr(object):
             else:
                 G.setWeight(u, v, G.weight(u, v) + weight)
 
-        print(f" {added} edges added to the graph")
+        print(f"{added} edges added to the graph")
 
 
-def _flip_keys_values(dictionary):
-    """Flip keys and values in a dictionnary.
 
-    :param dictionary: The dictionnary to invert
+    def _flip_keys_values(dictionary):
+        """Flip keys and values in a dictionnary.
 
-    """
-    return dict((v, k) for k, v in dictionary.items())
+        :param dictionary: The dictionnary to invert
+
+        """
+        return dict((v, k) for k, v in dictionary.items())
 
 
 def get_lgcc(graph):
