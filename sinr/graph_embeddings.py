@@ -385,13 +385,13 @@ class SINr(object):
 
 
 
-    def _flip_keys_values(dictionary):
-        """Flip keys and values in a dictionnary.
+def _flip_keys_values(dictionary):
+    """Flip keys and values in a dictionnary.
 
-        :param dictionary: The dictionnary to invert
+    :param dictionary: The dictionnary to invert
 
-        """
-        return dict((v, k) for k, v in dictionary.items())
+    """
+    return dict((v, k) for k, v in dictionary.items())
 
 
 def get_lgcc(graph):
