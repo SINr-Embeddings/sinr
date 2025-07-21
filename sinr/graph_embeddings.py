@@ -99,24 +99,6 @@ class SINr(object):
         logger.info("Finished building graph.")
         return cls(graph, out_of_LgCC, word_to_idx)
 
-    @classmethod
-    def _ensure_nodes(cls, graph, ids):
-        """Ensures that the nodes exist in the graph
-            Parameters:
-            graph: Networkit graph .
-            ids (Iterable[int]): A list or set of node IDs to ensure presence in the graph.
-            
-            Returns :
-                None.
-        """
-        for nid in ids:
-            if graph.hasNode(nid):
-                continue
-            if nid < graph.upperNodeIdBound():
-                graph.restoreNode(nid)
-            else:
-                graph.addNodes(nid - graph.upperNodeIdBound() + 1)
-
     def run(self, algo=None):
         """Runs the training of the embedding, i.e. community detection + vectors extraction
 
@@ -384,6 +366,24 @@ class SINr(object):
         print(f"{added} edges added to the graph")
 
 
+
+
+def _ensure_nodes(graph, ids):
+    """Ensures that the nodes exist in the graph
+            Parameters:
+            graph: Networkit graph .
+            ids (Iterable[int]): A list or set of node IDs to ensure presence in the graph.
+            
+            Returns :
+                None.
+    """
+    for nid in ids:
+        if graph.hasNode(nid):
+            continue
+        if nid < graph.upperNodeIdBound():
+            graph.restoreNode(nid)
+        else:
+            graph.addNodes(nid - graph.upperNodeIdBound() + 1)
 
 def _flip_keys_values(dictionary):
     """Flip keys and values in a dictionnary.
