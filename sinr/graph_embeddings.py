@@ -281,80 +281,75 @@ class SINr(object):
         else:
             return self.communities
 
-    def add_oov_words(self, model, oov_words):
+    def add_oov_words(self, oov_words):
         """
-        Adds OOV (Out-Of-Vocabulary) words to the vocabulary and the graph.
-
+        Adds OOV (Out-Of-Vocabulary) words to the vocabulary and the cooccurrence graph.
+    
         Parameters:
-            model: Name of the model .
-            oov_words (Iterable[str]): A list of words not present in the original vocabulary.
-
+            oov_words (Iterable[str]): List of OOV words.
+    
         Returns:
-            dict: A dictionary mapping each new OOV word to its assigned node ID.
+            dict: Mapping of OOV words to their new node IDs.
         """
         wrd_to_idx = self.wrd_to_idx
         idx_to_wrd = self.idx_to_wrd
-        G = model.G or self.cooc_graph
-        model.G = G 
-
+    
         last_id = max(wrd_to_idx.values(), default=-1)
         new_ids = {}
-        #  Assigns a new ID to each OOV word
+    
         for w in oov_words:
             if w not in wrd_to_idx:
                 last_id += 1
                 wrd_to_idx[w] = last_id
                 idx_to_wrd[last_id] = w
                 new_ids[w] = last_id
-        # Adds the nodes to the graph
+    
         _ensure_nodes(self.cooc_graph, new_ids.values())
-        _ensure_nodes(model.G, new_ids.values())
-
-        print(f" {len(new_ids)} OOV words added")
+        print(f"{len(new_ids)} OOV words added.")
         return new_ids
 
-    def add_edges_from_sentences(self, model, sentences, new_ids, window_size=10, min_cooccurrence=1):
+
+    def add_edges_from_sentences(self, sentences, new_ids, window_size=10, min_cooccurrence=1):
         """
-        Adds co-occurrence edges between OOV words and their context from a list of single sentences.
-
+        Adds co-occurrence edges between OOV words and context words from given sentences.
+    
         Parameters:
-            model: Name of the model .
-            sentences (Iterable[str]): A list of single sentences (str).
-            new_ids (dict): Mapping of OOV words to their assigned node IDs.
-            window_size (int): Size of the context window on each side of a word.
-            min_cooccurrence (int): Minimum number of co-occurrences required to keep an edge.
-
+            sentences (Iterable[str]): List of sentences.
+            new_ids (dict): Mapping of OOV words to their node IDs.
+            window_size (int): Context window size.
+            min_cooccurrence (int): Minimum co-occurrence count for an edge.
+    
         Returns:
             None
         """
         print(f"Adding edges for OOVs from sentences (window={window_size})...")
-        G = model.G
+        G = self.cooc_graph
         wrd_to_id = self.wrd_to_idx
         edge_counter = defaultdict(int)
-
+    
         for sentence in tqdm(sentences, desc="Scanning sentences"):
             words = [w for w in re.findall(r'\b[\w\-]+\b', sentence.lower()) if w.isascii()]
-
+    
             for i, center_word in enumerate(words):
                 if center_word not in new_ids:
                     continue
-
+    
                 center_id = new_ids[center_word]
                 context = words[max(0, i - window_size): i] + words[i+1: i + window_size + 1]
-
+    
                 for ctx in context:
                     if ctx in wrd_to_id and ctx != center_word:
                         ctx_id = wrd_to_id[ctx]
                         pair = tuple(sorted((center_id, ctx_id)))
                         edge_counter[pair] += 1
-
+    
         filtered_edges = {
-            pair: weight for pair, weight in edge_counter.items() 
+            pair: weight for pair, weight in edge_counter.items()
             if weight >= min_cooccurrence
         }
-
+    
         print(f"{len(edge_counter)} edges found, {len(filtered_edges)} after filtering (threshold={min_cooccurrence})")
-
+    
         added = 0
         for (u, v), weight in filtered_edges.items():
             if not G.hasEdge(u, v):
@@ -362,10 +357,9 @@ class SINr(object):
                 added += 1
             else:
                 G.setWeight(u, v, G.weight(u, v) + weight)
-
-        print(f"{added} edges added to the graph")
-
-
+    
+        print(f"{added} edges added to the graph.")
+    
 
 
 def _ensure_nodes(graph, ids):
