@@ -100,6 +100,14 @@ class Diachronic:
         return list(words), S
 
     def plot_topk_similarity_matrix(self, sinr_model, file_name="heatmap", change_norms=None, topk=10):
+        """Plot heatmaps of the top-k words with the highest change norms.
+        :param sinr_model: SINrVectors model to use for similarity computation
+        :param file_name: base name for output files
+        :param change_norms: precomputed change norms, if None, compute them
+        :param topk: number of top words to consider
+        
+        :return: None, saves heatmaps to files
+        """
         if change_norms is None:
             change_norms = self.compute_change_norms(sinr_model.vocab)
     
