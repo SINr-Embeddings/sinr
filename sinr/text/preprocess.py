@@ -158,7 +158,7 @@ class VRTMaker:
         corpus_opened.close()
         logger.info(f"VRT-style file written in {self.corpus_output.absolute()}")
 
-def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False, exclude_pos=[], en="chunking", min_freq=50, alpha=True, exclude_en=[], min_length_word=3, min_length_doc=2, dict_filt=[]):
+def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=False, lower_words=True, number=False, punct=False, exclude_pos=[], en="chunking", min_freq=50, alpha=True, exclude_en=[], min_length_word=3, min_length_doc=2, dict_filt=[], with_lemma_pos=False):
     """Extracts the text from a VRT corpus file.
 
     :param corpus_path: str
@@ -178,6 +178,8 @@ def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=F
     :type min_length_doc: int
     :param dict_filt: List of words to keep only specific vocabulary
     :type dict_filt: list
+    :param with_lemma_pos: bool If True, output format will be lemma_#POS (Default value = False)
+    :type with_lemma_pos: bool
     :returns: text (list(list(str))): A list of documents containing words
 
     """
@@ -223,8 +225,15 @@ def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=F
                     lemma_ = lemma
                 if not lemmatize:
                     lemma_ = token_
+                    
+                def format_token(word, pos_tag):
+                    if with_lemma_pos:
+                        return f"{word}_#{pos_tag}"
+                    else:
+                        return word
+                
                 if token_ in exceptions : 
-                    document.append(token_)
+                    document.append(format_token(token_, pos))
                 else :
                     if stop_words == is_stop and is_punct == punct and is_digit == number and like_num == number and not pos in exclude_pos and not ent_type in exclude_en and (alpha == is_alpha or ent_type != "None"):
                         if exclude_en and ent_iob != "None":
@@ -232,27 +241,38 @@ def extract_text(corpus_path, exceptions_path=None, lemmatize=True, stop_words=F
                         else:
                             if ent_type != "None" and len(lemma_) > 1:
                                 if en == "chunking" :
-                                    document.append(token_)
+                                    document.append(format_token(token_, pos))
                                 elif en == "tagging" :
-                                    document.append(ent_type)  
+                                    document.append(format_token(ent_type, pos))  
                                 elif en == "deleting" :
                                     pass
                             elif len(lemma) > min_length_word:
                                 if len(dict_filt) > 0:
                                     if lemma_ in dict_filt:
-                                        document.append(lemma_)
+                                        document.append(format_token(lemma_, pos))
                                 else:
-                                    document.append(lemma_)
+                                    document.append(format_token(lemma_, pos))
                     else:
                         pass
             else:
                 continue
     if min_freq > 1:
         counts = Counter([word for sent in out for word in sent])
-        accepted_tokens = {word for word, count in counts.items() if count >= min_freq}
-        out = [[word for word in sent if word in accepted_tokens or word in exceptions] for sent in out]
-        # line = corpus.readline().rstrip()
-        # x+=1
+        if with_lemma_pos:
+            exceptions_check = set()
+            for exc in exceptions:
+                exceptions_check.add(exc)
+                exceptions_check.add(f"{exc}_#")
+            
+            accepted_tokens = {word for word, count in counts.items() if count >= min_freq}
+            out = [[word for word in sent if word in accepted_tokens or 
+                   any(word.startswith(f"{exc}_#") for exc in exceptions) or word in exceptions] 
+                   for sent in out]
+        else :
+            accepted_tokens = {word for word, count in counts.items() if count >= min_freq}
+            out = [[word for word in sent if word in accepted_tokens or word in exceptions] for sent in out]
+            # line = corpus.readline().rstrip()
+            # x+=1
     return out
         
 def open_corpus(corpus_path):
