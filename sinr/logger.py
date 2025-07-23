@@ -10,4 +10,4 @@ ch.setFormatter(formatter)
 if not len(logger.handlers):
         logger.addHandler(ch)
 
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.WARNING)
