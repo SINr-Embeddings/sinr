@@ -119,36 +119,50 @@ def compute_similarity(vectors, corpus_name):
     output = {dataset: f"{value:9.4f}" for dataset, value in similarity.items()}
     return f"{corpus_name} {output}"
 
-def refine(graph, initial_membership, gamma=50):
-    """Refining communities for a given graph starting from an initial membership partition
+def refine(graph, communities, algorithm, gamma=50):
+    def _leiden():
+        from cdlib import algorithms, NodeClustering
+        networkx_graph = networkit.nxadapter.nk2nx(graph)
+        
+        coms = algorithms.leiden(networkx_graph, weights='weight', initial_membership=communities.getVector())
 
-    :param graph: The graph to compute communities for
-    :typev graph: networkit object
-    :param initial_membership: The initial membership partition
-    :typev initial_membership: networkit.Partition object
-    :param gamma: Resolution parameter for Louvain’s algorithm (default to 50)
+        # Compute a map node<->list of communities
+        community_map = NodeClustering.to_node_community_map(coms)
 
-    """
+        refined_communities = networkit.structures.Partition(len(networkx_graph.nodes))
+        refined_communities.allToSingletons()
+        for node, community in community_map.items():
+            refined_communities.moveToSubset(community[0],node)
 
-    from cdlib import algorithms, NodeClustering
-    networkx_graph = networkit.nxadapter.nk2nx(graph)
+        return refined_communities
 
-    list_of_communities = [list() for _ in range(initial_membership.numberOfSubsets())]
-    for index,community in enumerate(initial_membership.getVector()):
-        list_of_communities[community].append(index)
+    def _louvain():
+        from cdlib import algorithms, NodeClustering
+        networkx_graph = networkit.nxadapter.nk2nx(graph)
 
-    nc = NodeClustering(list_of_communities, networkx_graph, algorithm)
-    coms = algorithms.louvain(networkx_graph, weight='weight', resolution=gamma, partition=nc)
+        list_of_communities = [list() for _ in range(communities.numberOfSubsets())]
+        for index,community in enumerate(communities.getVector()):
+            list_of_communities[community].append(index)
 
-    # Compute a map node<->list of communities
-    community_map = NodeClustering.to_node_community_map(coms)
+        nc = NodeClustering(list_of_communities, networkx_graph, algorithm)
+        coms = algorithms.louvain(networkx_graph, weight='weight', resolution=gamma, partition=nc)
 
-    refined_communities = networkit.structures.Partition(len(networkx_graph.nodes))
-    refined_communities.allToSingletons()
-    for node, community in community_map.items():
-        refined_communities.moveToSubset(community[0],node)
+        # Compute a map node<->list of communities
+        community_map = NodeClustering.to_node_community_map(coms)
 
-    return refined_communities
+        refined_communities = networkit.structures.Partition(len(networkx_graph.nodes))
+        refined_communities.allToSingletons()
+        for node, community in community_map.items():
+            refined_communities.moveToSubset(community[0],node)
+
+        return refined_communities
+
+    algorithms = {
+            "leiden": _leiden, 
+            "louvain": _louvain,
+            }
+
+    return algorithms[algorithm]()   
 
 if __name__=="__main__":
 
@@ -232,11 +246,11 @@ if __name__=="__main__":
                 sinr_communities_and_weights_transferred.ponderate_graph(sinr_1, strategy)
 
                 sinr_communities_and_weights_transferred.transfert_communities_labels(vectors_1.get_communities_as_labels_sets())
+                transferred_communities = sinr_communities_and_weights_transferred.get_communities()
                 _log_communities(logger, transferred_communities, corpus_communities_and_weights_transferred)
                 
                 sinr_communities_and_weights_transferred.extract_embeddings()
                 vectors_communities_and_weights_transferred = ge.InterpretableWordsModelBuilder(sinr_communities_and_weights_transferred, corpus_communities_and_weights_transferred, n_jobs=40, n_neighbors=4).build()
-                #transferred_communities = sinr_communities_and_weights_transferred.get_communities()
                 #print("TRANSFERRED COMMUNITIES")
                 #print(networkit.community.inspectCommunities(transferred_communities, sinr_communities_and_weights_transferred.get_cooc_graph()))
                 
@@ -244,15 +258,15 @@ if __name__=="__main__":
                 # [END] Evaluating the similarity for the small corpus using weights and communities learned on the big one
             
                 # [BEGIN] Giving the precomputed communities as a seed to louvain on re-weighted graph 
-                corpus_communities_and_weights_transferred_refined = f"{corpus_name_2}_communities_and_weights_transferred_refined"
+                corpus_communities_and_weights_transferred_refined = f"{corpus_2_name}_communities_and_weights_transferred_refined"
                 initial_partition = sinr_communities_and_weights_transferred.get_communities()
-                refined_communities = refine(sinr_communities_and_weights_transferred_transferred.get_cooc_graph(), initial_partition, "louvain")
-                _log_communities(logger,refined_communities,corpus_refined)
-                logger.info(f"{corpus_refined} has {len([i for i in refined_communities.subsetSizes() if i==1])} singleton communities for {refined_communities.numberOfSubsets()} communities")
+                refined_communities = refine(sinr_communities_and_weights_transferred.get_cooc_graph(), initial_partition, "louvain")
+                _log_communities(logger,refined_communities,corpus_communities_and_weights_transferred_refined)
+                logger.info(f"{corpus_communities_and_weights_transferred_refined} has {len([i for i in refined_communities.subsetSizes() if i==1])} singleton communities for {refined_communities.numberOfSubsets()} communities")
                
                 sinr_communities_and_weights_transferred_refined = ge.SINr.load_from_cooc_pkl(path_to_matrix_2)
                 sinr_communities_and_weights_transferred_refined.extract_embeddings(refined_communities)
-                vectors_communities_and_weights_transferred_refined = ge.InterpretableWordsModelBuilder(sinr_communities_and_weights_transferred_refined, corpus_refined, n_jobs=40, n_neighbors=4).build()
+                vectors_communities_and_weights_transferred_refined = ge.InterpretableWordsModelBuilder(sinr_communities_and_weights_transferred_refined, corpus_communities_and_weights_transferred_refined, n_jobs=40, n_neighbors=4).build()
                     
                 logger.warning(compute_similarity(vectors_communities_and_weights_transferred_refined,corpus_communities_and_weights_transferred_refined))
                 # [END] Giving the precomputed communities as a seed to louvain on re-weighted graph 
