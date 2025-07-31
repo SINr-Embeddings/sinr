@@ -243,7 +243,8 @@ if __name__=="__main__":
                 # [BEGIN] Evaluating the similarity for the small corpus using weights and communities learned on the big one
                 corpus_communities_and_weights_transferred = f"{corpus_2_name}_communities_and_weights_transferred"
                 sinr_communities_and_weights_transferred = ge.SINr.load_from_cooc_pkl(path_to_matrix_2)
-                sinr_communities_and_weights_transferred.ponderate_graph(sinr_1, strategy)
+                sinr_communities_and_weights_transferred.set_cooc_graph(weighted_graph)
+                #sinr_communities_and_weights_transferred.ponderate_graph(sinr_1, strategy)
 
                 sinr_communities_and_weights_transferred.transfert_communities_labels(vectors_1.get_communities_as_labels_sets())
                 transferred_communities = sinr_communities_and_weights_transferred.get_communities()

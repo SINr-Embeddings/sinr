@@ -1,6 +1,6 @@
 import pickle as pk
 
-from networkit import Graph, components, community, setNumberOfThreads, getCurrentNumberOfThreads, getMaxNumberOfThreads, Partition
+from networkit import Graph, graphtools, components, community, setNumberOfThreads, getCurrentNumberOfThreads, getMaxNumberOfThreads, Partition
 from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat, mean, nanmax, int64, shape, delete
 from sklearn.neighbors import NearestNeighbors
 from scipy import spatial
@@ -279,6 +279,11 @@ class SINr(object):
     def get_cooc_graph(self):
         """Return the graph. """
         return self.cooc_graph
+
+    def set_cooc_graph(self, cooc_graph):
+        """Return the graph. """
+        # Ugly trick to copy the graph…
+        self.cooc_graph = graphtools.toUndirected(cooc_graph)
 
     def get_nr(self):
         """Return the NR matrix. """
