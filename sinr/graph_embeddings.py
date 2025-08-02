@@ -1,6 +1,6 @@
 import pickle as pk
 
-from networkit import Graph, graphtools, components, community, setNumberOfThreads, getCurrentNumberOfThreads, getMaxNumberOfThreads, Partition
+from networkit import Graph, graphtools, components, community, setNumberOfThreads, getCurrentNumberOfThreads, getMaxNumberOfThreads, Partition, nxadapter
 from numpy import argpartition, argsort, asarray, where, nonzero, concatenate, repeat, mean, nanmax, int64, shape, delete
 from sklearn.neighbors import NearestNeighbors
 from scipy import spatial
@@ -124,12 +124,30 @@ class SINr(object):
         communities = community.detectCommunities(self.cooc_graph, algo=algo, inspect=inspect)
         communities.compact(useTurbo=True)  # Consecutive communities from 0 to number of communities - 1
         self.communities = communities
+
+        '''from cdlib import algorithms, NodeClustering
+        networkx_graph = nxadapter.nk2nx(self.get_cooc_graph())
+
+        coms = algorithms.louvain(networkx_graph, weight='weight', resolution=gamma)
+
+        # Compute a map node<->list of communities
+        community_map = NodeClustering.to_node_community_map(coms)
+
+        print("done")
         logger.info("Finished detecting communities.")
+        
+        communities = Partition(len(networkx_graph.nodes))
+        communities.allToSingletons()
+        for node, comm in community_map.items():
+            communities.moveToSubset(comm[0],node)'''
+
+        self.communities = communities
         return communities
 
     def size_of_voc(self):
         """Returns the size of the vocabulary."""
         return len(self.idx_to_wrd)
+
 
     def ponderate_graph(self, sinr_base, strategy=1):
         """Change the current graph's edge weights based on those in another graph.
@@ -149,10 +167,13 @@ class SINr(object):
         for edge in base_graph.iterEdges():
             u = sinr_base.idx_to_wrd[edge[0]]
             v = sinr_base.idx_to_wrd[edge[1]]
+            in_graph = u in self.wrd_to_idx and v in self.wrd_to_idx
             condition = {
-                    1: u in self.wrd_to_idx and v in self.wrd_to_idx and self.cooc_graph.hasEdge(self.wrd_to_idx[u], self.wrd_to_idx[v]),
-                    2: u in self.wrd_to_idx and v in self.wrd_to_idx, 
-                    3: u in self.wrd_to_idx and v in self.wrd_to_idx and not (self.cooc_graph.hasEdge(self.wrd_to_idx[u], self.wrd_to_idx[v]))
+                   small_corpus_namsmall_corpus_nameoc_graph.has_edge(self.wrd_to_idx[u], self.wrd_to_idx[v]),
+                    1: in_graph and self.cooc_graph.hasEdge(self.wrd_to_idx[u], self.wrd_to_idx[v]),
+                    2: in_graph, 
+                    #3: in_graph and not (self.cooc_graph.hasEdge(self.wrd_to_idx[u], self.wrd_to_idx[v]))
+                    3: in_graph and not (self.cooc_graph.hasEdge(self.wrd_to_idx[u], self.wrd_to_idx[v]))
             }
             if condition[strategy]:
                 # setWeight inserts an edge if it does not exist and weight(u,v) returns 0 if (u,v) does not exist
