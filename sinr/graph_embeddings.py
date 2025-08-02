@@ -169,10 +169,10 @@ class SINr(object):
             v = sinr_base.idx_to_wrd[edge[1]]
             in_graph = u in self.wrd_to_idx and v in self.wrd_to_idx
             condition = {
-                   small_corpus_namsmall_corpus_nameoc_graph.has_edge(self.wrd_to_idx[u], self.wrd_to_idx[v]),
+                    #1: in_graph and self.cooc_graph.has_edge(self.wrd_to_idx[u], self.wrd_to_idx[v]),
                     1: in_graph and self.cooc_graph.hasEdge(self.wrd_to_idx[u], self.wrd_to_idx[v]),
                     2: in_graph, 
-                    #3: in_graph and not (self.cooc_graph.hasEdge(self.wrd_to_idx[u], self.wrd_to_idx[v]))
+                    #3: in_graph and not (self.cooc_graph.has_edge(self.wrd_to_idx[u], self.wrd_to_idx[v]))
                     3: in_graph and not (self.cooc_graph.hasEdge(self.wrd_to_idx[u], self.wrd_to_idx[v]))
             }
             if condition[strategy]:
