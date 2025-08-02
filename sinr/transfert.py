@@ -168,7 +168,7 @@ def refine(graph, communities, algorithm, gamma=50):
     return algorithms[algorithm]()   
 
 def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategy=1, logger=None):
-    logger.warning(f"=============== {strategies_names[strategy]} ===============")
+    #logger.warning(f"=============== {strategies_names[strategy]} ===============")
 
     # Saving the embeddings for the sake of performance
     # TODO -- Do we need to compute communities every time?
@@ -181,7 +181,7 @@ def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategy=
 
         communities_with_weights_transferred = sinr_with_weights_transferred.detect_communities(gamma=50)
         logger.info(f"{corpus_with_weights_transferred} has {len([i for i in communities_with_weights_transferred.subsetSizes() if i==1])} singleton communities for {communities_with_weights_transferred.numberOfSubsets()} communities")
-        _log_communities(logger,communities_with_weights_transferred,corpus_with_weights_transferred)
+        #_log_communities(logger,communities_with_weights_transferred,corpus_with_weights_transferred)
 
         sinr_with_weights_transferred.extract_embeddings()
         vectors_with_weights_transferred = ge.InterpretableWordsModelBuilder(sinr_with_weights_transferred, small_corpus_name, n_jobs=40, n_neighbors=4).build()
@@ -196,7 +196,7 @@ def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategy=
 
         sinr_communities_and_weights_transferred.transfert_communities_labels(vectors_1.get_communities_as_labels_sets())
         transferred_communities = sinr_communities_and_weights_transferred.get_communities()
-        _log_communities(logger, transferred_communities, corpus_communities_and_weights_transferred)
+        #_log_communities(logger, transferred_communities, corpus_communities_and_weights_transferred)
         
         sinr_communities_and_weights_transferred.extract_embeddings()
         vectors_communities_and_weights_transferred = ge.InterpretableWordsModelBuilder(sinr_communities_and_weights_transferred, corpus_communities_and_weights_transferred, n_jobs=40, n_neighbors=4).build()
@@ -209,8 +209,8 @@ def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategy=
         corpus_communities_and_weights_transferred_refined = f"{small_corpus_name}_communities_and_weights_transferred_refined"
         initial_partition = sinr_communities_and_weights_transferred.get_communities()
         refined_communities = refine(sinr_communities_and_weights_transferred.get_cooc_graph(), initial_partition, "louvain")
-        _log_communities(logger,refined_communities,corpus_communities_and_weights_transferred_refined)
-        logger.info(f"{corpus_communities_and_weights_transferred_refined} has {len([i for i in refined_communities.subsetSizes() if i==1])} singleton communities for {refined_communities.numberOfSubsets()} communities")
+        #_log_communities(logger,refined_communities,corpus_communities_and_weights_transferred_refined)
+        #logger.info(f"{corpus_communities_and_weights_transferred_refined} has {len([i for i in refined_communities.subsetSizes() if i==1])} singleton communities for {refined_communities.numberOfSubsets()} communities")
        
         sinr_communities_and_weights_transferred_refined = ge.SINr.load_from_cooc_pkl(small_corpus)
         sinr_communities_and_weights_transferred_refined.extract_embeddings(refined_communities)
