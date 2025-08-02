@@ -285,7 +285,7 @@ if __name__=="__main__":
         small_corpuses = glob.glob(sys.argv[2]+"*.pk*")
 
         try:
-            pool = Pool(7)
+            pool = Pool()
             transfert = Transfert(sinr_1, 3, logger)
             results = pool.map(transfert, small_corpuses)
         finally:
