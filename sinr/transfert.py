@@ -229,9 +229,7 @@ class Transfert:
 
         # Creating the cooccurrence matrix if not existing
         create_cooc_matrix(path_to_text_2, path_to_matrix_2, corpus_2_name)
-        make_transfert(self.sinr_large_corpus, path_to_matrix_2, corpus_2_name, 1, self.logger)
-        make_transfert(self.sinr_large_corpus, path_to_matrix_2, corpus_2_name, 2, self.logger)
-        make_transfert(self.sinr_large_corpus, path_to_matrix_2, corpus_2_name, 3, self.logger)
+        make_transfert(self.sinr_large_corpus, path_to_matrix_2, corpus_2_name, self.strategy, self.logger)
         return None
 
 if __name__=="__main__":
@@ -283,7 +281,7 @@ if __name__=="__main__":
 
         try:
             pool = Pool()
-            transfert = Transfert(sinr_1, [1,2,3], logger)
+            transfert = Transfert(sinr_1, 1, logger)
             results = pool.map(transfert, small_corpuses)
         finally:
             pool.close()
