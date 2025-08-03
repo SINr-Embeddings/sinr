@@ -167,14 +167,10 @@ def refine(graph, communities, algorithm, gamma=50):
 
     return algorithms[algorithm]()   
 
-def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategy=1, logger=None):
-    #logger.warning(f"=============== {strategies_names[strategy]} ===============")
-
-    # Saving the embeddings for the sake of performance
-    # TODO -- Do we need to compute communities every time?
-    if strategy>=1:
+def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategies=[1], logger=None):
+    def process(strategy):
         # [BEGIN] Computing communities on the small corpus after transferring the weights of the large corpus
-        corpus_with_weights_transferred = f"{small_corpus_name}_louvain_weights_transferred: "
+        corpus_with_weights_transferred = f"{small_corpus_name}_louvain_weights_transferred_{strategy}: "
         sinr_with_weights_transferred = ge.SINr.load_from_cooc_pkl(small_corpus)
         sinr_with_weights_transferred.ponderate_graph(sinr_large_corpus, strategy)
         weighted_graph = sinr_with_weights_transferred.get_cooc_graph()
@@ -188,9 +184,8 @@ def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategy=
         logger.warning(compute_similarity(vectors_with_weights_transferred,corpus_with_weights_transferred))
         # [END] Computing communities on the small corpus after transferring the weights of the large corpus
 
-    if strategy>=2:
         # [BEGIN] Evaluating the similarity for the small corpus using weights and communities learned on the big one
-        corpus_communities_and_weights_transferred = f"{small_corpus_name}_communities_and_weights_transferred"
+        corpus_communities_and_weights_transferred = f"{small_corpus_name}_communities_and_weights_transferred_{strategy}"
         sinr_communities_and_weights_transferred = ge.SINr.load_from_cooc_pkl(small_corpus)
         sinr_communities_and_weights_transferred.set_cooc_graph(weighted_graph)
 
@@ -204,13 +199,11 @@ def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategy=
         logger.warning(compute_similarity(vectors_communities_and_weights_transferred, corpus_communities_and_weights_transferred)+"\n")
         # [END] Evaluating the similarity for the small corpus using weights and communities learned on the big one
    
-    if strategy>=3: 
         # [BEGIN] Giving the precomputed communities as a seed to louvain on re-weighted graph 
-        corpus_communities_and_weights_transferred_refined = f"{small_corpus_name}_communities_and_weights_transferred_refined"
+        corpus_communities_and_weights_transferred_refined = f"{small_corpus_name}_communities_and_weights_transferred_refined_{strategy}"
         initial_partition = sinr_communities_and_weights_transferred.get_communities()
         refined_communities = refine(sinr_communities_and_weights_transferred.get_cooc_graph(), initial_partition, "louvain")
         #_log_communities(logger,refined_communities,corpus_communities_and_weights_transferred_refined)
-        #logger.info(f"{corpus_communities_and_weights_transferred_refined} has {len([i for i in refined_communities.subsetSizes() if i==1])} singleton communities for {refined_communities.numberOfSubsets()} communities")
        
         sinr_communities_and_weights_transferred_refined = ge.SINr.load_from_cooc_pkl(small_corpus)
         sinr_communities_and_weights_transferred_refined.extract_embeddings(refined_communities)
@@ -218,6 +211,9 @@ def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategy=
             
         logger.warning(compute_similarity(vectors_communities_and_weights_transferred_refined,corpus_communities_and_weights_transferred_refined))
         # [END] Giving the precomputed communities as a seed to louvain on re-weighted graph''' 
+
+    for strategy in strategies:
+        process(strategy)
 
 class Transfert:
     def __init__(self, sinr_large_corpus, strategy, logger):
