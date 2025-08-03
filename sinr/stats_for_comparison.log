@@ -1,0 +1,129 @@
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling1 {'MEN': '   0.2630', 'WS353': '   0.4396', 'SCWS': '   0.3725'}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling08 {'MEN': '   0.2562', 'WS353': '   0.4337', 'SCWS': '   0.3575'}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling06 {'MEN': '   0.3772', 'WS353': '   0.4697', 'SCWS': '   0.4111'}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling1 {'MEN': '   0.2506', 'WS353': '   0.4102', 'SCWS': '   0.3592'}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling1 {'MEN': '   0.3993', 'WS353': '   0.4800', 'SCWS': '   0.4206'}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling1 {'MEN': '   0.3940', 'WS353': '   0.4496', 'SCWS': '   0.3991'}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling1 {'MEN': '   0.3854', 'WS353': '   0.4282', 'SCWS': '   0.3893'}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling06 {'MEN': '   0.2426', 'WS353': '   0.3887', 'SCWS': '   0.3353'}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling1_louvain_weights_transferred:  {'MEN': '   0.2644', 'WS353': '   0.4287', 'SCWS': '   0.3721'}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling06 {'MEN': '   0.3558', 'WS353': '   0.3953', 'SCWS': '   0.3819'}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling06 {'MEN': '   0.2466', 'WS353': '   0.4260', 'SCWS': '   0.3761'}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling08_louvain_weights_transferred:  {'MEN': '   0.2625', 'WS353': '   0.4448', 'SCWS': '   0.3716'}
+WARNING:oanc_extracted {'MEN': '   0.4356', 'WS353': '   0.4611', 'SCWS': '   0.4314'}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling08 {'MEN': '   0.2445', 'WS353': '   0.4029', 'SCWS': '   0.3424'}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling06 {'MEN': '   0.2412', 'WS353': '   0.4590', 'SCWS': '   0.3962'}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling1 {'MEN': '   0.5193', 'WS353': '   0.4889', 'SCWS': '   0.4184'}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling1_louvain_weights_transferred:  {'MEN': '   0.2553', 'WS353': '   0.4050', 'SCWS': '   0.3432'}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling08 {'MEN': '   0.2566', 'WS353': '   0.4527', 'SCWS': '   0.3866'}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling1_communities_and_weights_transferred {'MEN': '   0.2387', 'WS353': '   0.4179', 'SCWS': '   0.3686'}
+
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling06_louvain_weights_transferred:  {'MEN': '   0.2514', 'WS353': '   0.4201', 'SCWS': '   0.3582'}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling08_communities_and_weights_transferred {'MEN': '   0.2341', 'WS353': '   0.4217', 'SCWS': '   0.3555'}
+
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling08 {'MEN': '   0.4837', 'WS353': '   0.4475', 'SCWS': '   0.4065'}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling1 {'MEN': '   0.2639', 'WS353': '   0.4722', 'SCWS': '   0.4029'}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling06_louvain_weights_transferred:  {'MEN': '   0.3867', 'WS353': '   0.4783', 'SCWS': '   0.4239'}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling1 {'MEN': '   0.5210', 'WS353': '   0.5092', 'SCWS': '   0.4473'}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling06_louvain_weights_transferred:  {'MEN': '   0.2563', 'WS353': '   0.4166', 'SCWS': '   0.3619'}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling1_communities_and_weights_transferred {'MEN': '   0.2315', 'WS353': '   0.3936', 'SCWS': '   0.3434'}
+
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling06 {'MEN': '   0.4814', 'WS353': '   0.4730', 'SCWS': '   0.4358'}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling08 {'MEN': '   0.3812', 'WS353': '   0.4568', 'SCWS': '   0.4132'}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling1 {'MEN': '   0.5202', 'WS353': '   0.4957', 'SCWS': '   0.4496'}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling08_louvain_weights_transferred:  {'MEN': '   0.2520', 'WS353': '   0.3943', 'SCWS': '   0.3377'}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling06_louvain_weights_transferred:  {'MEN': '   0.2551', 'WS353': '   0.4459', 'SCWS': '   0.3858'}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling06_communities_and_weights_transferred {'MEN': '   0.2186', 'WS353': '   0.3895', 'SCWS': '   0.3576'}
+
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling06 {'MEN': '   0.3735', 'WS353': '   0.4226', 'SCWS': '   0.3941'}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling1_louvain_weights_transferred:  {'MEN': '   0.3890', 'WS353': '   0.4297', 'SCWS': '   0.3872'}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling1_louvain_weights_transferred:  {'MEN': '   0.3934', 'WS353': '   0.4504', 'SCWS': '   0.4038'}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling08 {'MEN': '   0.3626', 'WS353': '   0.3964', 'SCWS': '   0.3823'}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling08_louvain_weights_transferred:  {'MEN': '   0.2657', 'WS353': '   0.4648', 'SCWS': '   0.3980'}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling1_louvain_weights_transferred:  {'MEN': '   0.4090', 'WS353': '   0.4605', 'SCWS': '   0.4336'}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling06_louvain_weights_transferred:  {'MEN': '   0.3637', 'WS353': '   0.4258', 'SCWS': '   0.3718'}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling06 {'MEN': '   0.4689', 'WS353': '   0.4064', 'SCWS': '   0.3865'}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling08 {'MEN': '   0.3915', 'WS353': '   0.4273', 'SCWS': '   0.3948'}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling1 {'MEN': '   0.5047', 'WS353': '   0.4597', 'SCWS': '   0.4073'}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling06_communities_and_weights_transferred {'MEN': '   0.2210', 'WS353': '   0.4092', 'SCWS': '   0.3691'}
+
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling1_louvain_weights_transferred:  {'MEN': '   0.2821', 'WS353': '   0.4570', 'SCWS': '   0.4026'}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling08 {'MEN': '   0.4919', 'WS353': '   0.4546', 'SCWS': '   0.4160'}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling06_communities_and_weights_transferred {'MEN': '   0.2361', 'WS353': '   0.4388', 'SCWS': '   0.3888'}
+
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling08_communities_and_weights_transferred {'MEN': '   0.2254', 'WS353': '   0.3852', 'SCWS': '   0.3416'}
+
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling06_communities_and_weights_transferred {'MEN': '   0.3700', 'WS353': '   0.4356', 'SCWS': '   0.4201'}
+
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling08_communities_and_weights_transferred {'MEN': '   0.2360', 'WS353': '   0.4335', 'SCWS': '   0.3976'}
+
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling06 {'MEN': '   0.4806', 'WS353': '   0.4389', 'SCWS': '   0.3956'}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling08 {'MEN': '   0.5094', 'WS353': '   0.4714', 'SCWS': '   0.4399'}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling1_communities_and_weights_transferred {'MEN': '   0.2435', 'WS353': '   0.4399', 'SCWS': '   0.4049'}
+
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling06_communities_and_weights_transferred {'MEN': '   0.3429', 'WS353': '   0.4131', 'SCWS': '   0.3885'}
+
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling06_louvain_weights_transferred:  {'MEN': '   0.3720', 'WS353': '   0.4560', 'SCWS': '   0.3952'}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling08_louvain_weights_transferred:  {'MEN': '   0.3819', 'WS353': '   0.4465', 'SCWS': '   0.3886'}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling08_louvain_weights_transferred:  {'MEN': '   0.4025', 'WS353': '   0.4845', 'SCWS': '   0.4280'}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling06_communities_and_weights_transferred_refined {'MEN': '   0.2277', 'WS353': '   0.3871', 'SCWS': '   0.3644'}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling06_communities_and_weights_transferred_refined {'MEN': '   0.2245', 'WS353': '   0.4314', 'SCWS': '   0.3818'}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling06_communities_and_weights_transferred {'MEN': '   0.3531', 'WS353': '   0.4322', 'SCWS': '   0.4002'}
+
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling1_communities_and_weights_transferred {'MEN': '   0.3686', 'WS353': '   0.4430', 'SCWS': '   0.4031'}
+
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling08_communities_and_weights_transferred {'MEN': '   0.3598', 'WS353': '   0.4124', 'SCWS': '   0.3894'}
+
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling06_communities_and_weights_transferred_refined {'MEN': '   0.2151', 'WS353': '   0.3749', 'SCWS': '   0.3399'}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling08_communities_and_weights_transferred {'MEN': '   0.3777', 'WS353': '   0.4642', 'SCWS': '   0.4188'}
+
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling08_communities_and_weights_transferred_refined {'MEN': '   0.2293', 'WS353': '   0.3793', 'SCWS': '   0.3526'}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling08_louvain_weights_transferred:  {'MEN': '   0.3855', 'WS353': '   0.4353', 'SCWS': '   0.3932'}
+WARNING:oanc_extracted_min_freq100_max_freq5900_prct_sampling1_communities_and_weights_transferred_refined {'MEN': '   0.2505', 'WS353': '   0.4539', 'SCWS': '   0.3979'}
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling1_communities_and_weights_transferred {'MEN': '   0.3600', 'WS353': '   0.4193', 'SCWS': '   0.3869'}
+
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling06_louvain_weights_transferred:  {'MEN': '   0.4955', 'WS353': '   0.4839', 'SCWS': '   0.4070'}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling1_louvain_weights_transferred:  {'MEN': '   0.5087', 'WS353': '   0.4830', 'SCWS': '   0.4190'}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling06_louvain_weights_transferred:  {'MEN': '   0.4898', 'WS353': '   0.4815', 'SCWS': '   0.4546'}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling08_louvain_weights_transferred:  {'MEN': '   0.4995', 'WS353': '   0.5079', 'SCWS': '   0.4364'}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling06_louvain_weights_transferred:  {'MEN': '   0.4984', 'WS353': '   0.4763', 'SCWS': '   0.4302'}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling08_louvain_weights_transferred:  {'MEN': '   0.5101', 'WS353': '   0.5208', 'SCWS': '   0.4681'}
+WARNING:oanc_extracted_min_freq50_max_freq5900_prct_sampling1_communities_and_weights_transferred {'MEN': '   0.3762', 'WS353': '   0.4471', 'SCWS': '   0.4330'}
+
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling08_communities_and_weights_transferred {'MEN': '   0.3645', 'WS353': '   0.4205', 'SCWS': '   0.3932'}
+
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling1_louvain_weights_transferred:  {'MEN': '   0.5117', 'WS353': '   0.4903', 'SCWS': '   0.4605'}
+WARNING:oanc_extracted_min_freq100_max_freq4000_prct_sampling08_communities_and_weights_transferred_refined {'MEN': '   0.2451', 'WS353': '   0.4069', 'SCWS': '   0.3583'}
+WARNING:oanc_extracted_min_freq100_max_freq3000_prct_sampling1_communities_and_weights_transferred_refined {'MEN': '   0.2358', 'WS353': '   0.3851', 'SCWS': '   0.3571'}
+WARNING:oanc_extracted_louvain_weights_transferred:  {'MEN': '   0.4337', 'WS353': '   0.4307', 'SCWS': '   0.4258'}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling1_louvain_weights_transferred:  {'MEN': '   0.4955', 'WS353': '   0.5003', 'SCWS': '   0.4321'}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling1_louvain_weights_transferred:  {'MEN': '   0.5060', 'WS353': '   0.4935', 'SCWS': '   0.4564'}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling06_communities_and_weights_transferred {'MEN': '   0.4653', 'WS353': '   0.4758', 'SCWS': '   0.4066'}
+
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling08_communities_and_weights_transferred {'MEN': '   0.4821', 'WS353': '   0.4908', 'SCWS': '   0.4321'}
+
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling1_communities_and_weights_transferred {'MEN': '   0.4853', 'WS353': '   0.4675', 'SCWS': '   0.4197'}
+
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling06_communities_and_weights_transferred {'MEN': '   0.4736', 'WS353': '   0.4634', 'SCWS': '   0.4453'}
+
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling08_communities_and_weights_transferred {'MEN': '   0.4884', 'WS353': '   0.4945', 'SCWS': '   0.4615'}
+
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling06_communities_and_weights_transferred {'MEN': '   0.4815', 'WS353': '   0.4523', 'SCWS': '   0.4198'}
+
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling08_louvain_weights_transferred:  {'MEN': '   0.4939', 'WS353': '   0.4808', 'SCWS': '   0.4100'}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling1_communities_and_weights_transferred {'MEN': '   0.4966', 'WS353': '   0.4793', 'SCWS': '   0.4588'}
+
+WARNING:oanc_extracted_communities_and_weights_transferred {'MEN': '   0.4298', 'WS353': '   0.4175', 'SCWS': '   0.4362'}
+
+WARNING:oanc_extracted_min_freq50_max_freq3000_prct_sampling1_communities_and_weights_transferred_refined {'MEN': '   0.3541', 'WS353': '   0.3937', 'SCWS': '   0.3846'}
+WARNING:oanc_extracted_min_freq50_max_freq4000_prct_sampling1_communities_and_weights_transferred_refined {'MEN': '   0.3652', 'WS353': '   0.4315', 'SCWS': '   0.3903'}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling1_communities_and_weights_transferred {'MEN': '   0.4880', 'WS353': '   0.4767', 'SCWS': '   0.4315'}
+
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling1_communities_and_weights_transferred {'MEN': '   0.4966', 'WS353': '   0.4793', 'SCWS': '   0.4588'}
+
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling08_communities_and_weights_transferred {'MEN': '   0.4691', 'WS353': '   0.4466', 'SCWS': '   0.4151'}
+
+WARNING:oanc_extracted_communities_and_weights_transferred_refined {'MEN': '   0.3762', 'WS353': '   0.4360', 'SCWS': '   0.4211'}
+WARNING:oanc_extracted_min_freq20_max_freq4000_prct_sampling1_communities_and_weights_transferred_refined {'MEN': '   0.4710', 'WS353': '   0.4530', 'SCWS': '   0.4229'}
+WARNING:oanc_extracted_min_freq20_max_freq5900_prct_sampling1_communities_and_weights_transferred_refined {'MEN': '   0.4660', 'WS353': '   0.4674', 'SCWS': '   0.4490'}
+WARNING:oanc_extracted_min_freq20_max_freq3000_prct_sampling08_communities_and_weights_transferred_refined {'MEN': '   0.4506', 'WS353': '   0.3942', 'SCWS': '   0.3974'}
