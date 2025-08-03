@@ -167,7 +167,7 @@ def refine(graph, communities, algorithm, gamma=50):
 
     return algorithms[algorithm]()   
 
-def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategies=[1], logger=None):
+def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategy=1, logger=None):
     def process(strategy):
         # [BEGIN] Computing communities on the small corpus after transferring the weights of the large corpus
         corpus_with_weights_transferred = f"{small_corpus_name}_louvain_weights_transferred_{strategy}: "
@@ -212,8 +212,7 @@ def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategie
         logger.warning(compute_similarity(vectors_communities_and_weights_transferred_refined,corpus_communities_and_weights_transferred_refined))
         # [END] Giving the precomputed communities as a seed to louvain on re-weighted graph''' 
 
-    for strategy in strategies:
-        process(strategy)
+    process(strategy)
 
 class Transfert:
     def __init__(self, sinr_large_corpus, strategy, logger):
@@ -230,7 +229,9 @@ class Transfert:
 
         # Creating the cooccurrence matrix if not existing
         create_cooc_matrix(path_to_text_2, path_to_matrix_2, corpus_2_name)
-        make_transfert(self.sinr_large_corpus, path_to_matrix_2, corpus_2_name, self.strategy, self.logger)
+        make_transfert(self.sinr_large_corpus, path_to_matrix_2, corpus_2_name, 1, self.logger)
+        make_transfert(self.sinr_large_corpus, path_to_matrix_2, corpus_2_name, 2, self.logger)
+        make_transfert(self.sinr_large_corpus, path_to_matrix_2, corpus_2_name, 3, self.logger)
         return None
 
 if __name__=="__main__":
