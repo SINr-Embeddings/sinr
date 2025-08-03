@@ -282,7 +282,7 @@ if __name__=="__main__":
 
         try:
             pool = Pool()
-            transfert = Transfert(sinr_1, 3, logger)
+            transfert = Transfert(sinr_1, [1,2,3], logger)
             results = pool.map(transfert, small_corpuses)
         finally:
             pool.close()
