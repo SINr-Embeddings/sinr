@@ -11,6 +11,9 @@ import sinr.text.evaluate as ev
 import sinr.graph_embeddings as ge
 import sys, pickle
 
+import warnings
+warnings.filterwarnings("ignore")
+
 min_frequences = { 
         "BNC": 50,
         "OANC_raw": 20
@@ -293,7 +296,7 @@ if __name__=="__main__":
             pool = Pool(6)
             transfert = Transfert(sinr_1, 1, logger)
             results = pool.map(transfert, small_corpuses)
-            print(results[0], file=sys.stderr)
+            print(results, file=sys.stderr)
         finally:
             pool.close()
             pool.join()
