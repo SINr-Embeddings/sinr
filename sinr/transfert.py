@@ -189,6 +189,21 @@ def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategy=
         result += compute_similarity(vectors_with_weights_transferred,corpus_with_weights_transferred)+"\n"
         # [END] Computing communities on the small corpus after transferring the weights of the large corpus
 
+        # [BEGIN] Evaluating the similarity for the small corpus using communities learned on the big one
+        corpus_communities_transferred = f"{small_corpus_name}_communities_transferred_{strategy}"
+        sinr_communities_transferred = ge.SINr.load_from_cooc_pkl(small_corpus)
+
+        sinr_communities_transferred.transfert_communities_labels(vectors_1.get_communities_as_labels_sets())
+        transferred_communities = sinr_communities_transferred.get_communities()
+        #_log_communities(logger, transferred_communities, corpus_communities_and_weights_transferred)
+        
+        sinr_communities_transferred.extract_embeddings()
+        vectors_communities_transferred = ge.InterpretableWordsModelBuilder(sinr_communities_transferred, corpus_communities_transferred, n_jobs=40, n_neighbors=4).build()
+        
+        #logger.warning(compute_similarity(vectors_communities_and_weights_transferred, corpus_communities_and_weights_transferred)+"\n")
+        result += compute_similarity(vectors_communities_transferred, corpus_communities_transferred)+"\n"
+        # [END] Evaluating the similarity for the small corpus using weights and communities learned on the big one
+
         # [BEGIN] Evaluating the similarity for the small corpus using weights and communities learned on the big one
         corpus_communities_and_weights_transferred = f"{small_corpus_name}_communities_and_weights_transferred_{strategy}"
         sinr_communities_and_weights_transferred = ge.SINr.load_from_cooc_pkl(small_corpus)
@@ -207,17 +222,20 @@ def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategy=
    
         # [BEGIN] Giving the precomputed communities as a seed to louvain on re-weighted graph 
         corpus_communities_and_weights_transferred_refined = f"{small_corpus_name}_communities_and_weights_transferred_refined_{strategy}"
-        initial_partition = sinr_communities_and_weights_transferred.get_communities()
-        refined_communities = refine(sinr_communities_and_weights_transferred.get_cooc_graph(), initial_partition, "louvain")
         #_log_communities(logger,refined_communities,corpus_communities_and_weights_transferred_refined)
-       
+      
+        # Transferring communities from large corpus to small one
         sinr_communities_and_weights_transferred_refined = ge.SINr.load_from_cooc_pkl(small_corpus)
+        sinr_communities_and_weights_transferred_refined.transfert_communities_labels(vectors_1.get_communities_as_labels_sets())
+
+        # Using such communities as a seed on the original graph
+        refined_communities = refine(sinr_communities_and_weights_transferred_refined.get_cooc_graph(), sinr_communities_and_weights_transferred_refined.get_communities(), "leiden")
         sinr_communities_and_weights_transferred_refined.extract_embeddings(refined_communities)
         vectors_communities_and_weights_transferred_refined = ge.InterpretableWordsModelBuilder(sinr_communities_and_weights_transferred_refined, corpus_communities_and_weights_transferred_refined, n_jobs=40, n_neighbors=4).build()
             
         #logger.warning(compute_similarity(vectors_communities_and_weights_transferred_refined,corpus_communities_and_weights_transferred_refined))
         result += compute_similarity(vectors_communities_and_weights_transferred_refined,corpus_communities_and_weights_transferred_refined)+"\n"
-        # [END] Giving the precomputed communities as a seed to louvain on re-weighted graph''' 
+        # [END] Giving the precomputed communities as a seed to louvain on re-weighted graph
 
         return result
 
@@ -293,10 +311,11 @@ if __name__=="__main__":
         small_corpuses = glob.glob(sys.argv[2]+"*.pk*")
 
         try:
-            pool = Pool(6)
+            pool = Pool()
             transfert = Transfert(sinr_1, 1, logger)
             results = pool.map(transfert, small_corpuses)
-            print(results, file=sys.stderr)
+            #print(results, file=sys.stderr)
+            print("\n".join(results), file=sys.stderr)
         finally:
             pool.close()
             pool.join()
