@@ -129,8 +129,13 @@ def refine(graph, communities, algorithm, gamma=50):
     def _leiden():
         from cdlib import algorithms, NodeClustering
         networkx_graph = networkit.nxadapter.nk2nx(graph)
-        
-        coms = algorithms.leiden(networkx_graph, weights='weight', initial_membership=communities.getVector())
+       
+        if (communities is None):
+            partition = networkit.structures.Partition(len(networkx_graph.nodes))
+            partition.allToSingletons()
+        else:
+            partition = communities
+        coms = algorithms.leiden(networkx_graph, weights='weight', initial_membership=partition.getVector())
 
         # Compute a map node<->list of communities
         community_map = NodeClustering.to_node_community_map(coms)
@@ -146,8 +151,14 @@ def refine(graph, communities, algorithm, gamma=50):
         from cdlib import algorithms, NodeClustering
         networkx_graph = networkit.nxadapter.nk2nx(graph)
 
-        list_of_communities = [list() for _ in range(communities.numberOfSubsets())]
-        for index,community in enumerate(communities.getVector()):
+        if (communities is None):
+            partition = networkit.structures.Partition(len(networkx_graph.nodes))
+            partition.allToSingletons()
+        else:
+            partition = communities
+        
+        list_of_communities = [list() for _ in range(partition.numberOfSubsets())]
+        for index,community in enumerate(partition.getVector()):
             list_of_communities[community].append(index)
 
         nc = NodeClustering(list_of_communities, networkx_graph, algorithm)
@@ -170,16 +181,29 @@ def refine(graph, communities, algorithm, gamma=50):
 
     return algorithms[algorithm]()   
 
-def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategy=1, logger=None):
+def make_transfert(sinr_large_corpus, vectors_large_corpus, small_corpus, small_corpus_name, strategy=1, logger=None):
     def process(strategy):
         result = f""
-        # [BEGIN] Computing communities on the small corpus after transferring the weights of the large corpus
-        corpus_with_weights_transferred = f"{small_corpus_name}_louvain_weights_transferred_{strategy}: "
-        sinr_with_weights_transferred = ge.SINr.load_from_cooc_pkl(small_corpus)
-        sinr_with_weights_transferred.ponderate_graph(sinr_large_corpus, strategy)
-        weighted_graph = sinr_with_weights_transferred.get_cooc_graph()
+        corpus_with_weights_transferred = f"{small_corpus_name}_leiden_weights_transferred_{strategy}: "
+        sinr_with_weights_transferred_leiden = ge.SINr.load_from_cooc_pkl(small_corpus)
+        sinr_with_weights_transferred_leiden.ponderate_graph(sinr_large_corpus, strategy)
+        weighted_graph = sinr_with_weights_transferred_leiden.get_cooc_graph()
 
+        # Leiden produces awful results, something must be wrong with the implementation…
+        '''# [BEGIN] Giving the precomputed communities as a seed to leiden on re-weighted graph 
+        # Transferring communities from large corpus to small one
+        # Using such communities as a seed on the original graph
+        refined_communities = refine(sinr_with_weights_transferred_leiden.get_cooc_graph(), None, "leiden")
+        sinr_with_weights_transferred_leiden.extract_embeddings(refined_communities)
+        vectors_weights_transferred_leiden = ge.InterpretableWordsModelBuilder(sinr_with_weights_transferred_leiden, corpus_with_weights_transferred, n_jobs=40, n_neighbors=4).build()
+            
+        #logger.warning(compute_similarity(vectors_communities_and_weights_transferred_refined,corpus_communities_and_weights_transferred_refined))
+        result += compute_similarity(vectors_weights_transferred_leiden,corpus_with_weights_transferred)+"\n"
+        # [END] Giving the precomputed communities as a seed to leiden on re-weighted graph'''
+
+        # [BEGIN] Computing communities on the small corpus after transferring the weights of the large corpus
         communities_with_weights_transferred = sinr_with_weights_transferred.detect_communities(gamma=50)
+        print(type(sinr_with_weights_transferred.get_communities()), type(communities_with_weights_transferred))
         #logger.info(f"{corpus_with_weights_transferred} has {len([i for i in communities_with_weights_transferred.subsetSizes() if i==1])} singleton communities for {communities_with_weights_transferred.numberOfSubsets()} communities")
         #_log_communities(logger,communities_with_weights_transferred,corpus_with_weights_transferred)
 
@@ -193,8 +217,8 @@ def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategy=
         corpus_communities_transferred = f"{small_corpus_name}_communities_transferred_{strategy}"
         sinr_communities_transferred = ge.SINr.load_from_cooc_pkl(small_corpus)
 
-        sinr_communities_transferred.transfert_communities_labels(vectors_1.get_communities_as_labels_sets())
-        transferred_communities = sinr_communities_transferred.get_communities()
+        sinr_communities_transferred.transfert_communities_labels(vectors_large_corpus.get_communities_as_labels_sets())
+        #transferred_communities = sinr_communities_transferred.get_communities()
         #_log_communities(logger, transferred_communities, corpus_communities_and_weights_transferred)
         
         sinr_communities_transferred.extract_embeddings()
@@ -209,41 +233,94 @@ def make_transfert(sinr_large_corpus, small_corpus, small_corpus_name, strategy=
         sinr_communities_and_weights_transferred = ge.SINr.load_from_cooc_pkl(small_corpus)
         sinr_communities_and_weights_transferred.set_cooc_graph(weighted_graph)
 
-        sinr_communities_and_weights_transferred.transfert_communities_labels(vectors_1.get_communities_as_labels_sets())
-        transferred_communities = sinr_communities_and_weights_transferred.get_communities()
+        sinr_communities_and_weights_transferred.transfert_communities_labels(vectors_large_corpus.get_communities_as_labels_sets())
+        #transferred_communities = sinr_communities_and_weights_transferred.get_communities()
         #_log_communities(logger, transferred_communities, corpus_communities_and_weights_transferred)
         
         sinr_communities_and_weights_transferred.extract_embeddings()
-        vectors_communities_and_weights_transferred = ge.InterpretableWordsModelBuilder(sinr_communities_and_weights_transferred, corpus_communities_and_weights_transferred, n_jobs=40, n_neighbors=4).build()
+        vectors_communities_and_weights_transferred = ge.InterpretableWordsModelBuilder(sinr_communities_and_weights_transferred, corpus_communities_and_weights_transferred, n_jobs=4, n_neighbors=4).build()
         
         #logger.warning(compute_similarity(vectors_communities_and_weights_transferred, corpus_communities_and_weights_transferred)+"\n")
         result += compute_similarity(vectors_communities_and_weights_transferred, corpus_communities_and_weights_transferred)+"\n"
         # [END] Evaluating the similarity for the small corpus using weights and communities learned on the big one
    
-        # [BEGIN] Giving the precomputed communities as a seed to louvain on re-weighted graph 
-        corpus_communities_and_weights_transferred_refined = f"{small_corpus_name}_communities_and_weights_transferred_refined_{strategy}"
+        # [BEGIN] Giving the precomputed communities as a seed to louvain on original graph 
+        corpus_communities_transferred_refined_louvain = f"{small_corpus_name}_communities_transferred_refined_louvain_{strategy}"
         #_log_communities(logger,refined_communities,corpus_communities_and_weights_transferred_refined)
       
         # Transferring communities from large corpus to small one
-        sinr_communities_and_weights_transferred_refined = ge.SINr.load_from_cooc_pkl(small_corpus)
-        sinr_communities_and_weights_transferred_refined.transfert_communities_labels(vectors_1.get_communities_as_labels_sets())
+        sinr_communities_transferred_refined_louvain = ge.SINr.load_from_cooc_pkl(small_corpus)
+        sinr_communities_transferred_refined_louvain.transfert_communities_labels(vectors_large_corpus.get_communities_as_labels_sets())
 
         # Using such communities as a seed on the original graph
-        refined_communities = refine(sinr_communities_and_weights_transferred_refined.get_cooc_graph(), sinr_communities_and_weights_transferred_refined.get_communities(), "leiden")
-        sinr_communities_and_weights_transferred_refined.extract_embeddings(refined_communities)
-        vectors_communities_and_weights_transferred_refined = ge.InterpretableWordsModelBuilder(sinr_communities_and_weights_transferred_refined, corpus_communities_and_weights_transferred_refined, n_jobs=40, n_neighbors=4).build()
+        refined_communities = refine(sinr_communities_transferred_refined_louvain.get_cooc_graph(), sinr_communities_transferred_refined_louvain.get_communities(), "louvain")
+        sinr_communities_transferred_refined_louvain.extract_embeddings(refined_communities)
+        vectors_communities_transferred_refined_louvain = ge.InterpretableWordsModelBuilder(sinr_communities_transferred_refined_louvain, corpus_communities_transferred_refined_louvain, n_jobs=4, n_neighbors=4).build()
             
         #logger.warning(compute_similarity(vectors_communities_and_weights_transferred_refined,corpus_communities_and_weights_transferred_refined))
-        result += compute_similarity(vectors_communities_and_weights_transferred_refined,corpus_communities_and_weights_transferred_refined)+"\n"
+        result += compute_similarity(vectors_communities_transferred_refined_louvain,corpus_communities_transferred_refined_louvain)+"\n"
+        # [END] Giving the precomputed communities as a seed to louvain on re-weighted graph
+   
+        # [BEGIN] Giving the precomputed communities as a seed to louvain on re-weighted graph 
+        corpus_communities_and_weights_transferred_refined_louvain = f"{small_corpus_name}_communities_and_weights_transferred_refined_louvain_{strategy}"
+        #_log_communities(logger,refined_communities,corpus_communities_and_weights_transferred_refined)
+      
+        # Transferring communities from large corpus to small one
+        sinr_communities_and_weights_transferred_refined_louvain = ge.SINr.load_from_cooc_pkl(small_corpus)
+        sinr_communities_and_weights_transferred_refined_louvain.transfert_communities_labels(vectors_large_corpus.get_communities_as_labels_sets())
+        sinr_communities_and_weights_transferred_refined_louvain.set_cooc_graph(weighted_graph)
+
+        # Using such communities as a seed on the original graph
+        refined_communities = refine(sinr_communities_and_weights_transferred_refined_louvain.get_cooc_graph(), sinr_communities_and_weights_transferred_refined_louvain.get_communities(), "louvain")
+        sinr_communities_and_weights_transferred_refined_louvain.extract_embeddings(refined_communities)
+        vectors_communities_and_weights_transferred_refined_louvain = ge.InterpretableWordsModelBuilder(sinr_communities_and_weights_transferred_refined_louvain, corpus_communities_and_weights_transferred_refined_louvain, n_jobs=40, n_neighbors=4).build()
+            
+        #logger.warning(compute_similarity(vectors_communities_and_weights_transferred_refined,corpus_communities_and_weights_transferred_refined))
+        result += compute_similarity(vectors_communities_and_weights_transferred_refined_louvain,corpus_communities_and_weights_transferred_refined_louvain)+"\n"
         # [END] Giving the precomputed communities as a seed to louvain on re-weighted graph
 
+        '''# [BEGIN] Giving the precomputed communities as a seed to leiden on original graph 
+        corpus_communities_transferred_refined_leiden = f"{small_corpus_name}_communities_transferred_refined_leiden_{strategy}"
+        #_log_communities(logger,refined_communities,corpus_communities_and_weights_transferred_refined)
+      
+        # Transferring communities from large corpus to small one
+        sinr_communities_transferred_refined_leiden = ge.SINr.load_from_cooc_pkl(small_corpus)
+        sinr_communities_transferred_refined_leiden.transfert_communities_labels(vectors_large_corpus.get_communities_as_labels_sets())
+
+        # Using such communities as a seed on the original graph
+        refined_communities = refine(sinr_communities_transferred_refined_leiden.get_cooc_graph(), sinr_communities_transferred_refined_leiden.get_communities(), "leiden")
+        sinr_communities_transferred_refined_leiden.extract_embeddings(refined_communities)
+        vectors_communities_transferred_refined_leiden = ge.InterpretableWordsModelBuilder(sinr_communities_transferred_refined_leiden, corpus_communities_transferred_refined_leiden, n_jobs=4, n_neighbors=4).build()
+            
+        #logger.warning(compute_similarity(vectors_communities_and_weights_transferred_refined,corpus_communities_and_weights_transferred_refined))
+        result += compute_similarity(vectors_communities_transferred_refined_leiden,corpus_communities_transferred_refined_leiden)+"\n"
+        # [END] Giving the precomputed communities as a seed to leiden on re-weighted graph
+   
+        # [BEGIN] Giving the precomputed communities as a seed to leiden on re-weighted graph 
+        corpus_communities_and_weights_transferred_refined_leiden = f"{small_corpus_name}_communities_and_weights_transferred_refined_leiden_{strategy}"
+        #_log_communities(logger,refined_communities,corpus_communities_and_weights_transferred_refined)
+      
+        # Transferring communities from large corpus to small one
+        sinr_communities_and_weights_transferred_refined_leiden = ge.SINr.load_from_cooc_pkl(small_corpus)
+        sinr_communities_and_weights_transferred_refined_leiden.transfert_communities_labels(vectors_large_corpus.get_communities_as_labels_sets())
+        sinr_communities_and_weights_transferred_refined_leiden.set_cooc_graph(weighted_graph)
+
+        # Using such communities as a seed on the original graph
+        refined_communities = refine(sinr_communities_and_weights_transferred_refined_leiden.get_cooc_graph(), sinr_communities_and_weights_transferred_refined_leiden.get_communities(), "leiden")
+        sinr_communities_and_weights_transferred_refined_leiden.extract_embeddings(refined_communities)
+        vectors_communities_and_weights_transferred_refined_leiden = ge.InterpretableWordsModelBuilder(sinr_communities_and_weights_transferred_refined_leiden, corpus_communities_and_weights_transferred_refined_leiden, n_jobs=40, n_neighbors=4).build()
+            
+        #logger.warning(compute_similarity(vectors_communities_and_weights_transferred_refined,corpus_communities_and_weights_transferred_refined))
+        result += compute_similarity(vectors_communities_and_weights_transferred_refined_leiden,corpus_communities_and_weights_transferred_refined_leiden)+"\n"
+        # [END] Giving the precomputed communities as a seed to leiden on re-weighted graph'''
         return result
 
     return process(strategy)
 
 class Transfert:
-    def __init__(self, sinr_large_corpus, strategy, logger):
+    def __init__(self, sinr_large_corpus, vectors_large_corpus, strategy, logger):
         self.sinr_large_corpus = sinr_large_corpus
+        self.vectors_large_corpus = vectors_large_corpus
         self.strategy = strategy
         self.logger = logger
 
@@ -260,7 +337,7 @@ class Transfert:
         if (self.strategy>0):
             # Creating the cooccurrence matrix if not existing
             create_cooc_matrix(path_to_text_2, path_to_matrix_2, corpus_2_name)
-            result += make_transfert(self.sinr_large_corpus, path_to_matrix_2, corpus_2_name, self.strategy, self.logger)
+            result += make_transfert(self.sinr_large_corpus, self.vectors_large_corpus, path_to_matrix_2, corpus_2_name, self.strategy, self.logger)
         return result
 
 if __name__=="__main__":
@@ -311,8 +388,8 @@ if __name__=="__main__":
         small_corpuses = glob.glob(sys.argv[2]+"*.pk*")
 
         try:
-            pool = Pool()
-            transfert = Transfert(sinr_1, 1, logger)
+            pool = Pool(4)
+            transfert = Transfert(sinr_1, vectors_1, 1, logger)
             results = pool.map(transfert, small_corpuses)
             #print(results, file=sys.stderr)
             print("\n".join(results), file=sys.stderr)
