@@ -33,6 +33,5 @@ Publications
 **SINr library**
 
 
--  Thibault Prouteau, Nicolas Dugué, Simon Guillot, Anthony Perez. SINr: a python package to train interpretable word and graph embeddings. French Regional Conference on Complex Systems, May 2023, Le Havre, France. pp.215, 
-   `⟨10.5281/zenodo.7957531⟩ <https://dx.doi.org/10.5281/zenodo.7957531>`. `⟨hal-04113024⟩ <https://hal.science/hal-04113024v1>`__ 
-=======
+-  Thibault Prouteau, Nicolas Dugué, Nathalie Camelin, Sylvain Meignier. Are Embedding Spaces Interpretable? Results of an Intrusion Detection Evaluation on a Large French Corpus. LREC 2022, Jun 2022, Marseille, France. `⟨hal-03770444⟩ <https://hal.science/hal-03770444>`__
+

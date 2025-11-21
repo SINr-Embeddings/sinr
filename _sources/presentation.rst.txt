@@ -185,6 +185,8 @@ Publications can also be found on :ref:`Publications`.
    French Regional Conference on Complex Systems, May 2023, Le Havre, France. pp.215, 
    `⟨10.5281/zenodo.7957531⟩ <https://dx.doi.org/10.5281/zenodo.7957531>`. `⟨hal-04113024⟩ <https://hal.science/hal-04113024v1>`__ 
 
+
+
 .. |languages| image:: https://img.shields.io/github/languages/count/SINr-Embeddings/sinr
 .. |downloads| image:: https://img.shields.io/pypi/dm/sinr
 .. |license| image:: https://img.shields.io/pypi/l/sinr?color=green
