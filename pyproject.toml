@@ -38,9 +38,11 @@ include = [
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
-cmake =  ">=3.18"
 joblib = ">=1.1.1"
-networkit = ">=9.1.1"
+networkit = [
+    { version = "9.1.1", python = "<3.11" },
+    { version = "11.0.1", python = ">=3.11" }
+]
 numpy = ">=1.20.0"
 scipy = ">=1.6.1"
 scikit-learn = "^1.2.1"
