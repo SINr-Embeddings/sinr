@@ -19,9 +19,11 @@ from sklearn.metrics.pairwise import cosine_similarity
 import itertools
 import matplotlib.pyplot as plt
 from pathlib import Path
+
 import sinr.graph_embeddings as ge
 from joblib import Parallel, delayed
 from statistics import mean 
+
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
@@ -862,6 +864,7 @@ def compute_analogy_sparse_normalized(sinr_vec, word_a, word_b, word_c, n=100):
         return sinr_vec.vocab[best_index]
     return None
 
+
 def varnn(set1, set2, k=25):
     """
     Computes varnn metrics from two neighbor sets.
@@ -953,6 +956,7 @@ def scores_varnn(model1, model2, k=25):
     res_per_word=varnn_across_models(model1, model2, k)
     res_per_word_pierrejean = [i[0] for i in res_per_word]
     return mean(res_per_word_pierrejean)
+
 
 def similarity_MEN_WS353_SCWS(sinr_vec, print_missing=True):
     """Evaluate similarity with MEN, WS353 and SCWS datasets

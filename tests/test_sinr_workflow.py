@@ -56,6 +56,7 @@ class TestSinr_embeddings(unittest.TestCase):
         
         #Normalise cooccurrence matrix using PPMI
         c.matrix = pmi_filter(c.matrix)
+        print(c.matrix)
         c.save("matrix.pk")
         
         self.sinr_from_cooc = graph_embeddings.SINr.load_from_cooc_pkl("matrix.pk")
@@ -72,11 +73,11 @@ class TestSinr_embeddings(unittest.TestCase):
         # The node of 'is' is outside the lgcc, 'is' is removed from the model vocabulary
         # ['a', 'fun' 'package', 'python', 'sinr']
         res.remove('is')
-        self.assertEquals(set(self.sinr_from_cooc.get_vocabulary()), res)
+        self.assertEqual(set(self.sinr_from_cooc.get_vocabulary()), res)
     
-        self.assertEquals(set(self.sinr_from_graph.get_vocabulary()), set(self.G.iterNodes()))
+        self.assertEqual(set(self.sinr_from_graph.get_vocabulary()), set(self.G.iterNodes()))
         
-        self.assertEquals(set(self.sinr_from_mat.get_vocabulary()), set(self.G.iterNodes()))
+        self.assertEqual(set(self.sinr_from_mat.get_vocabulary()), set(self.G.iterNodes()))
     
     def test_community_exception(self):
         self.assertRaises(NoCommunityDetectedException,self.sinr_from_graph.get_communities)

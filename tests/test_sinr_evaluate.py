@@ -9,6 +9,7 @@ import numpy as np
 
 import sinr.graph_embeddings as ge
 from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer, clf_fit, clf_score, compute_analogy_normalized, compute_analogy_sparse_normalized, compute_analogy_value_zero, compute_direct_bias_sinr, compute_indirect_bias_sinr, project_vector, reject_vector, identify_gender_direction_sinr, eval_analogy_k, best_predicted_word_k, varnn
+
 import urllib.request
 import os
 import tempfile
@@ -336,6 +337,7 @@ class TestVarnnFunction(unittest.TestCase):
         set2 = {"a", "b"}
         with self.assertRaises(ZeroDivisionError):
             varnn(set1, set2)
+
 
 if __name__ == '__main__':
     unittest.main()
