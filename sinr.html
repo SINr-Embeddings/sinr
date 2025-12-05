@@ -404,6 +404,33 @@ This object cannot then be used to inspect the resulting vectors. Instead, using
 <h3>Attributes<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
 <p>Attributes should not be read</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.add_edges_from_sentences">
+<span class="sig-name descname"><span class="pre">add_edges_from_sentences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sentences</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_cooccurrence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.add_edges_from_sentences" title="Permalink to this definition"></a></dt>
+<dd><p>Adds co-occurrence edges between OOV words and context words from given sentences.</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><p>sentences (Iterable[str]): List of sentences.
+new_ids (dict): Mapping of OOV words to their node IDs.
+window_size (int): Context window size.
+min_cooccurrence (int): Minimum co-occurrence count for an edge.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.add_oov_words">
+<span class="sig-name descname"><span class="pre">add_oov_words</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oov_words</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.add_oov_words" title="Permalink to this definition"></a></dt>
+<dd><p>Adds OOV (Out-Of-Vocabulary) words to the vocabulary and the cooccurrence graph.</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><p>oov_words (Iterable[str]): List of OOV words.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: Mapping of OOV words to their new node IDs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.detect_communities">
 <span class="sig-name descname"><span class="pre">detect_communities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inspect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">par</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'balanced'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.detect_communities" title="Permalink to this definition"></a></dt>
 <dd><p>Runs community detection on the graph</p>
@@ -548,27 +575,6 @@ Co-occurrence matrices should for instance be generated using sinr.text.cooccurr
 <dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.size_of_voc">
 <span class="sig-name descname"><span class="pre">size_of_voc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.size_of_voc" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the size of the vocabulary.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="sinr.graph_embeddings.SINr.transfert_communities_labels">
-<span class="sig-name descname"><span class="pre">transfert_communities_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">community_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINr.transfert_communities_labels" title="Permalink to this definition"></a></dt>
-<dd><p>Transfer communities computed on one graph to another, used mainly with co-occurence graphs.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>community_labels</strong> – a list of communities described by sets of labels describing the nodes</p></li>
-<li><p><strong>refine</strong> (<em>bool</em>) – (Default value = False)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Typev community_labels<span class="colon">:</span></dt>
-<dd class="field-even"><p>list[set[str]]</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Initializes a partition where nodes are all singletons. Then, when communities in parameters contain labels</p>
-</dd>
-</dl>
-<p>that are in the graph at hand, these communities are transferred.</p>
 </dd></dl>
 
 </section>
@@ -993,23 +999,6 @@ Co-occurrence matrices should for instance be generated using sinr.text.cooccurr
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_vectors_using_self_space">
-<span class="sig-name descname"><span class="pre">get_vectors_using_self_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vector</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_vectors_using_self_space" title="Permalink to this definition"></a></dt>
-<dd><p>Transpose the vectors of the sinr_vector object in parameter in the embedding space of the self object, using matching communities</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>sinr_vector</strong> (<a class="reference internal" href="#sinr.graph_embeddings.SINrVectors" title="sinr.graph_embeddings.SINrVectors"><em>SINrVectors</em></a>) – Small model (target)</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Copy of the self model (the big one) with vectors of the parameter (small one) transposed to its referential</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#sinr.graph_embeddings.SINrVectors" title="sinr.graph_embeddings.SINrVectors">SINrVectors</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.get_vocabulary_size">
 <span class="sig-name descname"><span class="pre">get_vocabulary_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.get_vocabulary_size" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -1255,6 +1244,25 @@ Co-occurrence matrices should for instance be generated using sinr.text.cooccurr
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>k</strong> – int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sinr.graph_embeddings.SINrVectors.transfert_sinr">
+<span class="sig-name descname"><span class="pre">transfert_sinr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">small_cooc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'model_transfert'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.graph_embeddings.SINrVectors.transfert_sinr" title="Permalink to this definition"></a></dt>
+<dd><p>Transfer the communities and embeddings from a small co-occurrence graph to the current one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>small_cooc</strong> (<a class="reference internal" href="#sinr.graph_embeddings.SINr" title="sinr.graph_embeddings.SINr"><em>SINr</em></a>) – A SINr object containing the small co-occurrence graph and the communities</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the model to be built, used for saving the model. The default is ‘model_transfert’.</p></li>
+<li><p><strong>n_neighbors</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of neighbors to use for the Nearest Neighbors model. The default is 25.</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of jobs that should be used The default is -1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A SINrVectors object transferred and aligned.</p>
 </dd>
 </dl>
 </dd></dl>

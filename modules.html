@@ -122,6 +122,8 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINr"><code class="docutils literal notranslate"><span class="pre">SINr</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINr.add_edges_from_sentences"><code class="docutils literal notranslate"><span class="pre">SINr.add_edges_from_sentences()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINr.add_oov_words"><code class="docutils literal notranslate"><span class="pre">SINr.add_oov_words()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINr.detect_communities"><code class="docutils literal notranslate"><span class="pre">SINr.detect_communities()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINr.extract_embeddings"><code class="docutils literal notranslate"><span class="pre">SINr.extract_embeddings()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINr.get_communities"><code class="docutils literal notranslate"><span class="pre">SINr.get_communities()</span></code></a></li>
@@ -137,7 +139,6 @@
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINr.load_from_graph"><code class="docutils literal notranslate"><span class="pre">SINr.load_from_graph()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINr.run"><code class="docutils literal notranslate"><span class="pre">SINr.run()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINr.size_of_voc"><code class="docutils literal notranslate"><span class="pre">SINr.size_of_voc()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINr.transfert_communities_labels"><code class="docutils literal notranslate"><span class="pre">SINr.transfert_communities_labels()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors"><code class="docutils literal notranslate"><span class="pre">SINrVectors</span></code></a><ul>
@@ -166,7 +167,6 @@
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.get_union_topk"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_union_topk()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.get_value_dim_per_word"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_value_dim_per_word()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.get_value_obj_dim"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_value_obj_dim()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.get_vectors_using_self_space"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_vectors_using_self_space()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.get_vocabulary_size"><code class="docutils literal notranslate"><span class="pre">SINrVectors.get_vocabulary_size()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.inter_sim"><code class="docutils literal notranslate"><span class="pre">SINrVectors.inter_sim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.intra_sim"><code class="docutils literal notranslate"><span class="pre">SINrVectors.intra_sim()</span></code></a></li>
@@ -187,6 +187,7 @@
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.set_vectors"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_vectors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.set_vocabulary"><code class="docutils literal notranslate"><span class="pre">SINrVectors.set_vocabulary()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.sparsify"><code class="docutils literal notranslate"><span class="pre">SINrVectors.sparsify()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors.transfert_sinr"><code class="docutils literal notranslate"><span class="pre">SINrVectors.transfert_sinr()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="sinr.html#sinr.graph_embeddings.ThresholdedModelBuilder"><code class="docutils literal notranslate"><span class="pre">ThresholdedModelBuilder</span></code></a><ul>
@@ -290,7 +291,11 @@
 <li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.evaluate.project_vector"><code class="docutils literal notranslate"><span class="pre">project_vector()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.evaluate.reject_vector"><code class="docutils literal notranslate"><span class="pre">reject_vector()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.evaluate.remove_invalid_lines"><code class="docutils literal notranslate"><span class="pre">remove_invalid_lines()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.evaluate.scores_varnn"><code class="docutils literal notranslate"><span class="pre">scores_varnn()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.evaluate.similarity_MEN_WS353_SCWS"><code class="docutils literal notranslate"><span class="pre">similarity_MEN_WS353_SCWS()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.evaluate.varnn"><code class="docutils literal notranslate"><span class="pre">varnn()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.evaluate.varnn_across_models"><code class="docutils literal notranslate"><span class="pre">varnn_across_models()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.evaluate.varnn_from_models"><code class="docutils literal notranslate"><span class="pre">varnn_from_models()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="sinr.text.html#sinr.text.evaluate.vectorizer"><code class="docutils literal notranslate"><span class="pre">vectorizer()</span></code></a></li>
 </ul>
 </li>

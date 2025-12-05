@@ -100,7 +100,11 @@
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.project_vector"><code class="docutils literal notranslate"><span class="pre">project_vector()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.reject_vector"><code class="docutils literal notranslate"><span class="pre">reject_vector()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.remove_invalid_lines"><code class="docutils literal notranslate"><span class="pre">remove_invalid_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.scores_varnn"><code class="docutils literal notranslate"><span class="pre">scores_varnn()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.similarity_MEN_WS353_SCWS"><code class="docutils literal notranslate"><span class="pre">similarity_MEN_WS353_SCWS()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.varnn"><code class="docutils literal notranslate"><span class="pre">varnn()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.varnn_across_models"><code class="docutils literal notranslate"><span class="pre">varnn_across_models()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.varnn_from_models"><code class="docutils literal notranslate"><span class="pre">varnn_from_models()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sinr.text.evaluate.vectorizer"><code class="docutils literal notranslate"><span class="pre">vectorizer()</span></code></a></li>
 </ul>
 </li>
@@ -347,7 +351,7 @@ the PMI is lower than a thershold min_pmi.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sinr.text.preprocess.extract_text">
-<span class="sig-prename descclassname"><span class="pre">sinr.text.preprocess.</span></span><span class="sig-name descname"><span class="pre">extract_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exceptions_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lemmatize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">punct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">en</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'chunking'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_en</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_length_word</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_length_doc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_filt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.preprocess.extract_text" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">sinr.text.preprocess.</span></span><span class="sig-name descname"><span class="pre">extract_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exceptions_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lemmatize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">punct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">en</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'chunking'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_en</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_length_word</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_length_doc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_filt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_lemma_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.preprocess.extract_text" title="Permalink to this definition"></a></dt>
 <dd><p>Extracts the text from a VRT corpus file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -367,6 +371,7 @@ the PMI is lower than a thershold min_pmi.</p>
 <li><p><strong>min_length_word</strong> – (Default value = 3)</p></li>
 <li><p><strong>min_length_doc</strong> (<em>int</em>) – The minimal number of token for a document (or sentence) to be kept (Default value = 2)</p></li>
 <li><p><strong>dict_filt</strong> (<em>list</em>) – List of words to keep only specific vocabulary</p></li>
+<li><p><strong>with_lemma_pos</strong> (<em>bool</em>) – bool If True, output format will be lemma_#POS (Default value = False)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -962,6 +967,26 @@ dictionary-like object. Keys of interest:
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.scores_varnn">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">scores_varnn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.scores_varnn" title="Permalink to this definition"></a></dt>
+<dd><p>Computes mean of pierrejean score on the shared vocabulary of model1 and model2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model1</strong> (<a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors" title="sinr.graph_embeddings.SINrVectors"><em>SINrVectors</em></a>) – a SINrVectors object</p></li>
+<li><p><strong>model2</strong> (<em>SINrVectors:</em>) – a second SINrVectors object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A score of varnn between the two models</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="sinr.text.evaluate.similarity_MEN_WS353_SCWS">
 <span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">similarity_MEN_WS353_SCWS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinr_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.similarity_MEN_WS353_SCWS" title="Permalink to this definition"></a></dt>
 <dd><p>Evaluate similarity with MEN, WS353 and SCWS datasets</p>
@@ -977,6 +1002,72 @@ dictionary-like object. Keys of interest:
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.varnn">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">varnn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.varnn" title="Permalink to this definition"></a></dt>
+<dd><p>Computes varnn metrics from two neighbor sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>set1</strong> (<em>set</em>) – set of neighbors (e.g. from model1)</p></li>
+<li><p><strong>set2</strong> (<em>set</em>) – set of neighbors (e.g. from model2)</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – number of neighbors used to compute the sets (default 25)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pierrejean score and flat score</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.varnn_across_models">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">varnn_across_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.varnn_across_models" title="Permalink to this definition"></a></dt>
+<dd><p>Computes varnn for each word is model1 also present in model2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model1</strong> (<a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors" title="sinr.graph_embeddings.SINrVectors"><em>SINrVectors</em></a>) – a SINrVectors object</p></li>
+<li><p><strong>model2</strong> (<em>SINrVectors:</em>) – a second SINrVectors object</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – number of neighbors used to compute the sets (default 25)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Results of varnn on the total vocabulary of model1</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of tuples</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sinr.text.evaluate.varnn_from_models">
+<span class="sig-prename descclassname"><span class="pre">sinr.text.evaluate.</span></span><span class="sig-name descname"><span class="pre">varnn_from_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nn1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nn2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sinr.text.evaluate.varnn_from_models" title="Permalink to this definition"></a></dt>
+<dd><p>Computes varnn for each word is model1 also present in model2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model1</strong> (<a class="reference internal" href="sinr.html#sinr.graph_embeddings.SINrVectors" title="sinr.graph_embeddings.SINrVectors"><em>SINrVectors</em></a>) – a SINrVectors object</p></li>
+<li><p><strong>model2</strong> (<em>SINrVectors:</em>) – a second SINrVectors object</p></li>
+<li><p><strong>word</strong> (<em>str</em>) – an item in the vocabulary of the first model</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – number of neighbors used to compute the sets (default 25)</p></li>
+<li><p><strong>nn1</strong> (<em>NearestNeighbors</em>) – NearestNeighbors object for model1 (default None)</p></li>
+<li><p><strong>nn2</strong> (<em>NearestNeighbors</em>) – NearestNeighbors object for model2 (default None)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Results of varnn between model1 and model2 on a single word as pierrejean score, the 1 - the proportion of shared neighbors, and a flat score the number of different neighbors</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
