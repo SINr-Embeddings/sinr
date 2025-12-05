@@ -154,6 +154,7 @@ documentation <https://sinr-embeddings.github.io/sinr/publications.html>`__.
 
 =======
 
+
 **Initial SINr paper, 2021**
 
 -  Thibault Prouteau, Victor Connes, Nicolas Dugué, Anthony Perez,
@@ -194,6 +195,7 @@ documentation <https://sinr-embeddings.github.io/sinr/publications.html>`__.
    `⟨10.5281/zenodo.7957531⟩ <https://dx.doi.org/10.5281/zenodo.7957531>`. `⟨hal-04113024⟩ <https://hal.science/hal-04113024v1>`__ 
 
 =======
+
    
    
 .. |languages| image:: https://img.shields.io/github/languages/count/SINr-Embeddings/sinr

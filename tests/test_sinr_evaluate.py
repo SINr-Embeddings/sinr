@@ -8,7 +8,8 @@ import unittest
 import numpy as np
 
 import sinr.graph_embeddings as ge
-from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer, clf_fit, clf_score, compute_analogy_normalized, compute_analogy_sparse_normalized, compute_analogy_value_zero, compute_direct_bias_sinr, compute_indirect_bias_sinr, project_vector, reject_vector, identify_gender_direction_sinr, eval_analogy_k, best_predicted_word_k
+from sinr.text.evaluate import fetch_data_MEN, fetch_data_WS353, eval_similarity, similarity_MEN_WS353_SCWS, vectorizer, clf_fit, clf_score, compute_analogy_normalized, compute_analogy_sparse_normalized, compute_analogy_value_zero, compute_direct_bias_sinr, compute_indirect_bias_sinr, project_vector, reject_vector, identify_gender_direction_sinr, eval_analogy_k, best_predicted_word_k, varnn
+
 import urllib.request
 import os
 import tempfile
@@ -299,6 +300,44 @@ class TestIndirectBiasFunctions(unittest.TestCase):
     def test_calc_indirect_bias_sinr_edge_case(self):
         similarity = compute_indirect_bias_sinr(self.sinr_vec, 'father', 'father', self.gender_direction)
         self.assertEqual(similarity, 0.0)
+
+class TestVarnnFunction(unittest.TestCase):
+    """Tests for the `varnn` function."""
+
+    def test_all_neighbors_shared(self):
+        set1 = {"a", "b", "c"}
+        set2 = {"a", "b", "c"}
+        score_pj, score_flat = varnn(set1, set2, k=3)
+        self.assertEqual(score_pj, 0.0)
+        self.assertEqual(score_flat, 0)
+
+    def test_no_neighbors_shared(self):
+        set1 = {"a", "b", "c"}
+        set2 = {"x", "y", "z"}
+        score_pj, score_flat = varnn(set1, set2, k=3)
+        self.assertEqual(score_pj, 1.0)
+        self.assertEqual(score_flat, 3)
+
+    def test_some_neighbors_shared(self):
+        set1 = {"a", "b", "c"}
+        set2 = {"b", "c", "x"}
+        score_pj, score_flat = varnn(set1, set2, k=3)
+        self.assertEqual(score_pj, 1 - 2/3)
+        self.assertEqual(score_flat, 1)
+
+    def test_with_k_different(self):
+        set1 = {"a", "b"}
+        set2 = {"b", "c"}
+        score_pj, score_flat = varnn(set1, set2, k=5)
+        self.assertAlmostEqual(score_pj, 0.5)
+        self.assertEqual(score_flat, 4)
+
+    def test_empty_sets(self):
+        set1 = set()
+        set2 = {"a", "b"}
+        with self.assertRaises(ZeroDivisionError):
+            varnn(set1, set2)
+
 
 if __name__ == '__main__':
     unittest.main()

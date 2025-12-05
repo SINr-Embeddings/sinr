@@ -19,6 +19,10 @@ from . import strategy_loader
 from .logger import logger
 from .nfm import get_nfm_embeddings
 import sinr.text.evaluate as ev
+import re
+from tqdm import tqdm
+from collections import defaultdict
+
 
 
 class SINr(object):
@@ -135,7 +139,7 @@ class SINr(object):
         """Returns the size of the vocabulary."""
         return len(self.idx_to_wrd)
 
-    def transfert_communities_labels(self, community_labels, refine=False):
+    def _transfert_communities_labels(self, community_labels, refine=False):
         """Transfer communities computed on one graph to another, used mainly with co-occurence graphs.
 
         :param community_labels: a list of communities described by sets of labels describing the nodes
@@ -163,7 +167,6 @@ class SINr(object):
         self.communities.compact()
         if refine:
             self._refine_transfered_communities()
-
 
     def extract_embeddings(self, communities=None):
         """Extract the embeddings based on the graph and the partition in communities previously detected.
@@ -278,6 +281,103 @@ class SINr(object):
         else:
             return self.communities
 
+    def add_oov_words(self, oov_words):
+        """
+        Adds OOV (Out-Of-Vocabulary) words to the vocabulary and the cooccurrence graph.
+    
+        Parameters:
+            oov_words (Iterable[str]): List of OOV words.
+    
+        Returns:
+            dict: Mapping of OOV words to their new node IDs.
+        """
+        wrd_to_idx = self.wrd_to_idx
+        idx_to_wrd = self.idx_to_wrd
+    
+        last_id = max(wrd_to_idx.values(), default=-1)
+        new_ids = {}
+    
+        for w in oov_words:
+            if w not in wrd_to_idx:
+                last_id += 1
+                wrd_to_idx[w] = last_id
+                idx_to_wrd[last_id] = w
+                new_ids[w] = last_id
+    
+        _ensure_nodes(self.cooc_graph, new_ids.values())
+        print(f"{len(new_ids)} OOV words added.")
+        return new_ids
+
+
+    def add_edges_from_sentences(self, sentences, new_ids, window_size=10, min_cooccurrence=1):
+        """
+        Adds co-occurrence edges between OOV words and context words from given sentences.
+    
+        Parameters:
+            sentences (Iterable[str]): List of sentences.
+            new_ids (dict): Mapping of OOV words to their node IDs.
+            window_size (int): Context window size.
+            min_cooccurrence (int): Minimum co-occurrence count for an edge.
+    
+        Returns:
+            None
+        """
+        print(f"Adding edges for OOVs from sentences (window={window_size})...")
+        G = self.cooc_graph
+        wrd_to_id = self.wrd_to_idx
+        edge_counter = defaultdict(int)
+    
+        for sentence in tqdm(sentences, desc="Scanning sentences"):
+            words = [w for w in re.findall(r'\b[\w\-]+\b', sentence.lower()) if w.isascii()]
+    
+            for i, center_word in enumerate(words):
+                if center_word not in new_ids:
+                    continue
+    
+                center_id = new_ids[center_word]
+                context = words[max(0, i - window_size): i] + words[i+1: i + window_size + 1]
+    
+                for ctx in context:
+                    if ctx in wrd_to_id and ctx != center_word:
+                        ctx_id = wrd_to_id[ctx]
+                        pair = tuple(sorted((center_id, ctx_id)))
+                        edge_counter[pair] += 1
+    
+        filtered_edges = {
+            pair: weight for pair, weight in edge_counter.items()
+            if weight >= min_cooccurrence
+        }
+    
+        print(f"{len(edge_counter)} edges found, {len(filtered_edges)} after filtering (threshold={min_cooccurrence})")
+    
+        added = 0
+        for (u, v), weight in filtered_edges.items():
+            if not G.hasEdge(u, v):
+                G.addEdge(u, v, weight)
+                added += 1
+            else:
+                G.setWeight(u, v, G.weight(u, v) + weight)
+    
+        print(f"{added} edges added to the graph.")
+    
+
+
+def _ensure_nodes(graph, ids):
+    """Ensures that the nodes exist in the graph
+            Parameters:
+            graph: Networkit graph .
+            ids (Iterable[int]): A list or set of node IDs to ensure presence in the graph.
+            
+            Returns :
+                None.
+    """
+    for nid in ids:
+        if graph.hasNode(nid):
+            continue
+        if nid < graph.upperNodeIdBound():
+            graph.restoreNode(nid)
+        else:
+            graph.addNodes(nid - graph.upperNodeIdBound() + 1)
 
 def _flip_keys_values(dictionary):
     """Flip keys and values in a dictionnary.
@@ -710,7 +810,7 @@ class SINrVectors(object):
         
         return l, tgt_from_src
     
-    def get_vectors_using_self_space(self, sinr_vector):
+    def _get_vectors_using_self_space(self, sinr_vector):
         """Transpose the vectors of the sinr_vector object in parameter in the embedding space of the self object, using matching communities
         
         :param sinr_vector: Small model (target)
@@ -727,6 +827,13 @@ class SINrVectors(object):
         row = vectors.row
         data = vectors.data
         col = [matching_ts[val] for val in vectors.col]
+        
+        # Filter out the -1 values in col
+        filtered = [(r, d, c) for r, d, c in zip(row, data, col) if c != -1]
+        if filtered:
+            row, data, col = zip(*filtered)
+        else:
+            row, data, col = [], [], []
     
         matrix = coo_matrix((data, (row, col)), shape=(sinr_vector.vectors.shape[0], self.vectors.shape[1]))
         
@@ -734,7 +841,49 @@ class SINrVectors(object):
         self_copy = copy.deepcopy(self)
         self_copy.set_vectors(matrix.tocsr())
         self_copy.vocab = sinr_vector.vocab
+        
+        new_sets = [set() for _ in range(self.vectors.shape[1])]
+
+        # For each community in the big model, we add the members of the small model that match
+        for big_com_id, small_com_id in enumerate(matching_st):
+            if small_com_id != -1:
+                new_sets[big_com_id] = sinr_vector.communities_sets[small_com_id].copy()
+    
+        self_copy.communities_sets = new_sets
+    
+        # update the community membership
+        self_copy.community_membership = [-1] * len(self_copy.vocab)
+        for com_id, members in enumerate(new_sets):
+            for u in members:
+                self_copy.community_membership[u] = com_id
+    
         return self_copy
+    
+    def transfert_sinr(self, small_cooc, name='model_transfert', n_neighbors=25, n_jobs=-1):
+        """Transfer the communities and embeddings from a small co-occurrence graph to the current one.
+        
+        :param small_cooc: A SINr object containing the small co-occurrence graph and the communities
+        :type small_cooc: SINr
+        :param name: Name of the model to be built, used for saving the model. The default is 'model_transfert'.
+        :type name: str, optional
+        :param n_neighbors: Number of neighbors to use for the Nearest Neighbors model. The default is 25.
+        :type n_neighbors: int, optional
+        :param n_jobs: Number of jobs that should be used The default is -1.
+        :type n_jobs: int, optional
+        :returns: A SINrVectors object transferred and aligned.
+        """
+        small_cooc._transfert_communities_labels(self.get_communities_as_labels_sets())
+        small_cooc.extract_embeddings()
+        
+        modele_small = InterpretableWordsModelBuilder(
+            small_cooc,
+            f'{name}',
+            n_jobs=n_jobs,
+            n_neighbors=n_neighbors
+        ).build()
+
+        transfert_align = self._get_vectors_using_self_space(modele_small)
+        return transfert_align
 
     def set_n_jobs(self, n_jobs):
         """Set the number of jobs.
