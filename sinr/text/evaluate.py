@@ -10,6 +10,7 @@ import os
 from tqdm.auto import tqdm
 import time
 import xgboost as xgb
+from functools import partialmethod
 
 def fetch_data_MEN():
     """Fetch MEN dataset for testing relatedness similarity
@@ -167,6 +168,8 @@ def eval_similarity(sinr_vec, dataset, print_missing=True):
     
     """
     
+    # Disable tqdm to clear output
+    tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
     scores = list()
     cosine_sim = list()
     
