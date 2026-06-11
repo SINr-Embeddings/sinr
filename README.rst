@@ -196,6 +196,10 @@ documentation <https://sinr-embeddings.github.io/sinr/publications.html>`__.
 
 =======
 
+
+💡 **Seemantics : devinez les mots, éclairez les algorithmes**
+
+Jouez et participez à notre travail de recherche sur les embeddings interprétables : <https://lium-seemantics.univ-lemans.fr/>
    
    
 .. |languages| image:: https://img.shields.io/github/languages/count/SINr-Embeddings/sinr
