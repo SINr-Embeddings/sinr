@@ -196,8 +196,6 @@ documentation <https://sinr-embeddings.github.io/sinr/publications.html>`__.
 
 =======
 
-Seemantics - french game based on SINr embeddings
-============
 
 💡 **Seemantics : devinez les mots, éclairez les algorithmes**
 
